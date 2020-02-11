@@ -17,11 +17,13 @@ import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextArea;
+import javax.swing.JButton;
 
 public class TextGameEngine {
 
 	private JFrame frame;
 	private JTextField txtName;
+	private JTextField txtEventName;
 
 	/**
 	 * Launch the application.
@@ -53,13 +55,13 @@ public class TextGameEngine {
 	{
 		//creating the GUI
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 450, 351);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 434, 261);
+		tabbedPane.setBounds(0, 0, 434, 312);
 		frame.getContentPane().add(tabbedPane);
 		
 		//Player tab
@@ -76,21 +78,11 @@ public class TextGameEngine {
 		txtrDescription.setText("Description");
 		txtrDescription.setBounds(10, 42, 270, 82);
 		playerTab.add(txtrDescription);
-		JList skillsList = new JList();
-		skillsList.setVisibleRowCount(4);
-		skillsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		skillsList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Example", "Example", "Example", "Example", "Example", "Example", "Example", "Example"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		skillsList.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Skill List", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		skillsList.setBounds(10, 135, 270, 87);
-		playerTab.add(skillsList);
+		
+		JTextArea txtrStartingSkillList = new JTextArea();
+		txtrStartingSkillList.setText("Starting Skill List");
+		txtrStartingSkillList.setBounds(10, 140, 270, 82);
+		playerTab.add(txtrStartingSkillList);
 		
 		//Room Tab
 		JPanel roomsTab = new JPanel();
@@ -100,6 +92,36 @@ public class TextGameEngine {
 		JPanel eventsTab = new JPanel();
 		tabbedPane.addTab("Events", null, eventsTab, null);
 		eventsTab.setLayout(null);
+		
+		txtEventName = new JTextField();
+		txtEventName.setText("Event Name");
+		txtEventName.setBounds(173, 2, 246, 20);
+		eventsTab.add(txtEventName);
+		txtEventName.setColumns(10);
+		
+		JTextArea txtrEventDescription = new JTextArea();
+		txtrEventDescription.setText("Event Description");
+		txtrEventDescription.setBounds(173, 27, 246, 68);
+		eventsTab.add(txtrEventDescription);
+		
+		JTextArea txtrEventConditions = new JTextArea();
+		txtrEventConditions.setText("Event Conditions");
+		txtrEventConditions.setBounds(173, 101, 246, 60);
+		eventsTab.add(txtrEventConditions);
+		
+		JTextArea txtrEvent = new JTextArea();
+		txtrEvent.setText("Event Actions");
+		txtrEvent.setBounds(173, 165, 246, 68);
+		eventsTab.add(txtrEvent);
+		
+		JList eventList = new JList();
+		eventList.setBorder(new TitledBorder(null, "Event List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		eventList.setBounds(0, 2, 163, 282);
+		eventsTab.add(eventList);
+		
+		JButton btnNewButton = new JButton("Create Event");
+		btnNewButton.setBounds(236, 244, 97, 23);
+		eventsTab.add(btnNewButton);
 		
 		//Extra Tab
 		JPanel panel_3 = new JPanel();
