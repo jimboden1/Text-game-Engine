@@ -14,10 +14,13 @@ import javax.swing.JList;
 import javax.swing.border.BevelBorder;
 import javax.swing.AbstractListModel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class TextGameEngine {
 
@@ -55,13 +58,13 @@ public class TextGameEngine {
 	{
 		//creating the GUI
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 351);
+		frame.setBounds(100, 100, 450, 371);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 434, 312);
+		tabbedPane.setBounds(0, 0, 434, 332);
 		frame.getContentPane().add(tabbedPane);
 		
 		//Player tab
@@ -87,6 +90,72 @@ public class TextGameEngine {
 		//Room Tab
 		JPanel roomsTab = new JPanel();
 		tabbedPane.addTab("Rooms", null, roomsTab, null);
+		roomsTab.setLayout(null);
+		
+		JList roomList = new JList();
+		roomList.setBounds(12, 13, 88, 278);
+		roomList.setBorder(new TitledBorder(null, "Room List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		roomsTab.add(roomList);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(112, 43, 308, 2);
+		roomsTab.add(separator);
+		
+		JLabel roomNameLabel = new JLabel("Room Name:");
+		roomNameLabel.setBounds(112, 0, 88, 45);
+		roomsTab.add(roomNameLabel);
+		
+		JTextField roomNameText = new JTextField();
+		roomNameText.setBounds(226, 13, 194, 22);
+		roomsTab.add(roomNameText);
+		roomNameText.setColumns(10);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(112, 168, 308, 2);
+		roomsTab.add(separator_1);
+		
+		JLabel roomDesc = new JLabel("Room Description:");
+		roomDesc.setBounds(212, 44, 105, 22);
+		roomsTab.add(roomDesc);
+		
+		JTextArea descArea = new JTextArea();
+		descArea.setBounds(112, 72, 308, 83);
+		roomsTab.add(descArea);
+		descArea.setColumns(10);
+		descArea.setLineWrap(true);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(112, 209, 308, 2);
+		roomsTab.add(separator_2);
+		
+		JLabel eventsLabel = new JLabel("Events:");
+		eventsLabel.setBounds(112, 168, 56, 43);
+		roomsTab.add(eventsLabel);
+		
+		JComboBox actionsCBox = new JComboBox();
+		actionsCBox.setBounds(226, 217, 194, 27);
+		roomsTab.add(actionsCBox);
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setBounds(112, 249, 308, 2);
+		roomsTab.add(separator_3);
+		
+		JLabel actionsLabel = new JLabel("Actions:");
+		actionsLabel.setBounds(112, 209, 56, 42);
+		roomsTab.add(actionsLabel);
+		
+		JComboBox eventsCBox = new JComboBox();
+		eventsCBox.setBounds(226, 177, 194, 27);
+		roomsTab.add(eventsCBox);
+		
+		JLabel npcLabel = new JLabel("NPCs:");
+		npcLabel.setBounds(112, 249, 56, 42);
+		roomsTab.add(npcLabel);
+		
+		JComboBox npcCBox = new JComboBox();
+		npcCBox.setBounds(226, 257, 194, 27);
+		roomsTab.add(npcCBox);
+		
 		
 		//Events Tab
 		JPanel eventsTab = new JPanel();
