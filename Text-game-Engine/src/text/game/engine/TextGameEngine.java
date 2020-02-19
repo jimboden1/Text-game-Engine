@@ -68,7 +68,7 @@ public class TextGameEngine {
 		
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 783, 554);
+		tabbedPane.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 		frame.getContentPane().add(tabbedPane);
 		
 		//Player tab
@@ -476,5 +476,9 @@ public class TextGameEngine {
 		JButton addSkillButton = new JButton("Add Skill");
 		addSkillButton.setBounds(572, 206, 194, 38);
 		skillTab.add(addSkillButton);
+                
+                JPanel baseTab = new JPanel();
+                ItemPanel itemTab = new ItemPanel(baseTab);
+		tabbedPane.addTab("Item", null, itemTab.createItemPanel(), null);
 	}
 }
