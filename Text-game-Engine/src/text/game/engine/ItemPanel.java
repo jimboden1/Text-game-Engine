@@ -1,6 +1,7 @@
 package text.game.engine;
 
 
+import java.awt.GridLayout;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
@@ -35,13 +36,20 @@ public class ItemPanel extends JPanel{
         base.add(itemList);
         
         itemName.setBounds(210, 10, 600, 50);
-        itemName.setBorder(new TitledBorder(null, "Item Name", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        itemName.setLayout(new GridLayout(2,2,10,10));
+        itemName.add(new JLabel("Name:"));
+        itemName.add(new JLabel("Cost:"));
+        itemName.add(new JTextField(20));
         itemName.add(new JTextField(20));
         base.add(itemName);
         
         itemDescription.setBounds(210, 70, 600, 100);
         itemDescription.setBorder(new TitledBorder(null, "Item Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         base.add(itemDescription);
+        
+        itemBenefits.setBounds(210, 180, 600, 100);
+        itemBenefits.setBorder(new TitledBorder(null, "Item Benefits", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        base.add(itemBenefits);
         
         itemBenefits.setBounds(210, 180, 600, 100);
         itemBenefits.setBorder(new TitledBorder(null, "Item Benefits", TitledBorder.LEADING, TitledBorder.TOP, null, null));
