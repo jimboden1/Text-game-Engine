@@ -1,5 +1,6 @@
 package text.game.engine;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -19,6 +20,8 @@ import javax.swing.JSeparator;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -64,8 +67,8 @@ public class TextGameEngine {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
+		frame.getContentPane().setLayout(new BorderLayout());
+                
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, frame.getWidth(), frame.getHeight());
@@ -78,7 +81,7 @@ public class TextGameEngine {
 		playerTab.setLayout(null);
 		txtName = new JTextField();
 		txtName.setText("Name");
-		txtName.setBounds(10, 13, 756, 38);
+		txtName.setBounds(10, 10, tabbedPane.getWidth()-40, 40);
 		playerTab.add(txtName);
 		txtName.setColumns(10);
 		JTextArea txtrDescription = new JTextArea();
