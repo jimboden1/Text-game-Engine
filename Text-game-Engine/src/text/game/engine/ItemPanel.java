@@ -1,6 +1,7 @@
 package text.game.engine;
 
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -11,13 +12,10 @@ import javax.swing.border.TitledBorder;
  * and open the template in the editor.
  */
 
-/**
- *
- * @author darkf
- */
 public class ItemPanel extends JPanel{
     
     JPanel base;
+    JPanel listPanel = new JPanel();
     JList itemList = new JList();
     JPanel itemName = new JPanel();
     JTextArea itemDescription = new JTextArea();
@@ -31,9 +29,22 @@ public class ItemPanel extends JPanel{
     
     public JPanel createItemPanel(){
         base.setLayout(null);
-        itemList.setBounds(10, 10, 195, 500);
+        listPanel.setBounds(10, 10, 195, 500);
+        listPanel.setLayout(new BorderLayout());
         itemList.setBorder(new TitledBorder(null, "Item List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        base.add(itemList);
+        JScrollPane js=new JScrollPane(itemList);
+        js.setVisible(true);
+        add(js);
+        listPanel.add(itemList, BorderLayout.CENTER);
+        JPanel bp = new JPanel();
+        JButton create = new JButton("Add Item");
+        JButton delete = new JButton("Delete");
+        bp.setLayout(new GridLayout(1,2,10,10));
+        bp.add(create);
+        bp.add(delete);
+        listPanel.add(bp, BorderLayout.SOUTH);
+        
+        base.add(listPanel);
         
         itemName.setBounds(210, 10, 600, 50);
         itemName.setLayout(new GridLayout(2,2,10,10));
