@@ -22,11 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
+import javax.swing.*;
 
 public class TextGameEngine {
 
@@ -65,14 +61,23 @@ public class TextGameEngine {
 
 		//creating the GUI
 		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 600);
+		frame.setBounds(100, 100, 800, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
+                JMenuBar menu = new JMenuBar();
+                JMenu files = new JMenu("Files");
+                JMenuItem save = new JMenuItem("Save");
+                JMenuItem load = new JMenuItem("Load");
+                JMenuItem create = new JMenuItem("New");
+                files.add(save);
+                files.add(load);
+                files.add(create);
+                menu.add(files);
+                frame.getContentPane().add(menu, BorderLayout.NORTH);
                 
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, frame.getWidth(), frame.getHeight());
-		frame.getContentPane().add(tabbedPane);
+		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
 		//Player tab
 		JPanel playerTab = new JPanel();
