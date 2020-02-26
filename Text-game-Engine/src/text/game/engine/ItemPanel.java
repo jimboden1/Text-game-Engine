@@ -28,9 +28,8 @@ public class ItemPanel extends JPanel{
     }
     
     public JPanel createItemPanel(){
-        base.setLayout(null);
-        listPanel.setBounds(10, 10, 195, 500);
-        listPanel.setLayout(new BorderLayout());
+        base.setLayout(new BorderLayout(10,10));
+        listPanel.setLayout(new BorderLayout(10,10));
         itemList.setBorder(new TitledBorder(null, "Item List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         JScrollPane js=new JScrollPane(itemList);
         js.setVisible(true);
@@ -44,32 +43,45 @@ public class ItemPanel extends JPanel{
         bp.add(delete);
         listPanel.add(bp, BorderLayout.SOUTH);
         
-        base.add(listPanel);
+        base.add(listPanel, BorderLayout.WEST);
         
-        itemName.setBounds(210, 10, 600, 50);
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new GridLayout(2,1,10,10));
+        JPanel upperRight = new JPanel();
+        upperRight.setLayout(new BorderLayout(10,10));
+        
+        
         itemName.setLayout(new GridLayout(2,2,10,10));
         itemName.add(new JLabel("Name:"));
         itemName.add(new JLabel("Cost:"));
+        itemName.add(new JTextField());
         itemName.add(new JTextField(20));
-        itemName.add(new JTextField(20));
-        base.add(itemName);
+        upperRight.add(itemName, BorderLayout.NORTH);
         
-        itemDescription.setBounds(210, 70, 600, 100);
+        
         itemDescription.setBorder(new TitledBorder(null, "Item Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        base.add(itemDescription);
+        upperRight.add(itemDescription);
+        JPanel typePanel = new JPanel();
+        JRadioButton consumable = new JRadioButton("Consumable");
+        typePanel.add(consumable);
+        upperRight.add(consumable, BorderLayout.SOUTH);
+        rightPanel.add(upperRight);
         
-        itemBenefits.setBounds(210, 180, 600, 100);
+        JPanel bottomRight = new JPanel();
+        bottomRight.setLayout(new GridLayout(2,1,10,10));
+        
         itemBenefits.setBorder(new TitledBorder(null, "Item Benefits", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        base.add(itemBenefits);
+        JButton addBenefit = new JButton("ADD");
+        JButton removeBenefit = new JButton("REMOVE");
+        bottomRight.add(itemBenefits);
         
-        itemBenefits.setBounds(210, 180, 600, 100);
-        itemBenefits.setBorder(new TitledBorder(null, "Item Benefits", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        base.add(itemBenefits);
-        
-        itemSkills.setBounds(210, 290, 600, 100);
         itemSkills.setBorder(new TitledBorder(null, "Item Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        base.add(itemSkills);
+        bottomRight.add(itemSkills);
+        JButton addSkill = new JButton("ADD");
+        JButton removeSkill = new JButton("REMOVE");
+        rightPanel.add(bottomRight);
         
+        base.add(rightPanel, BorderLayout.CENTER);
         
         return base;
     }
