@@ -63,8 +63,9 @@ public class TextGameEngine {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout());
+                frame.getContentPane().setLayout(null);
                 JMenuBar menu = new JMenuBar();
+                menu.setBounds(0, 0, 784, 22);
                 JMenu files = new JMenu("Files");
                 JMenuItem save = new JMenuItem("Save");
                 JMenuItem load = new JMenuItem("Load");
@@ -73,11 +74,12 @@ public class TextGameEngine {
                 files.add(load);
                 files.add(create);
                 menu.add(files);
-                frame.getContentPane().add(menu, BorderLayout.NORTH);
+                frame.getContentPane().add(menu);
                 
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		tabbedPane.setBounds(0, 22, 784, 639);
+		frame.getContentPane().add(tabbedPane);
 		
 		//Player tab
 		JPanel playerTab = new JPanel();
@@ -412,6 +414,9 @@ public class TextGameEngine {
 		actionArea.setBounds(520, 309, 234, 75);
 		eventsTab.add(actionArea);
 		
+		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.addTab("NPC", null, tabbedPane_1, null);
+		
 		//Skills Tab
 		JPanel skillTab = new JPanel();
 		tabbedPane.addTab("Skills", null, skillTab, null);
@@ -465,7 +470,7 @@ public class TextGameEngine {
 		skillTab.add(skillNameLabel);
 		
 		JLabel skillDescLabel = new JLabel("Skill Description:");
-		skillDescLabel.setBounds(361, 71, 73, 16);
+		skillDescLabel.setBounds(361, 71, 87, 16);
 		skillTab.add(skillDescLabel);
 		
 		JTextPane textPane_1 = new JTextPane();
