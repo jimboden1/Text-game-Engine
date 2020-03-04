@@ -63,8 +63,9 @@ public class TextGameEngine {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 615);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout());
+                frame.getContentPane().setLayout(null);
                 JMenuBar menu = new JMenuBar();
+                menu.setBounds(0, 0, 784, 22);
                 JMenu files = new JMenu("Files");
                 JMenuItem save = new JMenuItem("Save");
                 JMenuItem load = new JMenuItem("Load");
@@ -73,15 +74,19 @@ public class TextGameEngine {
                 files.add(load);
                 files.add(create);
                 menu.add(files);
-                frame.getContentPane().add(menu, BorderLayout.NORTH);
+                frame.getContentPane().add(menu);
                 
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+    	tabbedPane.setBounds(0, 22, 784, 639);
+		frame.getContentPane().add(tabbedPane);
+
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
         
 		JPanel playerBase = new JPanel();
         PlayerPanel playerTab = new PlayerPanel(playerBase);
 		tabbedPane.addTab("Player", null, playerTab.createPlayerPanel(), null);
+
 		
 		JPanel roomsBase = new JPanel();
         RoomsPanel roomsTab = new RoomsPanel(roomsBase);
@@ -91,9 +96,11 @@ public class TextGameEngine {
         EventsPanel eventsTab = new EventsPanel(eventsBase);
 		tabbedPane.addTab("Events", null, eventsTab.createEventsPanel(), null);
 		
+
         JPanel itemBase = new JPanel();
         ItemPanel itemTab = new ItemPanel(itemBase);
 		tabbedPane.addTab("Item", null, itemTab.createItemPanel(), null);
+
 		
 		JPanel skillsBase = new JPanel();
         SkillsPanel skillsTab = new SkillsPanel(skillsBase);
