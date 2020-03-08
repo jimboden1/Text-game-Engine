@@ -5,23 +5,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JList;
-import javax.swing.border.BevelBorder;
-import javax.swing.AbstractListModel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javax.swing.*;
 
 public class TextGameEngine {
@@ -63,18 +46,19 @@ public class TextGameEngine {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 615);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.getContentPane().setLayout(null);
+                frame.getContentPane().setLayout(new BorderLayout());
                 JMenuBar menu = new JMenuBar();
-                menu.setBounds(0, 0, 784, 22);
                 JMenu files = new JMenu("Files");
                 JMenuItem save = new JMenuItem("Save");
+                JMenuItem saveAs = new JMenuItem("Save As");
                 JMenuItem load = new JMenuItem("Load");
                 JMenuItem create = new JMenuItem("New");
                 files.add(save);
+                files.add(saveAs);
                 files.add(load);
                 files.add(create);
                 menu.add(files);
-                frame.getContentPane().add(menu);
+                frame.getContentPane().add(menu, BorderLayout.NORTH);
                 
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
