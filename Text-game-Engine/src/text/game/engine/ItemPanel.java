@@ -60,11 +60,21 @@ public class ItemPanel extends JPanel{
         
         
         itemDescription.setBorder(new TitledBorder(null, "Item Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        itemDescription.setWrapStyleWord(true);
         upperRight.add(itemDescription);
         JPanel typePanel = new JPanel();
+        typePanel.setLayout(new GridLayout(1,4,10,10));
+        ButtonGroup itemGroup = new ButtonGroup();
         JRadioButton consumable = new JRadioButton("Consumable");
+        itemGroup.add(consumable);
         typePanel.add(consumable);
-        upperRight.add(consumable, BorderLayout.SOUTH);
+        JRadioButton equipment = new JRadioButton("Equipment");
+        itemGroup.add(equipment);
+        typePanel.add(equipment);
+        JRadioButton key = new JRadioButton("Key Item");
+        itemGroup.add(key);
+        typePanel.add(key);
+        upperRight.add(typePanel, BorderLayout.SOUTH);
         rightPanel.add(upperRight);
         
         JPanel bottomRight = new JPanel();
