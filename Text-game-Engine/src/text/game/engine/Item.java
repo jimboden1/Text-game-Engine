@@ -8,8 +8,8 @@ package text.game.engine;
 import java.util.ArrayList;
 
 public class Item {
-    private String name, description, slot;
-    private int cost;
+    private String name, description;
+    private int cost, type;
     private ArrayList<Skill> skills = new ArrayList<Skill>();
     public Item(){
         name = "new Item";
@@ -22,8 +22,8 @@ public class Item {
     public void setDescription(String description) {
         this.description = description;
     }
-    public void setSlot(String slot){
-        this.slot = slot;
+    public void setType(int type){
+        this.type = type;
     }
     public void setCost(int cost){
         this.cost = cost;
@@ -48,8 +48,8 @@ public class Item {
     public String getDescription(){
         return description;
     }
-    public String getSlot(){
-        return slot;
+    public int getType(){
+        return type;
     }
     public int getCost(){
         return cost;
