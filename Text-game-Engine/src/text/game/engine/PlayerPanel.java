@@ -3,6 +3,9 @@ package text.game.engine;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
@@ -15,7 +18,15 @@ public class PlayerPanel extends JPanel
 	JEditorPane picPane = new JEditorPane();
 	JTextField strField = new JTextField();
 	JTextField dexField = new JTextField();
-	JTextField IQField = new JTextField();
+	JTextField iqField = new JTextField();
+	JTextField hpField = new JTextField();
+	JTextField perField = new JTextField();
+	JTextField willField = new JTextField();
+	
+	JButton addPicButton = new JButton();
+	JButton createPlayer = new JButton();
+	Player player;
+	
 	
 	public PlayerPanel(JPanel base)
 	{
@@ -33,7 +44,7 @@ public class PlayerPanel extends JPanel
 		
 		txtrDescription.setText("Description");
 		txtrDescription.setBounds(10, 62, 756, 86);
-		base.add(txtrDescription);		
+		base.add(txtrDescription);	
 		
 		playerSkillsList.setBounds(546, 176, 220, 335);
 		playerSkillsList.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -43,8 +54,43 @@ public class PlayerPanel extends JPanel
 		separator_4.setBounds(10, 161, 756, 2);
 		base.add(separator_4);		
 		
+		//Picture of the player if desired. 
 		picPane.setBounds(10, 176, 188, 174);
+		picPane.setEditable(false);
 		base.add(picPane);
+		addPicButton.setBounds(10, 350, 100, 20);
+		addPicButton.setText("Upload");
+		base.add(addPicButton);
+		addPicButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				
+			}
+		});
+		
+		//Create Player object
+		createPlayer.setBounds(300 ,350,100,20);
+		createPlayer.setText("Create");
+		base.add(createPlayer);
+		createPlayer.addActionListener(new ActionListener()
+		{
+				public void actionPerformed(ActionEvent e)
+				{
+					player = new Player();
+					player.setName(txtName.getText());
+					player.setDescription(txtrDescription.getText());
+					player.setStrength(Integer.parseInt(strField.getText()));
+					player.setDexterity(Integer.parseInt(dexField.getText()));
+					player.setIQ(Integer.parseInt(iqField.getText()));
+					player.setHealth(Integer.parseInt(hpField.getText()));
+					player.setPerception(Integer.parseInt(perField.getText()));
+					player.setWill(Integer.parseInt(willField.getText()));
+					player.getInfo();
+					//Set the skills 
+					//Set the image
+				}
+		});
 		
 		strField.setBounds(290, 219, 48, 22);
 		base.add(strField);
@@ -54,9 +100,21 @@ public class PlayerPanel extends JPanel
 		dexField.setBounds(290, 254, 48, 22);
 		base.add(dexField);
 		
-		IQField.setColumns(10);
-		IQField.setBounds(290, 289, 48, 22);
-		base.add(IQField);
+		iqField.setColumns(10);
+		iqField.setBounds(290, 289, 48, 22);
+		base.add(iqField);
+		
+		hpField.setColumns(10);
+		hpField.setBounds(474, 219, 48, 22);
+		base.add(hpField);
+		
+		perField.setColumns(10);
+		perField.setBounds(474, 254, 48, 22);
+		base.add(perField);
+		
+		willField.setColumns(10);
+		willField.setBounds(474, 289, 48, 22);
+		base.add(willField);
 		
 		JLabel strLabel = new JLabel("Strength:");
 		strLabel.setBounds(210, 219, 56, 16);
@@ -69,21 +127,6 @@ public class PlayerPanel extends JPanel
 		JLabel IQLabel = new JLabel("IQ:");
 		IQLabel.setBounds(210, 289, 56, 16);
 		base.add(IQLabel);
-		
-		JTextField HPField = new JTextField();
-		HPField.setColumns(10);
-		HPField.setBounds(474, 219, 48, 22);
-		base.add(HPField);
-		
-		JTextField perField = new JTextField();
-		perField.setColumns(10);
-		perField.setBounds(474, 254, 48, 22);
-		base.add(perField);
-		
-		JTextField willField = new JTextField();
-		willField.setColumns(10);
-		willField.setBounds(474, 289, 48, 22);
-		base.add(willField);
 		
 		JLabel HPLabel = new JLabel("HP:");
 		HPLabel.setBounds(375, 219, 56, 16);
