@@ -9,7 +9,9 @@ public class NPC
 	private ArrayList actions;
 	private ArrayList events;
 	private ArrayList skills;
-	public NPC() {}
+	public NPC() {
+            name = "new NPC";
+        }
 	
 	public void setName(String name) {this.name = name;}
 	public void setDescription(String description) {this.description = description;}

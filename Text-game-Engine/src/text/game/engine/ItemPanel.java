@@ -4,6 +4,7 @@ package text.game.engine;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 /*
@@ -29,6 +30,7 @@ public class ItemPanel extends JPanel{
     
     public JPanel createItemPanel(){
         base.setLayout(new BorderLayout(10,10));
+        base.setBorder(new EmptyBorder(10, 10, 10, 10));
         listPanel.setLayout(new BorderLayout(10,10));
         itemList.setBorder(new TitledBorder(null, "Item List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         JScrollPane js=new JScrollPane(itemList);

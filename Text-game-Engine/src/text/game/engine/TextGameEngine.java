@@ -70,11 +70,15 @@ public class TextGameEngine {
 		JPanel playerBase = new JPanel();
         PlayerPanel playerTab = new PlayerPanel(playerBase);
 		tabbedPane.addTab("Player", null, playerTab.createPlayerPanel(), null);
+                
+                JPanel NPCBase = new JPanel();
+        NPCPanel npcTab = new NPCPanel(NPCBase);
+		tabbedPane.addTab("NPC", null, npcTab.createNPCPanel(), null);
 
 		
 		JPanel roomsBase = new JPanel();
-        RoomsPanel roomsTab = new RoomsPanel(roomsBase);
-		tabbedPane.addTab("Rooms", null, roomsTab.createRoomsPanel(), null);
+        LocationPanel roomsTab = new LocationPanel(roomsBase);
+		tabbedPane.addTab("Locations", null, roomsTab.createLocationPanel(), null);
 		
 		JPanel eventsBase = new JPanel();
         EventsPanel eventsTab = new EventsPanel(eventsBase);
@@ -83,9 +87,9 @@ public class TextGameEngine {
 
         JPanel itemBase = new JPanel();
         ItemPanel itemTab = new ItemPanel(itemBase);
-		tabbedPane.addTab("Item", null, itemTab.createItemPanel(), null);
-
-		
+        tabbedPane.addTab("Items", null, itemTab.createItemPanel(), null);
+        
+                
 		JPanel skillsBase = new JPanel();
         SkillsPanel skillsTab = new SkillsPanel(skillsBase);
 		tabbedPane.addTab("Skills", null, skillsTab.createSkillsPanel(), null);
