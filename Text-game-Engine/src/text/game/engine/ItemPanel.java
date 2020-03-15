@@ -7,12 +7,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 public class ItemPanel extends JPanel{
     
     JPanel base;
@@ -82,15 +76,27 @@ public class ItemPanel extends JPanel{
         JPanel bottomRight = new JPanel();
         bottomRight.setLayout(new GridLayout(2,1,10,10));
         
+        JPanel benefitPanel = new JPanel(new BorderLayout(10,10));
+        JPanel benefitButtons = new JPanel(new GridLayout(2,1,10,10));
         itemBenefits.setBorder(new TitledBorder(null, "Item Benefits", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        benefitPanel.add(itemBenefits, BorderLayout.CENTER);
         JButton addBenefit = new JButton("ADD");
+        benefitButtons.add(addBenefit);
         JButton removeBenefit = new JButton("REMOVE");
-        bottomRight.add(itemBenefits);
+        benefitButtons.add(removeBenefit);
+        benefitPanel.add(benefitButtons, BorderLayout.EAST);
+        bottomRight.add(benefitPanel);
         
+        JPanel skillsPanel = new JPanel(new BorderLayout(10,10));
+        JPanel skillsButtons = new JPanel(new GridLayout(2,1,10,10));
         itemSkills.setBorder(new TitledBorder(null, "Item Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        bottomRight.add(itemSkills);
+        skillsPanel.add(itemSkills, BorderLayout.CENTER);
         JButton addSkill = new JButton("ADD");
+        skillsButtons.add(addSkill);
         JButton removeSkill = new JButton("REMOVE");
+        skillsButtons.add(removeSkill);
+        skillsPanel.add(skillsButtons, BorderLayout.EAST);
+        bottomRight.add(skillsPanel);
         rightPanel.add(bottomRight);
         
         base.add(rightPanel, BorderLayout.CENTER);

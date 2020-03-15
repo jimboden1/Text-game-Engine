@@ -11,14 +11,12 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-/**
- *
- * @author darkf
- */
 public class NPCPanel{
     
     private JPanel base;
     DefaultListModel dlm = new DefaultListModel();
+    int selected = -1;
+    NPC sNPC;
     JPanel listPanel = new JPanel();
     JList npcList = new JList(dlm);
     JTextField npcName = new JTextField();
@@ -37,10 +35,10 @@ public class NPCPanel{
         base.setLayout(new BorderLayout(10,10));
         base.setBorder(new EmptyBorder(10, 10, 10, 10));
         listPanel.setLayout(new BorderLayout(10,10));
-        npcList.setBorder(new TitledBorder(null, "NPC List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         JScrollPane js=new JScrollPane(npcList);
+        js.setBorder(new TitledBorder(null, "NPC List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         js.setVisible(true);
-        listPanel.add(npcList, BorderLayout.CENTER);
+        listPanel.add(js, BorderLayout.CENTER);
         JPanel bp = new JPanel(new GridLayout(1,2,10,10));
         JPanel topBP = new JPanel(new GridLayout(1,2,10,10));
         JButton save = new JButton("Save");
@@ -49,6 +47,8 @@ public class NPCPanel{
         JButton delete = new JButton("Delete");
         create.addActionListener(e -> addNewNPC());
         delete.addActionListener(e -> deleteSelectedNPC());
+        load.addActionListener(e -> loadNPC());
+        save.addActionListener(e -> saveNPC());
         topBP.add(save);
         topBP.add(load);
         bp.add(create);
@@ -63,11 +63,8 @@ public class NPCPanel{
         JPanel upperRight = new JPanel();
         upperRight.setLayout(new BorderLayout(10,10));
         
-        
-        
         npcName.setBorder(new TitledBorder(null, "Name", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         upperRight.add(npcName, BorderLayout.NORTH);
-        
         
         npcDescription.setBorder(new TitledBorder(null, "NPC Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         npcDescription.setWrapStyleWord(true);
@@ -124,8 +121,6 @@ public class NPCPanel{
         bottomRight.add(skill);
         rightPanel.add(bottomRight);
         
-        
-        
         base.add(rightPanel, BorderLayout.CENTER);
         
         return base;
@@ -143,14 +138,57 @@ public class NPCPanel{
                 dlm.removeRange(selection[0], selection[selection.length-1]);
                 for(int i = selection.length-1;i>=0;i--){
                     list.remove(selection[i]);
+                    if(selection[i]==selected)
+                        selected = -1;
                 }
             }
             else{
                 int selection = npcList.getSelectedIndex();
+                if (selection == selected)
+                    selected = -1;
                 dlm.remove(selection);
                 list.remove(selection);
             }
         }
     }
     
+    public void saveNPC(){
+        if(selected == -1){
+            NPC add = new NPC();
+            if(!npcName.getText().equals("")){
+                dlm.addElement(npcName.getText());
+                add.setName(npcName.getText());
+                list.add(add);
+            }
+            else{
+                dlm.addElement("New NPC");
+                add.setName("New NPC");
+                list.add(add);
+            }
+        }
+        else{
+            selected = list.indexOf(sNPC);
+            dlm.set(selected, npcName.getText());
+            sNPC.setName(npcName.getText());
+            sNPC.setDescription(npcDescription.getText());
+        }
+    }
+    public void loadNPC(){
+        if(!npcList.isSelectionEmpty()){
+            if(npcList.getSelectedIndices().length > 1){
+                }
+            else{
+                selected = npcList.getSelectedIndex();
+                sNPC = list.get(selected);
+                npcName.setText(sNPC.getName());
+                npcDescription.setText(sNPC.getDescription());
+            }
+        }
+    }
+    public NPC pullData(){
+        NPC created = new NPC();
+        created.setName(npcName.getText());
+        created.setDescription(npcDescription.getText());
+        return created;
+    }
 }
