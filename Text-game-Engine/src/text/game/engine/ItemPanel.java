@@ -3,20 +3,33 @@ package text.game.engine;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-public class ItemPanel extends JPanel{
+public class ItemPanel{
     
     JPanel base;
+    DefaultListModel dlm = new DefaultListModel();
+    DefaultListModel skilllm = new DefaultListModel();
+    DefaultListModel benefitlm = new DefaultListModel();
     JPanel listPanel = new JPanel();
-    JList itemList = new JList();
-    JPanel itemName = new JPanel();
+    int selected = -1;
+    Item sItem;
+    JList itemList = new JList(dlm);
+    JTextField itemName = new JTextField();
+    JTextField itemCost = new JTextField();
     JTextArea itemDescription = new JTextArea();
+    JRadioButton consumable = new JRadioButton("Consumable");
+    String[] equipmentType = {"Helm","Chest","Arms","Main Hand","Off Hand","Pants","Shoes", "Accessory"};
+    JComboBox equipmentBox = new JComboBox(equipmentType);
+    JRadioButton equipment = new JRadioButton("Equipment");
+    JRadioButton key = new JRadioButton("Key Item");
     JPanel itemType = new JPanel();
-    JList itemBenefits = new JList();
-    JList itemSkills = new JList();
+    JList itemBenefits = new JList(benefitlm);
+    JList itemSkills = new JList(skilllm);
+    ArrayList<Item> list = new ArrayList<Item>();
     
     public ItemPanel(JPanel base){
         this.base = base;
@@ -26,17 +39,23 @@ public class ItemPanel extends JPanel{
         base.setLayout(new BorderLayout(10,10));
         base.setBorder(new EmptyBorder(10, 10, 10, 10));
         listPanel.setLayout(new BorderLayout(10,10));
-        itemList.setBorder(new TitledBorder(null, "Item List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        JScrollPane js=new JScrollPane(itemList);
-        js.setVisible(true);
-        add(js);
-        listPanel.add(itemList, BorderLayout.CENTER);
+        listPanel.add(this.makeScrollList(itemList, "Item List"), BorderLayout.CENTER);
         JPanel bp = new JPanel();
+        JPanel topBP = new JPanel(new GridLayout(1,2,10,10));
+        JButton save = new JButton("Save");
+        JButton load = new JButton("Load");
         JButton create = new JButton("Add Item");
         JButton delete = new JButton("Delete");
+        create.addActionListener(e -> addNewItem());
+        delete.addActionListener(e -> deleteSelectedItem());
+        load.addActionListener(e -> loadItem());
+        save.addActionListener(e -> saveItem());
+        topBP.add(save);
+        topBP.add(load);
         bp.setLayout(new GridLayout(1,2,10,10));
         bp.add(create);
         bp.add(delete);
+        listPanel.add(topBP, BorderLayout.NORTH);
         listPanel.add(bp, BorderLayout.SOUTH);
         
         base.add(listPanel, BorderLayout.WEST);
@@ -47,12 +66,12 @@ public class ItemPanel extends JPanel{
         upperRight.setLayout(new BorderLayout(10,10));
         
         
-        itemName.setLayout(new GridLayout(2,2,10,10));
-        itemName.add(new JLabel("Name:"));
-        itemName.add(new JLabel("Cost:"));
-        itemName.add(new JTextField());
-        itemName.add(new JTextField(20));
-        upperRight.add(itemName, BorderLayout.NORTH);
+        JPanel costName = new JPanel(new GridLayout(2,2,10,10));
+        costName.add(new JLabel("Name:"));
+        costName.add(new JLabel("Cost:"));
+        costName.add(itemName);
+        costName.add(itemCost);
+        upperRight.add(costName, BorderLayout.NORTH);
         
         
         itemDescription.setBorder(new TitledBorder(null, "Item Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -61,13 +80,12 @@ public class ItemPanel extends JPanel{
         JPanel typePanel = new JPanel();
         typePanel.setLayout(new GridLayout(1,4,10,10));
         ButtonGroup itemGroup = new ButtonGroup();
-        JRadioButton consumable = new JRadioButton("Consumable");
         itemGroup.add(consumable);
         typePanel.add(consumable);
-        JRadioButton equipment = new JRadioButton("Equipment");
         itemGroup.add(equipment);
         typePanel.add(equipment);
-        JRadioButton key = new JRadioButton("Key Item");
+        equipmentBox.setSelectedIndex(0);
+        typePanel.add(equipmentBox);
         itemGroup.add(key);
         typePanel.add(key);
         upperRight.add(typePanel, BorderLayout.SOUTH);
@@ -78,8 +96,7 @@ public class ItemPanel extends JPanel{
         
         JPanel benefitPanel = new JPanel(new BorderLayout(10,10));
         JPanel benefitButtons = new JPanel(new GridLayout(2,1,10,10));
-        itemBenefits.setBorder(new TitledBorder(null, "Item Benefits", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        benefitPanel.add(itemBenefits, BorderLayout.CENTER);
+        benefitPanel.add(this.makeScrollList(itemBenefits, "Item Benefits"), BorderLayout.CENTER);
         JButton addBenefit = new JButton("ADD");
         benefitButtons.add(addBenefit);
         JButton removeBenefit = new JButton("REMOVE");
@@ -89,8 +106,7 @@ public class ItemPanel extends JPanel{
         
         JPanel skillsPanel = new JPanel(new BorderLayout(10,10));
         JPanel skillsButtons = new JPanel(new GridLayout(2,1,10,10));
-        itemSkills.setBorder(new TitledBorder(null, "Item Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        skillsPanel.add(itemSkills, BorderLayout.CENTER);
+        skillsPanel.add(this.makeScrollList(itemSkills, "Item Skills"), BorderLayout.CENTER);
         JButton addSkill = new JButton("ADD");
         skillsButtons.add(addSkill);
         JButton removeSkill = new JButton("REMOVE");
@@ -102,6 +118,114 @@ public class ItemPanel extends JPanel{
         base.add(rightPanel, BorderLayout.CENTER);
         
         return base;
+    }
+    
+    
+    public void addNewItem(){
+        dlm.addElement("New Item");
+        list.add(new Item());
+    }
+    
+    public void deleteSelectedItem(){
+        if(!itemList.isSelectionEmpty()){
+            if(itemList.getSelectedIndices().length > 1){
+                int[] selection = itemList.getSelectedIndices();
+                dlm.removeRange(selection[0], selection[selection.length-1]);
+                for(int i = selection.length-1;i>=0;i--){
+                    list.remove(selection[i]);
+                    if(selection[i]==selected)
+                        selected = -1;
+                }
+            }
+            else{
+                int selection = itemList.getSelectedIndex();
+                if (selection == selected)
+                    selected = -1;
+                dlm.remove(selection);
+                list.remove(selection);
+            }
+        }
+    }
+    
+    public void saveItem(){
+        if(selected == -1){
+            Item add = new Item();
+            if(!itemName.getText().equals("")){
+                dlm.addElement(itemName.getText());
+                add.setName(itemName.getText());
+                sItem = this.pullData();
+                list.add(add);
+            }
+            else{
+                dlm.addElement("New Item");
+                add.setName("New Item");
+                list.add(add);
+            }
+        }
+        else{
+            selected = list.indexOf(sItem);
+            dlm.set(selected, itemName.getText());
+            sItem = this.pullData();
+            list.set(selected, sItem);
+        }
+    }
+    public void loadItem(){
+        if(!itemList.isSelectionEmpty()){
+            if(itemList.getSelectedIndices().length > 1){
+                }
+            else{
+                selected = itemList.getSelectedIndex();
+                sItem = list.get(selected);
+                itemName.setText(sItem.getName());
+                itemDescription.setText(sItem.getDescription());
+                this.selectType(sItem);
+            }
+        }
+    }
+    public Item pullData(){
+        Item created = new Item();
+        created.setName(itemName.getText());
+        try{
+            created.setCost(Integer.parseInt(itemCost.getText()));
+        }
+        catch(Exception e){
+            
+        }
+        created.setDescription(itemDescription.getText());
+        created.setType(this.getType());
+        return created;
+    }
+    
+    public JScrollPane makeScrollList(JList list, String name){
+        JScrollPane js = new JScrollPane(list);
+        js.setBorder(new TitledBorder(null, name, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        return js;
+    }
+    
+    public void selectType(Item item){
+        int type = item.getType();
+        if(type==0){
+            consumable.setSelected(true);
+        }
+        else if(type >= 1 && type!=9){
+            equipment.setSelected(true);
+            equipmentBox.setSelectedIndex(type-1);
+        }
+        else{
+            key.setSelected(true);
+        }
+    }
+    
+    public int getType(){
+        if(consumable.isSelected()){
+            return 0;
+        }
+        else if(equipment.isSelected()){
+            return 1+equipmentBox.getSelectedIndex();
+        }
+        else{
+            return 9;
+        }
     }
 
 }

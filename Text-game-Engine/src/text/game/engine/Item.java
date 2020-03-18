@@ -3,12 +3,12 @@ package text.game.engine;
 
 import java.util.ArrayList;
 
-public class Item {
+public class Item implements java.io.Serializable{
     private String name, description;
     private int cost, type;
     private ArrayList<Skill> skills = new ArrayList<Skill>();
     public Item(){
-        name = "new Item";
+        name = "New Item";
         cost = 0;
     }
     

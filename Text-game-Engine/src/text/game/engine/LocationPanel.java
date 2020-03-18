@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 
-public class LocationPanel extends JPanel
+public class LocationPanel
 {
 	JPanel base;
 	JList locationList = new JList();
@@ -29,14 +29,14 @@ public class LocationPanel extends JPanel
 		base.setLayout(null);		
 		
 		locationList.setBounds(12, 13, 194, 498);
-		locationList.setBorder(new TitledBorder(null, "Room List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		locationList.setBorder(new TitledBorder(null, "Location List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		base.add(locationList);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(218, 62, 548, 2);
 		base.add(separator);
 		
-		JLabel roomNameLabel = new JLabel("Room Name:");
+		JLabel roomNameLabel = new JLabel("Location Name:");
 		roomNameLabel.setBounds(218, 13, 88, 36);
 		base.add(roomNameLabel);
 		
@@ -44,7 +44,7 @@ public class LocationPanel extends JPanel
 		separator_1.setBounds(218, 201, 548, 2);
 		base.add(separator_1);
 		
-		JLabel roomDesc = new JLabel("Room Description:");
+		JLabel roomDesc = new JLabel("Location Description:");
 		roomDesc.setBounds(218, 77, 105, 22);
 		base.add(roomDesc);
 				

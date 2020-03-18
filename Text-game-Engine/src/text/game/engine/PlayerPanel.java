@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
-public class PlayerPanel extends JPanel
+public class PlayerPanel
 {
 	JPanel base;
 	JTextField txtName = new JTextField();
@@ -38,20 +38,22 @@ public class PlayerPanel extends JPanel
 		base.setLayout(null);
 		
 		txtName.setText("Name");
-		txtName.setBounds(10, 10, 70, 40);
+		txtName.setBounds(10, 10, 100, 30);
 		base.add(txtName);
-		txtName.setColumns(10);
+		txtName.setColumns(100);
 		
 		txtrDescription.setText("Description");
-		txtrDescription.setBounds(10, 62, 756, 86);
+		txtrDescription.setBounds(10, 62, 755, 85);
 		base.add(txtrDescription);	
 		
-		playerSkillsList.setBounds(546, 176, 220, 335);
-		playerSkillsList.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		base.add(playerSkillsList);
+                JScrollPane js = new JScrollPane(playerSkillsList);
+		js.setBounds(546, 176, 220, 335);
+                js.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        
+                base.add(js);
 		
 		JSeparator separator_4 = new JSeparator();
-		separator_4.setBounds(10, 161, 756, 2);
+		separator_4.setBounds(10, 160, 755, 2);
 		base.add(separator_4);		
 		
 		//Picture of the player if desired. 

@@ -3,11 +3,11 @@ package text.game.engine;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Player
+public class Player implements java.io.Serializable
 {
 	private String name, description;
 	private int strength, dexterity, iq, health, perception, will;
-	private ArrayList skills;
+	private ArrayList<Skill> skills;
 	private BufferedImage playerPic;
 	
 	public Player(){}

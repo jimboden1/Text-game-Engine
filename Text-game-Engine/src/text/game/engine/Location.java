@@ -1,6 +1,6 @@
-
 package text.game.engine;
 
-public class Skill implements java.io.Serializable{
+public class Location implements java.io.Serializable{
     private String name, description;
+    
 }

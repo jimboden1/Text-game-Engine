@@ -5,13 +5,19 @@ import java.awt.GridLayout;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
-public class SkillsPanel extends JPanel 
+public class SkillsPanel
 {
 	JPanel base;
 	JList skillsList = new JList();
 	JTextField textField = new JTextField();
 	JTextPane textPane_1 = new JTextPane();
 	JTextField modField = new JTextField();
+        JRadioButton strRadButton = new JRadioButton("Strength");
+        JRadioButton dexRadButton = new JRadioButton("Dexterity");
+        JRadioButton IQRadButton = new JRadioButton("IQ");
+        JRadioButton HPRadButton = new JRadioButton("Health Points");
+        JRadioButton percRadButton = new JRadioButton("Perception");
+        JRadioButton willRadButton = new JRadioButton("Will");
 	
 	public SkillsPanel(JPanel base)
 	{
@@ -30,27 +36,29 @@ public class SkillsPanel extends JPanel
 		separator_9.setBounds(12, 257, 754, 2);
 		base.add(separator_9);
 		
-		JRadioButton strRadButton = new JRadioButton("Strength");
+                ButtonGroup statGroup = new ButtonGroup();
+                
+                statGroup.add(strRadButton);
 		strRadButton.setBounds(226, 37, 127, 25);
 		base.add(strRadButton);
 		
-		JRadioButton dexRadButton = new JRadioButton("Dexterity");
+                statGroup.add(dexRadButton);
 		dexRadButton.setBounds(226, 67, 127, 25);
 		base.add(dexRadButton);
 		
-		JRadioButton IQRadButton = new JRadioButton("IQ");
+                statGroup.add(IQRadButton);
 		IQRadButton.setBounds(226, 97, 127, 25);
 		base.add(IQRadButton);
 		
-		JRadioButton HPRadButton = new JRadioButton("Health Points");
+                statGroup.add(HPRadButton);
 		HPRadButton.setBounds(226, 127, 127, 25);
 		base.add(HPRadButton);
 		
-		JRadioButton percRadButton = new JRadioButton("Perception");
+                statGroup.add(percRadButton);
 		percRadButton.setBounds(226, 157, 127, 25);
 		base.add(percRadButton);
 		
-		JRadioButton willRadButton = new JRadioButton("Will");
+                statGroup.add(willRadButton);
 		willRadButton.setBounds(226, 187, 127, 25);
 		base.add(willRadButton);
 		

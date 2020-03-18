@@ -2,13 +2,13 @@ package text.game.engine;
 
 import java.util.ArrayList;
 
-public class NPC
+public class NPC implements java.io.Serializable
 {
 	private String name, description;
-	private int type;
-	private ArrayList commands;
-	private ArrayList events;
-	private ArrayList skills;
+	private int type;//0 is merchant; 1 is enemy; 2 is other
+	private ArrayList<Command> commands;
+	private ArrayList<Events> events;
+	private ArrayList<Skill> skills;
 	public NPC() {
             name = "New NPC";
             type = 0;
@@ -24,9 +24,9 @@ public class NPC
 	public String getName() {return name;}
 	public String getDescription() {return description;}
 	public int getType(){return type;}
-	public ArrayList getCommands() {return commands;}
-	public ArrayList getEvents() {return events;}
-	public ArrayList getSkills() {return skills;}
+	public ArrayList<Command> getCommands() {return commands;}
+	public ArrayList<Events> getEvents() {return events;}
+	public ArrayList<Skill> getSkills() {return skills;}
 	
 
 }
