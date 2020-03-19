@@ -2,6 +2,7 @@ package text.game.engine;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
@@ -18,6 +19,7 @@ public class SkillsPanel
         JRadioButton HPRadButton = new JRadioButton("Health Points");
         JRadioButton percRadButton = new JRadioButton("Perception");
         JRadioButton willRadButton = new JRadioButton("Will");
+        ArrayList<Skill> skillList= new ArrayList<Skill>();
 	
 	public SkillsPanel(JPanel base)
 	{

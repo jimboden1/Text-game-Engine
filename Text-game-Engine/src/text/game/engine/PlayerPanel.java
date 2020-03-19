@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.PlainDocument;
 
 public class PlayerPanel
 {
@@ -49,6 +50,13 @@ public class PlayerPanel
                 JScrollPane js = new JScrollPane(playerSkillsList);
 		js.setBounds(546, 176, 220, 335);
                 js.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+                
+                IntFilter.makeIntOnly(strField);
+                IntFilter.makeIntOnly(dexField);
+                IntFilter.makeIntOnly(iqField);
+                IntFilter.makeIntOnly(hpField);
+                IntFilter.makeIntOnly(perField);
+                IntFilter.makeIntOnly(willField);
         
                 base.add(js);
 		

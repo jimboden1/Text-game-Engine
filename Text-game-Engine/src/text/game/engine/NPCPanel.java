@@ -23,18 +23,22 @@ public class NPCPanel{
     JPanel listPanel = new JPanel();
     JList npcList = new JList(dlm);
     JTextField npcName = new JTextField();
+    JTextField strength, dexterity, iq, health, perception, will = new JTextField();
     JTextArea npcDescription = new JTextArea();
     JRadioButton other = new JRadioButton("Other");
     JRadioButton enemy = new JRadioButton("Enemy");
     JRadioButton merchant = new JRadioButton("Merchant");
     JPanel npcType = new JPanel();
-    JList npcCommands = new JList();
+    JList npcItems = new JList();
     JList npcEvents = new JList();
     JList npcSkills = new JList();
+    JPanel customPanel = new JPanel(new BorderLayout(10,10));
     ArrayList<NPC> list = new ArrayList<NPC>();
+    CentralDB centralDB;
     
-    public NPCPanel(JPanel base){
+    public NPCPanel(JPanel base, CentralDB cDB){
         this.base = base;
+        centralDB = cDB;
     }
     
     public JPanel createNPCPanel(){
@@ -69,9 +73,10 @@ public class NPCPanel{
         npcName.setBorder(new TitledBorder(null, "Name", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         upperRight.add(npcName, BorderLayout.NORTH);
         
-        npcDescription.setBorder(new TitledBorder(null, "NPC Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        JScrollPane js = new JScrollPane(npcDescription);
+        js.setBorder(new TitledBorder(null, "NPC Description", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         npcDescription.setWrapStyleWord(true);
-        upperRight.add(npcDescription);
+        upperRight.add(js);
         JPanel typePanel = new JPanel();
         typePanel.setLayout(new GridLayout(1,4,10,10));
         ButtonGroup typeGroup = new ButtonGroup();
@@ -81,31 +86,23 @@ public class NPCPanel{
         typePanel.add(enemy);
         typeGroup.add(other);
         typePanel.add(other);
+        merchant.addActionListener(e-> merchantPanel());
+        enemy.addActionListener(e-> enemyPanel());
         upperRight.add(typePanel, BorderLayout.SOUTH);
         rightPanel.add(upperRight);
         
         JPanel bottomRight = new JPanel();
         bottomRight.setLayout(new GridLayout(1,3,10,10));
         
-        JPanel command = new JPanel(new BorderLayout(10,10));
-        JPanel commandButtons = new JPanel(new GridLayout(1,2,10,10));
-        command.add(this.makeScrollList(npcCommands, "NPC Commands"), BorderLayout.CENTER);
-        JButton addCommand = new JButton("ADD");
-        commandButtons.add(addCommand);
-        JButton removeCommand = new JButton("REMOVE");
-        commandButtons.add(removeCommand);
-        command.add(commandButtons, BorderLayout.SOUTH);
-        bottomRight.add(command);
-        
-        JPanel event = new JPanel(new BorderLayout(10,10));
-        JPanel eventButtons = new JPanel(new GridLayout(1,2,10,10));
-        event.add(this.makeScrollList(npcEvents, "NPC Events"), BorderLayout.CENTER);
-        JButton addEvent = new JButton("ADD");
-        eventButtons.add(addEvent);
-        JButton removeEvent = new JButton("REMOVE");
-        eventButtons.add(removeEvent);
-        event.add(eventButtons, BorderLayout.SOUTH);
-        bottomRight.add(event);
+        JPanel item = new JPanel(new BorderLayout(10,10));
+        JPanel itemButtons = new JPanel(new GridLayout(1,2,10,10));
+        item.add(this.makeScrollList(npcItems, "NPC Items"), BorderLayout.CENTER);
+        JButton addItem = new JButton("ADD");
+        itemButtons.add(addItem);
+        JButton removeItem = new JButton("REMOVE");
+        itemButtons.add(removeItem);
+        item.add(itemButtons, BorderLayout.SOUTH);
+        bottomRight.add(item);
         
         JPanel skill = new JPanel(new BorderLayout(10,10));
         JPanel skillButtons = new JPanel(new GridLayout(1,2,10,10));
@@ -117,6 +114,8 @@ public class NPCPanel{
         skill.add(skillButtons, BorderLayout.SOUTH);
         bottomRight.add(skill);
         rightPanel.add(bottomRight);
+        
+        bottomRight.add(customPanel);
         
         base.add(rightPanel, BorderLayout.CENTER);
         
@@ -222,5 +221,23 @@ public class NPCPanel{
             type = 2;
         }
         return type;
+    }
+    public void merchantPanel(){
+        customPanel.removeAll();
+        JPanel eventButtons = new JPanel(new GridLayout(1,2,10,10));
+        customPanel.add(this.makeScrollList(npcEvents, "NPC Events"), BorderLayout.CENTER);
+        JButton addEvent = new JButton("ADD");
+        eventButtons.add(addEvent);
+        JButton removeEvent = new JButton("REMOVE");
+        eventButtons.add(removeEvent);
+        customPanel.add(eventButtons, BorderLayout.SOUTH);
+        customPanel.revalidate();
+        customPanel.repaint();
+    }
+    public void enemyPanel(){
+        customPanel.removeAll();
+        JPanel statusPanel = new JPanel(new GridLayout(10,1,10,10));
+        customPanel.revalidate();
+        customPanel.repaint();
     }
 }

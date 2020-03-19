@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.PlainDocument;
 
 public class ItemPanel{
     
@@ -30,9 +31,11 @@ public class ItemPanel{
     JList itemBenefits = new JList(benefitlm);
     JList itemSkills = new JList(skilllm);
     ArrayList<Item> list = new ArrayList<Item>();
+    CentralDB centralDB;
     
-    public ItemPanel(JPanel base){
+    public ItemPanel(JPanel base, CentralDB cDB){
         this.base = base;
+        centralDB = cDB;
     }
     
     public JPanel createItemPanel(){
@@ -69,6 +72,9 @@ public class ItemPanel{
         JPanel costName = new JPanel(new GridLayout(2,2,10,10));
         costName.add(new JLabel("Name:"));
         costName.add(new JLabel("Cost:"));
+        PlainDocument doc = (PlainDocument) itemCost.getDocument();
+        doc.setDocumentFilter(new IntFilter());
+
         costName.add(itemName);
         costName.add(itemCost);
         upperRight.add(costName, BorderLayout.NORTH);
@@ -227,5 +233,4 @@ public class ItemPanel{
             return 9;
         }
     }
-
 }
