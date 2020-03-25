@@ -3,14 +3,24 @@ package text.game.engine;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 
 public class LocationPanel
 {
-	JPanel base;
-	JList locationList = new JList();
+	private JPanel base;
+	DefaultListModel dlm = new DefaultListModel();
+	DefaultListModel eventlm = new DefaultListModel();
+	DefaultListModel commandlm = new DefaultListModel();
+	DefaultListModel itemlm = new DefaultListModel();
+	int selected = -1;
+	
+	Location sLoc;
+	JList locationList = new JList(dlm);
+	JTextPane locationName = new JTextPane();
 	JTextArea descArea = new JTextArea();
 	JComboBox eventsCBox = new JComboBox();
 	JComboBox haveEventCBox = new JComboBox();
@@ -19,18 +29,42 @@ public class LocationPanel
 	JComboBox itemsCBox = new JComboBox();
 	JComboBox roomItemsCBox = new JComboBox();
 	
-	public LocationPanel(JPanel base)
+	ArrayList<Location> list = new ArrayList<Location>();
+	CentralDB centralDB;
+	
+	public LocationPanel(JPanel base, CentralDB cDB)
 	{
 		this.base = base;
+		centralDB = cDB;
 	}
 	
 	public JPanel createLocationPanel()
 	{
 		base.setLayout(null);		
 		
-		locationList.setBounds(12, 13, 194, 498);
+		locationList.setBounds(12, 43, 194, 433);
 		locationList.setBorder(new TitledBorder(null, "Location List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		base.add(locationList);
+		
+		JButton saveButton = new JButton("Save");
+		saveButton.setBounds(12, 13, 88, 25);
+		base.add(saveButton);
+		saveButton.addActionListener(e -> saveLocation());
+		
+		JButton loadButton = new JButton("Load");
+		loadButton.setBounds(118, 13, 88, 25);
+		base.add(loadButton);
+		loadButton.addActionListener(e -> loadLocation());
+		
+		JButton addLocButton = new JButton("Add");
+		addLocButton.setBounds(12, 486, 88, 25);
+		base.add(addLocButton);
+		addLocButton.addActionListener(e -> addNewLocation());
+		
+		JButton deleteLocButton = new JButton("Delete");
+		deleteLocButton.setBounds(118, 486, 88, 25);
+		base.add(deleteLocButton);
+		deleteLocButton.addActionListener(e -> deleteSelectedLocation());
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(218, 62, 548, 2);
@@ -64,9 +98,8 @@ public class LocationPanel
 		eventsCBox.setBounds(572, 232, 194, 27);
 		base.add(eventsCBox);
 		
-		JTextPane textPane = new JTextPane();
-		textPane.setBounds(334, 13, 432, 36);
-		base.add(textPane);
+		locationName.setBounds(334, 13, 432, 36);
+		base.add(locationName);
 		
 		JCheckBox fillItemsChkBox = new JCheckBox("Auto-fill items");
 		fillItemsChkBox.setBounds(213, 116, 113, 25);
@@ -79,8 +112,8 @@ public class LocationPanel
 		haveEventCBox.setBounds(310, 232, 194, 27);
 		base.add(haveEventCBox);
 		
-		JLabel roomEventsLabel = new JLabel("In Room:");
-		roomEventsLabel.setBounds(379, 214, 56, 16);
+		JLabel roomEventsLabel = new JLabel("In Location:");
+		roomEventsLabel.setBounds(379, 214, 76, 16);
 		base.add(roomEventsLabel);
 		
 		JLabel availableEventsLabel = new JLabel("Available:");
@@ -99,8 +132,8 @@ public class LocationPanel
 		separator_6.setBounds(218, 401, 548, 2);
 		base.add(separator_6);
 		
-		JLabel actionsLabel = new JLabel("Actions:");
-		actionsLabel.setBounds(218, 315, 56, 16);
+		JLabel actionsLabel = new JLabel("Commands:");
+		actionsLabel.setBounds(218, 315, 76, 16);
 		base.add(actionsLabel);
 		
 		actCBox.setBounds(572, 331, 194, 27);
@@ -109,8 +142,8 @@ public class LocationPanel
 		roomActCBox.setBounds(310, 331, 194, 27);
 		base.add(roomActCBox);
 		
-		JLabel roomActLabel = new JLabel("In Room:");
-		roomActLabel.setBounds(379, 313, 56, 16);
+		JLabel roomActLabel = new JLabel("In Location:");
+		roomActLabel.setBounds(379, 313, 76, 16);
 		base.add(roomActLabel);
 		
 		JLabel availableActLabel = new JLabel("Available:");
@@ -135,8 +168,8 @@ public class LocationPanel
 		roomItemsCBox.setBounds(310, 434, 194, 27);
 		base.add(roomItemsCBox);
 		
-		JLabel roomItemsLabel = new JLabel("In Room:");
-		roomItemsLabel.setBounds(379, 416, 56, 16);
+		JLabel roomItemsLabel = new JLabel("In Location:");
+		roomItemsLabel.setBounds(379, 416, 76, 16);
 		base.add(roomItemsLabel);
 		
 		JLabel availableItemsLabel = new JLabel("Available:");
@@ -153,4 +186,70 @@ public class LocationPanel
 		
 		return base;
 	}
+	
+	public void addNewLocation()
+	{
+        dlm.addElement("New Location");
+        list.add(new Location());
+    }
+
+	public void deleteSelectedLocation()
+	{
+        if(!locationList.isSelectionEmpty())
+        {
+            int[] selection = locationList.getSelectedIndices();
+            dlm.removeRange(selection[0], selection[selection.length-1]);
+        }        
+    }
+	
+	public void saveLocation()
+	{
+		 if(selected == -1){
+	            Location add = new Location();
+	            if(!locationName.getText().equals(""))
+	            {
+	                dlm.addElement(locationName.getText());
+	                add.setName(locationName.getText());
+	                list.add(add);
+	            }
+	            else{
+	                dlm.addElement("New Location");
+	                add.setName("New Location");
+	                list.add(add);
+	            }
+	        }
+	        else
+	        {
+	            selected = list.indexOf(sLoc);
+	            dlm.set(selected, locationName.getText());
+	            sLoc = this.pullData();
+	            list.set(selected, sLoc);
+	        }
+	}
+	
+	public void loadLocation()
+	{
+        if(!locationList.isSelectionEmpty())
+        {
+            if(locationList.getSelectedIndices().length > 1)
+            {
+            }
+            else
+            {
+                selected = locationList.getSelectedIndex();
+                sLoc = list.get(selected);
+                locationName.setText(sLoc.getName());
+                descArea.setText(sLoc.getDescription());
+                //this.selectType(sLoc);
+            }
+        }
+    }
+	
+	public Location pullData()
+	{
+        Location created = new Location();
+        created.setName(locationName.getText());
+        created.setDescription(descArea.getText());
+        return created;
+    }
 }

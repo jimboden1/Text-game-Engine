@@ -70,13 +70,13 @@ public class TextGameEngine {
         PlayerPanel playerTab = new PlayerPanel(playerBase);
 		tabbedPane.addTab("Player", null, playerTab.createPlayerPanel(), null);
                 
-                JPanel NPCBase = new JPanel();
+        JPanel NPCBase = new JPanel();
         NPCPanel npcTab = new NPCPanel(NPCBase, centralDB);
 		tabbedPane.addTab("NPC", null, npcTab.createNPCPanel(), null);
 
 		
 		JPanel roomsBase = new JPanel();
-        LocationPanel roomsTab = new LocationPanel(roomsBase);
+        LocationPanel roomsTab = new LocationPanel(roomsBase, null);
 		tabbedPane.addTab("Locations", null, roomsTab.createLocationPanel(), null);
 		
 		JPanel eventsBase = new JPanel();
