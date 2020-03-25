@@ -5,30 +5,12 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JList;
-import javax.swing.border.BevelBorder;
-import javax.swing.AbstractListModel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javax.swing.*;
 
 public class TextGameEngine {
 
 	private JFrame frame;
-	private JTextField txtName;
-	private JTextField txtEventName;
+        public static CentralDB centralDB = new CentralDB();
 
 	/**
 	 * Launch the application.
@@ -63,18 +45,19 @@ public class TextGameEngine {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 615);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.getContentPane().setLayout(null);
+                frame.getContentPane().setLayout(new BorderLayout());
                 JMenuBar menu = new JMenuBar();
-                menu.setBounds(0, 0, 784, 22);
                 JMenu files = new JMenu("Files");
                 JMenuItem save = new JMenuItem("Save");
+                JMenuItem saveAs = new JMenuItem("Save As");
                 JMenuItem load = new JMenuItem("Load");
                 JMenuItem create = new JMenuItem("New");
                 files.add(save);
+                files.add(saveAs);
                 files.add(load);
                 files.add(create);
                 menu.add(files);
-                frame.getContentPane().add(menu);
+                frame.getContentPane().add(menu, BorderLayout.NORTH);
                 
 		//Creating the tab layout
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -86,11 +69,15 @@ public class TextGameEngine {
 		JPanel playerBase = new JPanel();
         PlayerPanel playerTab = new PlayerPanel(playerBase);
 		tabbedPane.addTab("Player", null, playerTab.createPlayerPanel(), null);
+                
+                JPanel NPCBase = new JPanel();
+        NPCPanel npcTab = new NPCPanel(NPCBase, centralDB);
+		tabbedPane.addTab("NPC", null, npcTab.createNPCPanel(), null);
 
 		
 		JPanel roomsBase = new JPanel();
-        RoomsPanel roomsTab = new RoomsPanel(roomsBase);
-		tabbedPane.addTab("Rooms", null, roomsTab.createRoomsPanel(), null);
+        LocationPanel roomsTab = new LocationPanel(roomsBase);
+		tabbedPane.addTab("Locations", null, roomsTab.createLocationPanel(), null);
 		
 		JPanel eventsBase = new JPanel();
         EventsPanel eventsTab = new EventsPanel(eventsBase);
@@ -98,10 +85,10 @@ public class TextGameEngine {
 		
 
         JPanel itemBase = new JPanel();
-        ItemPanel itemTab = new ItemPanel(itemBase);
-		tabbedPane.addTab("Item", null, itemTab.createItemPanel(), null);
-
-		
+        ItemPanel itemTab = new ItemPanel(itemBase, centralDB);
+        tabbedPane.addTab("Items", null, itemTab.createItemPanel(), null);
+        
+                
 		JPanel skillsBase = new JPanel();
         SkillsPanel skillsTab = new SkillsPanel(skillsBase);
 		tabbedPane.addTab("Skills", null, skillsTab.createSkillsPanel(), null);

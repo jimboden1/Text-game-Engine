@@ -1,13 +1,56 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package text.game.engine;
 
-public class Item {
-    public String name;
-    public int cost;
-    public String descrition;
+import java.util.ArrayList;
+
+public class Item implements java.io.Serializable{
+    private String name, description;
+    private int cost, type;
+    private ArrayList<Skill> skills = new ArrayList<Skill>();
+    public Item(){
+        name = "New Item";
+        cost = 0;
+    }
     
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setType(int type){
+        this.type = type;
+    }
+    public void setCost(int cost){
+        this.cost = cost;
+    }
+    public void setSkills(ArrayList<Skill> skills){
+        this.skills = skills;
+    }
+    public void addSkill(Skill skill){
+        if(!skills.contains(skill)){
+            skills.add(skill);
+        }
+    }
+    public void removeSkill(Skill skill){
+        if(skills.contains(skill)){
+            skills.remove(skill);
+        }
+    }
+    
+    public String getName(){
+        return name;
+    }
+    public String getDescription(){
+        return description;
+    }
+    public int getType(){
+        return type;
+    }
+    public int getCost(){
+        return cost;
+    }
+    public ArrayList<Skill> getSkills(){
+        return skills;
+    }
 }
