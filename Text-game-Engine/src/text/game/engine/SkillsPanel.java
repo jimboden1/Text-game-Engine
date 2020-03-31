@@ -2,6 +2,8 @@ package text.game.engine;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -9,14 +11,15 @@ import javax.swing.border.TitledBorder;
 public class SkillsPanel
 {
 	JPanel base;
-	JList skillsList = new JList();
+	DefaultListModel listModel = new DefaultListModel();
+	JList skillsList = new JList(listModel);
 	JTextField textField = new JTextField();
 	JTextPane textPane_1 = new JTextPane();
 	JTextField modField = new JTextField();
         JRadioButton strRadButton = new JRadioButton("Strength");
         JRadioButton dexRadButton = new JRadioButton("Dexterity");
-        JRadioButton IQRadButton = new JRadioButton("IQ");
-        JRadioButton HPRadButton = new JRadioButton("Health Points");
+        JRadioButton iqRadButton = new JRadioButton("IQ");
+        JRadioButton hpRadButton = new JRadioButton("Health Points");
         JRadioButton percRadButton = new JRadioButton("Perception");
         JRadioButton willRadButton = new JRadioButton("Will");
         ArrayList<Skill> skillList= new ArrayList<Skill>();
@@ -48,13 +51,13 @@ public class SkillsPanel
 		dexRadButton.setBounds(226, 67, 127, 25);
 		base.add(dexRadButton);
 		
-                statGroup.add(IQRadButton);
-		IQRadButton.setBounds(226, 97, 127, 25);
-		base.add(IQRadButton);
+                statGroup.add(iqRadButton);
+		iqRadButton.setBounds(226, 97, 127, 25);
+		base.add(iqRadButton);
 		
-                statGroup.add(HPRadButton);
-		HPRadButton.setBounds(226, 127, 127, 25);
-		base.add(HPRadButton);
+                statGroup.add(hpRadButton);
+		hpRadButton.setBounds(226, 127, 127, 25);
+		base.add(hpRadButton);
 		
                 statGroup.add(percRadButton);
 		percRadButton.setBounds(226, 157, 127, 25);
@@ -94,6 +97,35 @@ public class SkillsPanel
 		JButton addSkillButton = new JButton("Add Skill");
 		addSkillButton.setBounds(572, 206, 194, 38);
 		base.add(addSkillButton);
+		addSkillButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				Skill skill = new Skill();
+				String name, description,type;
+				name = textField.getText();
+				description = textPane_1.getText();
+				if(strRadButton.isSelected())
+					type = "strength";
+				else if(dexRadButton.isSelected())
+					type = "dexterity";
+				else if(iqRadButton.isSelected())
+					type = "iq";
+				else if(hpRadButton.isSelected())
+					type = "health";
+				else if(percRadButton.isSelected())
+					type = "perception";
+				else
+					type = "will";
+				skill.setName(name);
+				skill.setDescription(description);
+				skill.setType(type);
+				skillList.add(skill);
+				System.out.println(name + " " + description + " " + type);
+				listModel.addElement(name);
+				
+			}
+		});
 		
 		return base;
 	}
