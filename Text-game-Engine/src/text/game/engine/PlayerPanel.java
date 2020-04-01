@@ -32,7 +32,7 @@ public class PlayerPanel
 	JButton addPicButton = new JButton();
 	JButton createPlayer = new JButton();
 	Player player;
-	File playerPic;
+	ImageIcon playerPic;
 	
 	
 	public PlayerPanel(JPanel base)
@@ -100,6 +100,7 @@ public class PlayerPanel
 			    	   img = ImageIO.read(file);
 			    	   Image scaled = img.getScaledInstance(picPane.getWidth(), picPane.getHeight(), Image.SCALE_SMOOTH);
 			    	   ImageIcon icon = new ImageIcon(scaled);
+			    	   playerPic = icon;
 			    	   picPane.setIcon(icon);
 			    	   base.repaint();
 			    	   base.revalidate();

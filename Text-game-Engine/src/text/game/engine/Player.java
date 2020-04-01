@@ -4,12 +4,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 public class Player implements java.io.Serializable
 {
 	private String name, description;
 	private int strength, dexterity, iq, health, perception, will;
 	private ArrayList<Skill> skills;
-	private File playerPic;
+	private ImageIcon playerPic;
 	
 	public Player(){}
 	
@@ -22,7 +24,7 @@ public class Player implements java.io.Serializable
 	public void setPerception(int perception) {this.perception = perception;}
 	public void setWill(int will) {this.will = will;}
 	public void setSkills(ArrayList skills) {this.skills = skills;}
-	public void setPic(File playerPic) {this.playerPic = playerPic;}
+	public void setPic(ImageIcon playerPic) {this.playerPic = playerPic;}
 	public void getInfo()
 	{
 		System.out.println("Player: " + name + "\n"
