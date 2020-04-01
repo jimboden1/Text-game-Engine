@@ -1,13 +1,19 @@
 package text.game.engine;
 
-
+import java.awt.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.PlainDocument;
 
 public class PlayerPanel
@@ -16,17 +22,17 @@ public class PlayerPanel
 	JTextField txtName = new JTextField();
 	JTextArea txtrDescription = new JTextArea();
 	JList playerSkillsList = new JList();
-	JEditorPane picPane = new JEditorPane();
+	JLabel picPane = new JLabel();
 	JTextField strField = new JTextField();
 	JTextField dexField = new JTextField();
 	JTextField iqField = new JTextField();
 	JTextField hpField = new JTextField();
 	JTextField perField = new JTextField();
 	JTextField willField = new JTextField();
-	
 	JButton addPicButton = new JButton();
 	JButton createPlayer = new JButton();
 	Player player;
+	File playerPic;
 	
 	
 	public PlayerPanel(JPanel base)
@@ -66,7 +72,10 @@ public class PlayerPanel
 		
 		//Picture of the player if desired. 
 		picPane.setBounds(10, 176, 188, 174);
-		picPane.setEditable(false);
+		picPane.setVisible(true);
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
+		picPane.setBorder(border);
+		//picPane.setEditable(false);
 		base.add(picPane);
 		addPicButton.setBounds(10, 350, 100, 20);
 		addPicButton.setText("Upload");
@@ -75,7 +84,33 @@ public class PlayerPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				
+				JFileChooser chooser = new JFileChooser();
+			    FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG File", "jpg","jpeg");
+			    chooser.setFileFilter(filter);
+			    int returnVal = chooser.showOpenDialog(base);
+			    if(returnVal == JFileChooser.APPROVE_OPTION)
+			    {
+			       System.out.println("You chose to open this file: " +
+			            chooser.getSelectedFile().getName());
+			       
+			       File file = new File(chooser.getSelectedFile().getPath());
+			       BufferedImage img;
+			       try
+			       {
+			    	   img = ImageIO.read(file);
+			    	   Image scaled = img.getScaledInstance(picPane.getWidth(), picPane.getHeight(), Image.SCALE_SMOOTH);
+			    	   ImageIcon icon = new ImageIcon(scaled);
+			    	   picPane.setIcon(icon);
+			    	   base.repaint();
+			    	   base.revalidate();
+			       }catch (IOException e1)
+			       {
+			    	   // TODO Auto-generated catch block
+			    	   e1.printStackTrace();
+			       }
+			       
+			       
+			    }
 			}
 		});
 		
@@ -98,7 +133,9 @@ public class PlayerPanel
 					player.setWill(Integer.parseInt(willField.getText()));
 					player.getInfo();
 					//Set the skills 
+					
 					//Set the image
+					player.setPic(playerPic);
 				}
 		});
 		
