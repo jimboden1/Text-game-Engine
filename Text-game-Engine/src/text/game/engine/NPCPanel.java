@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package text.game.engine;
 
 import java.awt.*;
@@ -14,31 +10,27 @@ import javax.swing.border.TitledBorder;
 public class NPCPanel{
     
     private JPanel base;
-    DefaultListModel dlm = new DefaultListModel();
-    DefaultListModel commandlm = new DefaultListModel();
-    DefaultListModel skilllm = new DefaultListModel();
-    DefaultListModel eventlm = new DefaultListModel();
+    DefaultListModel dlm = new DefaultListModel(), itemlm = new DefaultListModel(),
+            skilllm = new DefaultListModel(), eventlm = new DefaultListModel();
     int selected = -1;
     NPC sNPC;
     JPanel listPanel = new JPanel();
     JList npcList = new JList(dlm);
-    JTextField npcName = new JTextField();
-    JTextField strength, dexterity, iq, health, perception, will = new JTextField();
+    JTextField npcName = new JTextField(), strength = new JTextField(),
+            dexterity = new JTextField(), iq = new JTextField(),
+            health = new JTextField(), perception = new JTextField(),
+            will = new JTextField();
     JTextArea npcDescription = new JTextArea();
-    JRadioButton other = new JRadioButton("Other");
-    JRadioButton enemy = new JRadioButton("Enemy");
-    JRadioButton merchant = new JRadioButton("Merchant");
+    JRadioButton other = new JRadioButton("Other"), enemy = new JRadioButton("Enemy"), 
+            merchant = new JRadioButton("Merchant");
     JPanel npcType = new JPanel();
-    JList npcItems = new JList();
-    JList npcEvents = new JList();
-    JList npcSkills = new JList();
+    JList npcItems = new JList(itemlm), npcEvents = new JList(eventlm),
+            npcSkills = new JList(skilllm);
     JPanel customPanel = new JPanel(new BorderLayout(10,10));
     ArrayList<NPC> list = new ArrayList<NPC>();
-    CentralDB centralDB;
     
-    public NPCPanel(JPanel base, CentralDB cDB){
+    public NPCPanel(JPanel base){
         this.base = base;
-        centralDB = cDB;
     }
     
     public JPanel createNPCPanel(){
@@ -88,6 +80,7 @@ public class NPCPanel{
         typePanel.add(other);
         merchant.addActionListener(e-> merchantPanel());
         enemy.addActionListener(e-> enemyPanel());
+        other.addActionListener(e->merchantPanel());
         upperRight.add(typePanel, BorderLayout.SOUTH);
         rightPanel.add(upperRight);
         
@@ -145,6 +138,7 @@ public class NPCPanel{
                 dlm.remove(selection);
                 list.remove(selection);
             }
+            CentralDB.npcList = list;
         }
     }
     
@@ -167,6 +161,7 @@ public class NPCPanel{
             dlm.set(selected, npcName.getText());
             sNPC = this.pullData();
             list.set(selected, sNPC);
+            CentralDB.npcList = list;
         }
     }
     public void loadNPC(){
@@ -236,7 +231,26 @@ public class NPCPanel{
     }
     public void enemyPanel(){
         customPanel.removeAll();
-        JPanel statusPanel = new JPanel(new GridLayout(10,1,10,10));
+        JPanel statusPanel = new JPanel(new GridLayout(6,1));
+        strength.setBorder(new TitledBorder(null, "Strength", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        IntFilter.makeIntOnly(strength);
+        statusPanel.add(strength);
+        dexterity.setBorder(new TitledBorder(null, "Dexterity", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        IntFilter.makeIntOnly(dexterity);
+        statusPanel.add(dexterity);
+        iq.setBorder(new TitledBorder(null, "IQ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        IntFilter.makeIntOnly(iq);
+        statusPanel.add(iq);
+        health.setBorder(new TitledBorder(null, "Health", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        IntFilter.makeIntOnly(health);
+        statusPanel.add(health);
+        perception.setBorder(new TitledBorder(null, "Perception", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        IntFilter.makeIntOnly(perception);
+        statusPanel.add(perception);
+        will.setBorder(new TitledBorder(null, "Will", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        IntFilter.makeIntOnly(will);
+        statusPanel.add(will);
+        customPanel.add(statusPanel);
         customPanel.revalidate();
         customPanel.repaint();
     }

@@ -1,4 +1,3 @@
-
 package text.game.engine;
 
 import java.util.ArrayList;
@@ -7,6 +6,8 @@ public class Item implements java.io.Serializable{
     private String name, description;
     private int cost, type;
     private ArrayList<Skill> skills = new ArrayList<Skill>();
+    private ArrayList<Benefit> benefits = new ArrayList<>();
+    
     public Item(){
         name = "New Item";
         cost = 0;
@@ -37,6 +38,19 @@ public class Item implements java.io.Serializable{
             skills.remove(skill);
         }
     }
+    public void setBenefits(ArrayList<Benefit> benefits){
+        this.benefits = benefits;
+    }
+    public void addBenefits(Benefit benefit){
+        if(!benefits.contains(benefit)){
+            benefits.add(benefit);
+        }
+    }
+    public void removeBenefits(Benefit benefit){
+        if(benefits.contains(benefit)){
+            benefits.remove(benefit);
+        }
+    }
     
     public String getName(){
         return name;
@@ -52,5 +66,8 @@ public class Item implements java.io.Serializable{
     }
     public ArrayList<Skill> getSkills(){
         return skills;
+    }
+    public ArrayList<Benefit> getBenefits(){
+        return benefits;
     }
 }

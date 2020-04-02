@@ -31,11 +31,9 @@ public class ItemPanel{
     JList itemBenefits = new JList(benefitlm);
     JList itemSkills = new JList(skilllm);
     ArrayList<Item> list = new ArrayList<Item>();
-    CentralDB centralDB;
     
-    public ItemPanel(JPanel base, CentralDB cDB){
+    public ItemPanel(JPanel base){
         this.base = base;
-        centralDB = cDB;
     }
     
     public JPanel createItemPanel(){

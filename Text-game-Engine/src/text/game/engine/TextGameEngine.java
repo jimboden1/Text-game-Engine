@@ -10,7 +10,6 @@ import javax.swing.*;
 public class TextGameEngine {
 
 	private JFrame frame;
-        public static CentralDB centralDB = new CentralDB();
 
 	/**
 	 * Launch the application.
@@ -71,7 +70,7 @@ public class TextGameEngine {
 		tabbedPane.addTab("Player", null, playerTab.createPlayerPanel(), null);
                 
         JPanel NPCBase = new JPanel();
-        NPCPanel npcTab = new NPCPanel(NPCBase, centralDB);
+        NPCPanel npcTab = new NPCPanel(NPCBase);
 		tabbedPane.addTab("NPC", null, npcTab.createNPCPanel(), null);
 
 		
@@ -85,7 +84,7 @@ public class TextGameEngine {
 		
 
         JPanel itemBase = new JPanel();
-        ItemPanel itemTab = new ItemPanel(itemBase, centralDB);
+        ItemPanel itemTab = new ItemPanel(itemBase);
         tabbedPane.addTab("Items", null, itemTab.createItemPanel(), null);
         
                 
