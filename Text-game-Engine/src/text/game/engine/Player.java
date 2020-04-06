@@ -48,5 +48,24 @@ public class Player implements java.io.Serializable
 	public int getPerception() {return perception;}
 	public int getWill() {return will;}
 	public ArrayList getSkills() {return skills;}
+	
+	public void applyModifiers()
+	{
+		for (Skill skill : skills)
+		{
+			if(skill.getType() == "stregnth")
+				strength += skill.getModifier();
+			else if(skill.getType() == "dexterity")
+				dexterity +=skill.getModifier();
+			else if(skill.getType() == "iq")
+				iq += skill.getModifier();
+			else if(skill.getType() == "health")
+				health += skill.getModifier();
+			else if(skill.getType() == "perception")
+				perception += skill.getModifier();
+			else
+				will += skill.getModifier();
+		}
+	}
 
 }

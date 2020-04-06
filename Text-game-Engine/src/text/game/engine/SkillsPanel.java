@@ -120,10 +120,12 @@ public class SkillsPanel
 				skill.setName(name);
 				skill.setDescription(description);
 				skill.setType(type);
+				skill.setModifier(Integer.parseInt(modField.getText()));
 				skillList.add(skill);
 				System.out.println(name + " " + description + " " + type);
 				listModel.addElement(name);
-				
+				//Add the skills that were just created to the database
+				CentralDB.skillList = skillList;
 			}
 		});
 		

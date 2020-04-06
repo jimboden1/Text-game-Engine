@@ -21,7 +21,8 @@ public class PlayerPanel
 	JPanel base;
 	JTextField txtName = new JTextField();
 	JTextArea txtrDescription = new JTextArea();
-	JList playerSkillsList = new JList();
+	DefaultListModel listModel = new DefaultListModel();
+	JList playerSkillsList = new JList(listModel);
 	JLabel picPane = new JLabel();
 	JTextField strField = new JTextField();
 	JTextField dexField = new JTextField();
@@ -31,6 +32,8 @@ public class PlayerPanel
 	JTextField willField = new JTextField();
 	JButton addPicButton = new JButton();
 	JButton createPlayer = new JButton();
+	JButton addSkill = new JButton();
+	JButton removeSkill = new JButton();
 	Player player;
 	ImageIcon playerPic;
 	
@@ -53,19 +56,101 @@ public class PlayerPanel
 		txtrDescription.setBounds(10, 62, 755, 85);
 		base.add(txtrDescription);	
 		
-                JScrollPane js = new JScrollPane(playerSkillsList);
+        JScrollPane js = new JScrollPane(playerSkillsList);
 		js.setBounds(546, 176, 220, 335);
-                js.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-                
-                IntFilter.makeIntOnly(strField);
-                IntFilter.makeIntOnly(dexField);
-                IntFilter.makeIntOnly(iqField);
-                IntFilter.makeIntOnly(hpField);
-                IntFilter.makeIntOnly(perField);
-                IntFilter.makeIntOnly(willField);
+        js.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        for(Skill skill: CentralDB.skillList)
+        {
+            listModel.addElement(skill.getName());
+        }
+        base.add(js);
+        base.repaint();
+        base.revalidate();
         
-                base.add(js);
-		
+        addSkill.setText("Add Skill");
+        addSkill.setBounds(445,450,100,20);
+        base.add(addSkill);
+        addSkill.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				JFrame popupFrame = new JFrame();
+				JPanel popupPanel = new JPanel();
+				popupFrame.add(popupPanel);
+				popupFrame.setVisible(true);
+				popupFrame.setBounds(200,175, 750, 500 );
+				popupPanel.setLayout(null);
+				DefaultListModel listModel2 = new DefaultListModel();
+				JList skills = new JList(listModel2);
+				JScrollPane scrollPane = new JScrollPane(skills);
+				scrollPane.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				scrollPane.setBounds(250,25,220,335);
+				popupPanel.add(scrollPane);
+				for(Skill skill : CentralDB.skillList)
+				{
+					listModel2.addElement(skill.getName());
+				}
+				JButton confirm = new JButton();
+				confirm.setText("Confirm");
+				confirm.setBounds(305, 360, 100, 20);
+				popupPanel.add(confirm);
+				confirm.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						//For all scrollPane items if it is selected, do another for of all CentralDB skills and if
+						
+						//skill.getName() == scrollPane.getSelected then add that skill to player skills
+					}
+				});
+			}
+		});
+        
+        removeSkill.setName("Remove Skill");
+        removeSkill.setBounds(445,485,100,20);
+        base.add(removeSkill);
+        removeSkill.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				JFrame popupFrame = new JFrame();
+				JPanel popupPanel = new JPanel();
+				popupFrame.add(popupPanel);
+				popupFrame.setVisible(true);
+				popupFrame.setBounds(200,200, 1000, 1000 );
+				DefaultListModel listModel2 = new DefaultListModel();
+				JList skills = new JList(listModel2);
+				JScrollPane scrollPane = new JScrollPane(skills);
+				scrollPane.setBounds(250,350,220,335);
+				popupPanel.add(scrollPane);
+				for(Skill skill : CentralDB.skillList)
+				{
+					listModel2.addElement(skill.getName());
+				}
+				JButton confirm = new JButton();
+				confirm.setBounds(250, 480, 100, 20);
+				popupPanel.add(confirm);
+				
+				confirm.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						//For all scrollPane items if it is selected, do another for of all player skills and if
+						//skill.getName() == scrollPane.getSelected then remove that skill from player skills
+					}
+				});
+			}
+		});
+        
+        
+        
+        IntFilter.makeIntOnly(strField);
+        IntFilter.makeIntOnly(dexField);
+        IntFilter.makeIntOnly(iqField);
+        IntFilter.makeIntOnly(hpField);
+        IntFilter.makeIntOnly(perField);
+        IntFilter.makeIntOnly(willField);
+        
 		JSeparator separator_4 = new JSeparator();
 		separator_4.setBounds(10, 160, 755, 2);
 		base.add(separator_4);		
@@ -102,8 +187,6 @@ public class PlayerPanel
 			    	   ImageIcon icon = new ImageIcon(scaled);
 			    	   playerPic = icon;
 			    	   picPane.setIcon(icon);
-			    	   base.repaint();
-			    	   base.revalidate();
 			       }catch (IOException e1)
 			       {
 			    	   // TODO Auto-generated catch block
@@ -133,8 +216,8 @@ public class PlayerPanel
 					player.setPerception(Integer.parseInt(perField.getText()));
 					player.setWill(Integer.parseInt(willField.getText()));
 					player.getInfo();
-					//Set the skills 
-					
+					//apply the skills 
+					player.applyModifiers();
 					//Set the image
 					player.setPic(playerPic);
 				}
