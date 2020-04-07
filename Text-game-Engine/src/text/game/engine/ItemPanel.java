@@ -30,7 +30,8 @@ public class ItemPanel{
     JPanel itemType = new JPanel();
     JList itemBenefits = new JList(benefitlm);
     JList itemSkills = new JList(skilllm);
-    ArrayList<Item> list = new ArrayList<Item>();
+    ArrayList<Item> list = CentralDB.itemList;
+    ArrayList<Benefit> benefitsList = new ArrayList<>();
     
     public ItemPanel(JPanel base){
         this.base = base;
@@ -102,8 +103,10 @@ public class ItemPanel{
         JPanel benefitButtons = new JPanel(new GridLayout(2,1,10,10));
         benefitPanel.add(this.makeScrollList(itemBenefits, "Item Benefits"), BorderLayout.CENTER);
         JButton addBenefit = new JButton("ADD");
+        addBenefit.addActionListener(e -> addBenefit());
         benefitButtons.add(addBenefit);
         JButton removeBenefit = new JButton("REMOVE");
+        removeBenefit.addActionListener(e -> removeBenefit());
         benefitButtons.add(removeBenefit);
         benefitPanel.add(benefitButtons, BorderLayout.EAST);
         bottomRight.add(benefitPanel);
@@ -134,10 +137,10 @@ public class ItemPanel{
         if(!itemList.isSelectionEmpty()){
             if(itemList.getSelectedIndices().length > 1){
                 int[] selection = itemList.getSelectedIndices();
-                dlm.removeRange(selection[0], selection[selection.length-1]);
-                for(int i = selection.length-1;i>=0;i--){
+                for(int i = selection.length-1 ; i>=0; i--){
+                	dlm.remove(selection[i]);
                     list.remove(selection[i]);
-                    if(selection[i]==selected)
+                    if(selection[i] == selected)
                         selected = -1;
                 }
             }
@@ -193,10 +196,11 @@ public class ItemPanel{
             created.setCost(Integer.parseInt(itemCost.getText()));
         }
         catch(Exception e){
-            
+        	created.setCost(0);
         }
         created.setDescription(itemDescription.getText());
         created.setType(this.getType());
+        created.setBenefits(benefitsList);
         return created;
     }
     
@@ -231,4 +235,48 @@ public class ItemPanel{
             return 9;
         }
     }
+    
+    public void addBenefit() {
+    	JOptionPane popup = new JOptionPane();
+    	Benefit benefit = new Benefit();
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+    	JTextField mod = new JTextField("0");
+    	IntFilter.makeIntOnly(mod);
+    	String[] stats = {"Strength", "Dexterity", "IQ", "Health Points", "Perception", "Will"};
+    	
+    	mod.setBorder(new TitledBorder(null, "Modifier", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+    	
+        JComboBox statbox = new JComboBox(stats);
+        
+        main.add(mod, BorderLayout.NORTH);
+        main.add(statbox, BorderLayout.CENTER);
+        
+        popup.showMessageDialog(main, main);
+        
+        benefit.modifier = Integer.parseInt(mod.getText());
+        benefit.attributePlace =statbox.getSelectedIndex();
+        benefit.makeAttribute(statbox.getSelectedIndex());
+        
+        benefitlm.addElement(benefit.attribute + ": " + benefit.modifier);
+        benefitsList.add(benefit);
+    }
+    
+    public void removeBenefit() {
+    	if(!itemBenefits.isSelectionEmpty()){
+            if(itemBenefits.getSelectedIndices().length > 1){
+                int[] selection = itemBenefits.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	benefitlm.remove(selection[i]);
+                	benefitsList.remove(selection[i]);
+                }
+            }
+            else{
+                int selection = itemBenefits.getSelectedIndex();
+                benefitlm.remove(selection);
+                benefitsList.remove(selection);
+            }
+        }
+    }
+    
+    
 }

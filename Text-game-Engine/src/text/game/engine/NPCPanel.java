@@ -124,8 +124,8 @@ public class NPCPanel{
         if(!npcList.isSelectionEmpty()){
             if(npcList.getSelectedIndices().length > 1){
                 int[] selection = npcList.getSelectedIndices();
-                dlm.removeRange(selection[0], selection[selection.length-1]);
                 for(int i = selection.length-1;i>=0;i--){
+                    dlm.remove(selection[i]);
                     list.remove(selection[i]);
                     if(selection[i]==selected)
                         selected = -1;
@@ -217,6 +217,7 @@ public class NPCPanel{
         }
         return type;
     }
+    
     public void merchantPanel(){
         customPanel.removeAll();
         JPanel eventButtons = new JPanel(new GridLayout(1,2,10,10));
