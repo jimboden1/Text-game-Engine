@@ -39,7 +39,8 @@ public class TextGameEngine {
 	 */
 	private void initialize()
 	{
-
+		CentralDB database = new CentralDB();
+		
 		//creating the GUI
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 615);
@@ -75,11 +76,11 @@ public class TextGameEngine {
 
 		
 		JPanel roomsBase = new JPanel();
-        LocationPanel roomsTab = new LocationPanel(roomsBase, null);
+        LocationPanel roomsTab = new LocationPanel(roomsBase, database);
 		tabbedPane.addTab("Locations", null, roomsTab.createLocationPanel(), null);
 		
 		JPanel eventsBase = new JPanel();
-        EventsPanel eventsTab = new EventsPanel(eventsBase);
+        EventsPanel eventsTab = new EventsPanel(eventsBase, database);
 		tabbedPane.addTab("Events", null, eventsTab.createEventsPanel(), null);
 		
 

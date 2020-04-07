@@ -9,4 +9,5 @@ public class CentralDB implements java.io.Serializable{
     public static ArrayList<Events> eventList = new ArrayList<Events>();
     public static ArrayList<Command> commandList =  new ArrayList<Command>();
     public static ArrayList<NPC> npcList = new ArrayList<NPC>();
+	public ArrayList<Location> locationList = new ArrayList<Location>();
 }
