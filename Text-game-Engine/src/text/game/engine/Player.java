@@ -10,7 +10,7 @@ public class Player implements java.io.Serializable
 {
 	private String name, description;
 	private int strength, dexterity, iq, health, perception, will;
-	private ArrayList<Skill> skills;
+	private ArrayList<Skill> skills = new ArrayList<>();
 	private ImageIcon playerPic;
 	
 	public Player(){}
@@ -23,7 +23,7 @@ public class Player implements java.io.Serializable
 	public void setHealth(int health) {this.health = health;}
 	public void setPerception(int perception) {this.perception = perception;}
 	public void setWill(int will) {this.will = will;}
-	public void setSkills(ArrayList skills) {this.skills = skills;}
+	public void setSkills(ArrayList<Skill> skills) {this.skills = skills;}
 	public void setPic(ImageIcon playerPic) {this.playerPic = playerPic;}
 	public void getInfo()
 	{
@@ -47,7 +47,7 @@ public class Player implements java.io.Serializable
 	public int getHealth() {return health;}
 	public int getPerception() {return perception;}
 	public int getWill() {return will;}
-	public ArrayList getSkills() {return skills;}
+	public ArrayList<Skill> getSkills() {return skills;}
 	
 	public void applyModifiers()
 	{

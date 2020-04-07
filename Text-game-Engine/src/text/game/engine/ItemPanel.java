@@ -252,8 +252,12 @@ public class ItemPanel{
         main.add(statbox, BorderLayout.CENTER);
         
         popup.showMessageDialog(main, main);
-        
-        benefit.modifier = Integer.parseInt(mod.getText());
+        if(mod.getText().isEmpty()) {
+        	benefit.modifier = 0;
+        }
+        else {
+            benefit.modifier = Integer.parseInt(mod.getText());
+        }
         benefit.attributePlace =statbox.getSelectedIndex();
         benefit.makeAttribute(statbox.getSelectedIndex());
         
