@@ -125,6 +125,7 @@ public class NPCPanel{
     public void addNewNPC(){
         dlm.addElement("New NPC");
         list.add(new NPC());
+        CentralDB.npcList = list;
     }
     
     public void deleteSelectedNPC(){
@@ -168,8 +169,8 @@ public class NPCPanel{
             dlm.set(selected, npcName.getText());
             sNPC = this.pullData();
             list.set(selected, sNPC);
-            CentralDB.npcList = list;
         }
+        CentralDB.npcList = list;
     }
     public void loadNPC(){
         if(!npcList.isSelectionEmpty()){
