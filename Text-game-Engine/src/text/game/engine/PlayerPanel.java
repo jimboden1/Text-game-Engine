@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -98,15 +99,27 @@ public class PlayerPanel
 				{
 					public void actionPerformed(ActionEvent e)
 					{
-						//For all scrollPane items if it is selected, do another for of all CentralDB skills and if
-						
-						//skill.getName() == scrollPane.getSelected then add that skill to player skills
+						ArrayList<Skill> tempSkills = new ArrayList();
+						java.util.List selected = skills.getSelectedValuesList();
+						for(int i=0; i<selected.size();i++)
+						{
+							if(selected.get(i)==CentralDB.skillList.get(i).getName())
+							{
+								tempSkills.add(CentralDB.skillList.get(i));
+								//testing
+								System.out.println("You picked: " + CentralDB.skillList.get(i).getName());
+							}
+							else //testing
+								System.out.println("They didn't match ");
+						}
+						player.setSkills(tempSkills);
+						popupFrame.dispose();
 					}
 				});
 			}
 		});
         
-        removeSkill.setName("Remove Skill");
+        removeSkill.setText("Remove Skill");
         removeSkill.setBounds(445,485,100,20);
         base.add(removeSkill);
         removeSkill.addActionListener(new ActionListener()
@@ -116,19 +129,32 @@ public class PlayerPanel
 				JFrame popupFrame = new JFrame();
 				JPanel popupPanel = new JPanel();
 				popupFrame.add(popupPanel);
+				popupPanel.setLayout(null);
 				popupFrame.setVisible(true);
-				popupFrame.setBounds(200,200, 1000, 1000 );
+				popupFrame.setBounds(200,175, 750, 500);
 				DefaultListModel listModel2 = new DefaultListModel();
 				JList skills = new JList(listModel2);
 				JScrollPane scrollPane = new JScrollPane(skills);
-				scrollPane.setBounds(250,350,220,335);
+				scrollPane.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				scrollPane.setBounds(250,25,220,335);
 				popupPanel.add(scrollPane);
-				for(Skill skill : CentralDB.skillList)
+				
+				try
 				{
-					listModel2.addElement(skill.getName());
+					ArrayList<Skill> currentSkills = player.getSkills();
+					for(Skill skill : currentSkills)
+					{
+						listModel2.addElement(skill.getName());
+					}
+					
+				}catch(NullPointerException e1)
+				{
+					System.out.println("The player has no skills yet!");
 				}
+				
 				JButton confirm = new JButton();
-				confirm.setBounds(250, 480, 100, 20);
+				confirm.setText("Confirm");
+				confirm.setBounds(305, 360, 100, 20);
 				popupPanel.add(confirm);
 				
 				confirm.addActionListener(new ActionListener()
@@ -137,6 +163,22 @@ public class PlayerPanel
 					{
 						//For all scrollPane items if it is selected, do another for of all player skills and if
 						//skill.getName() == scrollPane.getSelected then remove that skill from player skills
+						java.util.List selected = skills.getSelectedValuesList();
+						ArrayList<Skill> currentSkills = player.getSkills();
+						for(int j=0;j<currentSkills.size();j++)
+						{
+							for(int i=0; i<selected.size();i++)
+							{
+								if(selected.get(i)==currentSkills.get(j).getName())
+								{
+									currentSkills.remove(i);
+									listModel2.remove(i);
+								}
+							}
+						}
+						player.setSkills(currentSkills);
+						
+						
 					}
 				});
 			}
