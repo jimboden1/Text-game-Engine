@@ -32,6 +32,7 @@ public class ItemPanel{
     JList itemSkills = new JList(skilllm);
     ArrayList<Item> list = CentralDB.itemList;
     ArrayList<Benefit> benefitsList = new ArrayList<>();
+    ArrayList<Skill> skillsList = new ArrayList<>();
     
     public ItemPanel(JPanel base){
         this.base = base;
@@ -115,8 +116,10 @@ public class ItemPanel{
         JPanel skillsButtons = new JPanel(new GridLayout(2,1,10,10));
         skillsPanel.add(this.makeScrollList(itemSkills, "Item Skills"), BorderLayout.CENTER);
         JButton addSkill = new JButton("ADD");
+        addSkill.addActionListener(e -> addSkill());
         skillsButtons.add(addSkill);
         JButton removeSkill = new JButton("REMOVE");
+        removeSkill.addActionListener(e -> removeSkill());
         skillsButtons.add(removeSkill);
         skillsPanel.add(skillsButtons, BorderLayout.EAST);
         bottomRight.add(skillsPanel);
@@ -201,6 +204,7 @@ public class ItemPanel{
         created.setDescription(itemDescription.getText());
         created.setType(this.getType());
         created.setBenefits(benefitsList);
+        created.setSkills(skillsList);
         return created;
     }
     
@@ -282,5 +286,38 @@ public class ItemPanel{
         }
     }
     
+    public void addSkill() {
+    	JOptionPane popup = new JOptionPane();
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel skills = new DefaultListModel();
+    	JList skillList = new JList(skills);
+    	for(Skill skill : CentralDB.skillList)
+		{
+    		skills.addElement(skill.getName());
+		}
+    	main.add(this.makeScrollList(skillList, "Skills"));
+        popup.showMessageDialog(main, main);
+        int[] selection = skillList.getSelectedIndices();
+        for(int i:selection) {
+            skilllm.addElement(CentralDB.skillList.get(i).getName());
+            skillsList.add(CentralDB.skillList.get(i));
+        }
+    }
     
+    public void removeSkill() {
+    	if(!itemSkills.isSelectionEmpty()){
+            if(itemSkills.getSelectedIndices().length > 1){
+                int[] selection = itemSkills.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	skilllm.remove(selection[i]);
+                	skillsList.remove(selection[i]);
+                }
+            }
+            else{
+                int selection = itemSkills.getSelectedIndex();
+                skilllm.remove(selection);
+                skillsList.remove(selection);
+            }
+        }
+    }
 }
