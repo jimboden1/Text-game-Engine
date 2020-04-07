@@ -134,6 +134,7 @@ public class ItemPanel{
     public void addNewItem(){
         dlm.addElement("New Item");
         list.add(new Item());
+        CentralDB.itemList = list;
     }
     
     public void deleteSelectedItem(){
@@ -154,6 +155,7 @@ public class ItemPanel{
                 dlm.remove(selection);
                 list.remove(selection);
             }
+            CentralDB.itemList = list;
         }
     }
     
@@ -178,6 +180,7 @@ public class ItemPanel{
             sItem = this.pullData();
             list.set(selected, sItem);
         }
+        CentralDB.itemList = list;
     }
     public void loadItem(){
         if(!itemList.isSelectionEmpty()){
