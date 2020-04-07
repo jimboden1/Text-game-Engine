@@ -28,6 +28,9 @@ public class NPCPanel{
             npcSkills = new JList(skilllm);
     JPanel customPanel = new JPanel(new BorderLayout(10,10));
     ArrayList<NPC> list = new ArrayList<NPC>();
+    ArrayList<Skill> skillsList = new ArrayList<>();
+    ArrayList<Item> itemList = new ArrayList<>();
+    ArrayList<Events> eventList = new ArrayList<>();
     
     public NPCPanel(JPanel base){
         this.base = base;
@@ -91,8 +94,10 @@ public class NPCPanel{
         JPanel itemButtons = new JPanel(new GridLayout(1,2,10,10));
         item.add(this.makeScrollList(npcItems, "NPC Items"), BorderLayout.CENTER);
         JButton addItem = new JButton("ADD");
+        addItem.addActionListener(e -> addItem());
         itemButtons.add(addItem);
         JButton removeItem = new JButton("REMOVE");
+        removeItem.addActionListener(e-> removeItem());
         itemButtons.add(removeItem);
         item.add(itemButtons, BorderLayout.SOUTH);
         bottomRight.add(item);
@@ -101,8 +106,10 @@ public class NPCPanel{
         JPanel skillButtons = new JPanel(new GridLayout(1,2,10,10));
         skill.add(this.makeScrollList(npcSkills, "NPC Skills"), BorderLayout.CENTER);
         JButton addSkill = new JButton("ADD");
+        addSkill.addActionListener(e -> addSkill());
         skillButtons.add(addSkill);
         JButton removeSkill = new JButton("REMOVE");
+        removeSkill.addActionListener(e -> removeSkill());
         skillButtons.add(removeSkill);
         skill.add(skillButtons, BorderLayout.SOUTH);
         bottomRight.add(skill);
@@ -223,8 +230,10 @@ public class NPCPanel{
         JPanel eventButtons = new JPanel(new GridLayout(1,2,10,10));
         customPanel.add(this.makeScrollList(npcEvents, "NPC Events"), BorderLayout.CENTER);
         JButton addEvent = new JButton("ADD");
+        addEvent.addActionListener(e -> addEvent());
         eventButtons.add(addEvent);
         JButton removeEvent = new JButton("REMOVE");
+        removeEvent.addActionListener(e -> removeEvent());
         eventButtons.add(removeEvent);
         customPanel.add(eventButtons, BorderLayout.SOUTH);
         customPanel.revalidate();
@@ -254,5 +263,110 @@ public class NPCPanel{
         customPanel.add(statusPanel);
         customPanel.revalidate();
         customPanel.repaint();
+    }
+    
+    public void addSkill() {
+    	JOptionPane popup = new JOptionPane();
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel skills = new DefaultListModel();
+    	JList skillList = new JList(skills);
+    	for(Skill skill : CentralDB.skillList)
+		{
+    		skills.addElement(skill.getName());
+		}
+    	main.add(this.makeScrollList(skillList, "Skills"));
+        popup.showMessageDialog(main, main);
+        int[] selection = skillList.getSelectedIndices();
+        for(int i:selection) {
+            skilllm.addElement(CentralDB.skillList.get(i).getName());
+            skillsList.add(CentralDB.skillList.get(i));
+        }
+    }
+    
+    public void removeSkill() {
+    	if(!npcSkills.isSelectionEmpty()){
+            if(npcSkills.getSelectedIndices().length > 1){
+                int[] selection = npcSkills.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	skilllm.remove(selection[i]);
+                	skillsList.remove(selection[i]);
+                }
+            }
+            else{
+                int selection = npcSkills.getSelectedIndex();
+                skilllm.remove(selection);
+                skillsList.remove(selection);
+            }
+        }
+    }
+    
+    public void addItem() {
+    	JOptionPane popup = new JOptionPane();
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel items = new DefaultListModel();
+    	JList skillList = new JList(items);
+    	for(Item item : CentralDB.itemList)
+		{
+    		items.addElement(item.getName());
+		}
+    	main.add(this.makeScrollList(skillList, "Items"));
+        popup.showMessageDialog(main, main);
+        int[] selection = skillList.getSelectedIndices();
+        for(int i:selection) {
+            itemlm.addElement(CentralDB.itemList.get(i).getName());
+            itemList.add(CentralDB.itemList.get(i));
+        }
+    }
+    
+    public void removeItem() {
+    	if(!npcItems.isSelectionEmpty()){
+            if(npcItems.getSelectedIndices().length > 1){
+                int[] selection = npcItems.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	itemlm.remove(selection[i]);
+                	itemList.remove(selection[i]);
+                }
+            }
+            else{
+                int selection = npcItems.getSelectedIndex();
+                itemlm.remove(selection);
+                itemList.remove(selection);
+            }
+        }
+    }
+    
+    public void addEvent() {
+    	JOptionPane popup = new JOptionPane();
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel events = new DefaultListModel();
+    	JList skillList = new JList(events);
+    	for(Events event : CentralDB.eventList)
+		{
+    		events.addElement(event.getName());
+		}
+    	main.add(this.makeScrollList(skillList, "Events"));
+        popup.showMessageDialog(main, main);
+        int[] selection = skillList.getSelectedIndices();
+        for(int i:selection) {
+            eventlm.addElement(CentralDB.eventList.get(i).getName());
+            eventList.add(CentralDB.eventList.get(i));
+        }
+    }
+    
+    public void removeEvent() {
+    	if(!npcEvents.isSelectionEmpty()){
+            if(npcEvents.getSelectedIndices().length > 1){
+                int[] selection = npcEvents.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	eventlm.remove(selection[i]);
+                	eventList.remove(selection[i]);
+                }
+            }
+            else{
+                int selection = npcEvents.getSelectedIndex();
+                eventlm.remove(selection);
+                eventList.remove(selection);
+            }
+        }
     }
 }
