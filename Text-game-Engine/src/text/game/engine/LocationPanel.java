@@ -17,6 +17,7 @@ public class LocationPanel
 	DefaultListModel commandlm = new DefaultListModel();
 	DefaultListModel itemlm = new DefaultListModel();
 	int selected = -1;
+	JCheckBox startScreenChkBox = new JCheckBox("Set as Start Screen");
 	
 	Location sLoc;
 	JList locationList = new JList(dlm);
@@ -101,12 +102,15 @@ public class LocationPanel
 		locationName.setBounds(334, 13, 432, 36);
 		base.add(locationName);
 		
+		startScreenChkBox.setBounds(210, 105, 113, 25);
+		base.add(startScreenChkBox);
+		
 		JCheckBox fillItemsChkBox = new JCheckBox("Auto-fill items");
-		fillItemsChkBox.setBounds(213, 116, 113, 25);
+		fillItemsChkBox.setBounds(210, 130, 113, 25);
 		base.add(fillItemsChkBox);
 		
 		JCheckBox fillNPCChkBox = new JCheckBox("Auto-fill NPCs");
-		fillNPCChkBox.setBounds(214, 146, 113, 25);
+		fillNPCChkBox.setBounds(210, 155, 113, 25);
 		base.add(fillNPCChkBox);
 		
 		haveEventCBox.setBounds(310, 232, 194, 27);
@@ -199,6 +203,7 @@ public class LocationPanel
         {
             int[] selection = locationList.getSelectedIndices();
             dlm.removeRange(selection[0], selection[selection.length-1]);
+            selected = -1;
         }        
     }
 	
@@ -240,6 +245,12 @@ public class LocationPanel
                 sLoc = list.get(selected);
                 locationName.setText(sLoc.getName());
                 descArea.setText(sLoc.getDescription());
+                if(CentralDB.startScreen.equals(sLoc)) {
+                	startScreenChkBox.setSelected(true);
+                }
+                else {
+                	startScreenChkBox.setSelected(false);
+                }
                 //this.selectType(sLoc);
             }
         }
@@ -250,6 +261,9 @@ public class LocationPanel
         Location created = new Location();
         created.setName(locationName.getText());
         created.setDescription(descArea.getText());
+        if (startScreenChkBox.isSelected()) {
+    		CentralDB.startScreen = created;
+        }
         return created;
     }
 }
