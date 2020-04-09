@@ -187,6 +187,9 @@ public class EventsPanel extends JPanel
                 sEvent = list.get(selected);
                 txtEventName.setText(sEvent.getName());
                 txtEventDescription.setText(sEvent.getDescription());
+                actionArea.setText(sEvent.getActionDesc());
+                successArea.setText(sEvent.getSuccessDesc());
+                failArea.setText(sEvent.getFailDesc());
                 //this.selectType(sLoc);
             }
         }
@@ -213,6 +216,9 @@ public class EventsPanel extends JPanel
         Events created = new Events();
         created.setName(txtEventName.getText());
         created.setDescription(txtEventDescription.getText());
+        created.setActionDesc(actionArea.getText());
+        created.setSuccessDesc(successArea.getText());
+        created.setFailDesc(failArea.getText());
         return created;
     }
 }
