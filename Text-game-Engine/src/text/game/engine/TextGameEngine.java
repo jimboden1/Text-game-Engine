@@ -2,6 +2,12 @@ package text.game.engine;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -10,6 +16,11 @@ import javax.swing.*;
 public class TextGameEngine {
 
 	private JFrame frame;
+	private String fileLocation =  new File(".").getAbsolutePath();
+	private CentralDB centralDB = new CentralDB();
+	private LocationPanel roomsTab = new LocationPanel();
+    private ItemPanel itemTab = new ItemPanel();
+	
 
 	/**
 	 * Launch the application.
@@ -48,8 +59,10 @@ public class TextGameEngine {
                 JMenuBar menu = new JMenuBar();
                 JMenu files = new JMenu("Files");
                 JMenuItem save = new JMenuItem("Save");
+                save.addActionListener(e->save());
                 JMenuItem saveAs = new JMenuItem("Save As");
                 JMenuItem load = new JMenuItem("Load");
+                load.addActionListener(e->load());
                 JMenuItem create = new JMenuItem("New");
                 files.add(save);
                 files.add(saveAs);
@@ -74,8 +87,6 @@ public class TextGameEngine {
 		tabbedPane.addTab("NPC", null, npcTab.createNPCPanel(), null);
 
 		
-		JPanel roomsBase = new JPanel();
-        LocationPanel roomsTab = new LocationPanel(roomsBase, null);
 		tabbedPane.addTab("Locations", null, roomsTab.createLocationPanel(), null);
 		
 		JPanel eventsBase = new JPanel();
@@ -84,13 +95,77 @@ public class TextGameEngine {
 		
 
         JPanel itemBase = new JPanel();
-        ItemPanel itemTab = new ItemPanel(itemBase);
         tabbedPane.addTab("Items", null, itemTab.createItemPanel(), null);
         
                 
 		JPanel skillsBase = new JPanel();
         SkillsPanel skillsTab = new SkillsPanel(skillsBase);
 		tabbedPane.addTab("Skills", null, skillsTab.createSkillsPanel(), null);
+		
+	}
+	
+	public void save() {
+		if(fileLocation.equals(null)) {
+			this.saveAs();
+		}
+		else {
+			String filename = "file.ser";
+			centralDB.loadOutCentralDB();
+			try
+		      
+			{ 
+				centralDB.counter++;
+				FileOutputStream file = new FileOutputStream(filename);
+				ObjectOutputStream out = new ObjectOutputStream(file);
+				out.writeObject(centralDB); 
+
+				out.close();
+				file.close();
+				System.out.println("Object has been serialized"); 
+
+			}
+			catch(IOException ex)
+			{
+				System.out.println("IOException is caught");
+				
+			}
+		}
+	}
+	
+	public void load() {
+		centralDB = null;
+		try
+        {    
+			String filename = "file.ser";
+			
+            FileInputStream file = new FileInputStream(filename); 
+            ObjectInputStream in = new ObjectInputStream(file); 
+              
+            centralDB = (CentralDB)in.readObject();
+            
+            in.close(); 
+            file.close();
+            
+            CentralDB.loadIntoCentralDB(centralDB);
+            roomsTab.update();
+            itemTab.update();
+              
+            System.out.println("Object has been deserialized ");
+			System.out.println("Count: " + centralDB.counter);
+        } 
+          
+        catch(IOException ex) 
+        { 
+            System.out.println("IOException is caught"); 
+        } 
+          
+        catch(ClassNotFoundException ex) 
+        { 
+            System.out.println("ClassNotFoundException is caught"); 
+        } 
+	}
+	
+	public void saveAs() {
 		
 	}
 }

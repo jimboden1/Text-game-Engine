@@ -33,6 +33,12 @@ public class LocationPanel
 	ArrayList<Location> list = new ArrayList<Location>();
 	CentralDB centralDB;
 	
+	public LocationPanel()
+	{
+		base = new JPanel();
+
+	}
+	
 	public LocationPanel(JPanel base, CentralDB cDB)
 	{
 		this.base = base;
@@ -266,4 +272,13 @@ public class LocationPanel
         }
         return created;
     }
+	
+	public void update() {
+		list = CentralDB.locationList;
+		dlm.removeAllElements();
+		for(Location location: list) {
+			System.out.println(location.getName());
+			dlm.addElement(location.getName());
+		}
+	}
 }

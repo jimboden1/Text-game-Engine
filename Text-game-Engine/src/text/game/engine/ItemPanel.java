@@ -34,6 +34,10 @@ public class ItemPanel{
     ArrayList<Benefit> benefitsList = new ArrayList<>();
     ArrayList<Skill> skillsList = new ArrayList<>();
     
+    public ItemPanel() {
+    	base = new JPanel();
+    }
+    
     public ItemPanel(JPanel base){
         this.base = base;
     }
@@ -191,6 +195,7 @@ public class ItemPanel{
                 sItem = list.get(selected);
                 itemName.setText(sItem.getName());
                 itemDescription.setText(sItem.getDescription());
+                itemCost.setText(""+sItem.getCost());
                 this.selectType(sItem);
             }
         }
@@ -322,5 +327,13 @@ public class ItemPanel{
                 skillsList.remove(selection);
             }
         }
-    }
+    	
+    }public void update() {
+		list = CentralDB.itemList;
+		dlm.removeAllElements();
+		for(Item item: list) {
+			System.out.println(item.getName());
+			dlm.addElement(item.getName());
+		}
+	}
 }
