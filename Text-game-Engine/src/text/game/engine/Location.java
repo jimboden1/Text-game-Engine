@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Location implements java.io.Serializable{
     private String name, description;
     private ArrayList<Events> events;
-    private ArrayList<Command> commands;
+    private ArrayList<Location> locations;
     private ArrayList<Item> items;
     
     public Location() {
@@ -15,13 +15,13 @@ public class Location implements java.io.Serializable{
 	public void setName(String name) {this.name = name;}
 	public void setDescription(String description) {this.description = description;}
 	public void setEvents(ArrayList<Events> events) {this.events = events;}
-	public void setCommands(ArrayList<Command> commands) {this.commands = commands;}
+	public void setLocations(ArrayList<Location> locations) {this.locations = locations;}
 	public void setItems(ArrayList<Item> items) {this.items = items;}
     
 	public String getName() {return name;}
 	public String getDescription() {return description;}
 	public ArrayList<Events> getEvents() {return events;}
-	public ArrayList<Command> getCommands() {return commands;}
+	public ArrayList<Location> getCommands() {return locations;}
 	public ArrayList<Item> getItems() {return items;} 
     
 	

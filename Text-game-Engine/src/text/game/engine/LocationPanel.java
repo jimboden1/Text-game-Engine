@@ -142,7 +142,7 @@ public class LocationPanel
 		separator_6.setBounds(218, 401, 548, 2);
 		base.add(separator_6);
 		
-		JLabel actionsLabel = new JLabel("Commands:");
+		JLabel actionsLabel = new JLabel("Locations:");
 		actionsLabel.setBounds(218, 315, 76, 16);
 		base.add(actionsLabel);
 		

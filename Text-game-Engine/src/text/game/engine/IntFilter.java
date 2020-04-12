@@ -61,7 +61,6 @@ class IntFilter extends DocumentFilter {
       if (test(sb.toString())) {
          super.remove(fb, offset, length);
       } else {
-         // warn the user and don't allow the insert
       }
 
    }

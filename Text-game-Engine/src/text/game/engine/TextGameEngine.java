@@ -9,14 +9,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TextGameEngine {
 
 	private JFrame frame;
-	private String fileLocation =  new File(".").getAbsolutePath();
+	private File currentFile = null;
 	private CentralDB centralDB = new CentralDB();
 	private LocationPanel roomsTab = new LocationPanel();
     private ItemPanel itemTab = new ItemPanel();
@@ -64,11 +63,17 @@ public class TextGameEngine {
                 JMenuItem load = new JMenuItem("Load");
                 load.addActionListener(e->load());
                 JMenuItem create = new JMenuItem("New");
+                JMenu play = new JMenu("Play");
+                JMenuItem playNew = new JMenuItem("Load Game");
+                JMenuItem playThis = new JMenuItem("Play This");
+                play.add(playNew);
+                play.add(playThis);
                 files.add(save);
                 files.add(saveAs);
                 files.add(load);
                 files.add(create);
                 menu.add(files);
+                menu.add(play);
                 frame.getContentPane().add(menu, BorderLayout.NORTH);
                 
 		//Creating the tab layout
@@ -105,23 +110,23 @@ public class TextGameEngine {
 	}
 	
 	public void save() {
-		if(fileLocation.equals(null)) {
+		if(currentFile == null) {
 			this.saveAs();
 		}
 		else {
-			String filename = "file.ser";
+			
+			
+			String filename = currentFile.getAbsolutePath();
 			centralDB.loadOutCentralDB();
 			try
 		      
 			{ 
-				centralDB.counter++;
 				FileOutputStream file = new FileOutputStream(filename);
 				ObjectOutputStream out = new ObjectOutputStream(file);
 				out.writeObject(centralDB); 
 
 				out.close();
 				file.close();
-				System.out.println("Object has been serialized"); 
 
 			}
 			catch(IOException ex)
@@ -129,43 +134,56 @@ public class TextGameEngine {
 				System.out.println("IOException is caught");
 				
 			}
+			
 		}
 	}
 	
 	public void load() {
 		centralDB = null;
-		try
-        {    
-			String filename = "file.ser";
+		JFileChooser chooser = new JFileChooser();
+		
+	    int returnVal = chooser.showOpenDialog(frame);
+	    if(returnVal == JFileChooser.APPROVE_OPTION)
+	    {
+	    	try
+        	{
 			
-            FileInputStream file = new FileInputStream(filename); 
-            ObjectInputStream in = new ObjectInputStream(file); 
+				String filename = currentFile.getAbsolutePath();
+			
+            	FileInputStream file = new FileInputStream(filename); 
+            	ObjectInputStream in = new ObjectInputStream(file); 
               
-            centralDB = (CentralDB)in.readObject();
+            	centralDB = (CentralDB)in.readObject();
             
-            in.close(); 
-            file.close();
+            	in.close(); 
+            	file.close();
             
-            CentralDB.loadIntoCentralDB(centralDB);
-            roomsTab.update();
-            itemTab.update();
+            	CentralDB.loadIntoCentralDB(centralDB);
+            	roomsTab.update();
+            	itemTab.update();
               
-            System.out.println("Object has been deserialized ");
-			System.out.println("Count: " + centralDB.counter);
-        } 
+        	} 
           
-        catch(IOException ex) 
-        { 
-            System.out.println("IOException is caught"); 
-        } 
+        	catch(IOException ex) 
+        	{ 
+            	System.out.println("IOException is caught"); 
+        	} 
           
-        catch(ClassNotFoundException ex) 
-        { 
-            System.out.println("ClassNotFoundException is caught"); 
-        } 
+			catch(ClassNotFoundException ex) 
+        	{ 
+            	System.out.println("ClassNotFoundException is caught"); 
+        	} 
+	    }
 	}
 	
 	public void saveAs() {
-		
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Specify a file to save");
+
+		int userSelection = fileChooser.showSaveDialog(frame);
+		if (userSelection == JFileChooser.APPROVE_OPTION) {
+			currentFile = fileChooser.getSelectedFile();
+			this.save();
+		}
 	}
 }

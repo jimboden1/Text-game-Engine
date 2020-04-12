@@ -19,8 +19,6 @@ public class CentralDB implements java.io.Serializable{
     public ArrayList<Location> locationListTemp =  new ArrayList<Location>();
     public ArrayList<NPC> npcListTemp = new ArrayList<NPC>();
     public Location startScreenTemp = new Location();
-    public static int counter = 0;
-    public int counterTemp;
     
     public void loadOutCentralDB() {
     	this.playerTemp = player;
@@ -32,7 +30,6 @@ public class CentralDB implements java.io.Serializable{
     	this.locationListTemp = locationList;
     	this.npcListTemp = npcList;
     	this.startScreenTemp = startScreen;
-    	this.counterTemp = counter;
     }
     
     public static void loadIntoCentralDB(CentralDB centralDB) {
@@ -44,7 +41,6 @@ public class CentralDB implements java.io.Serializable{
     	locationList = centralDB.locationListTemp;
     	npcList = centralDB.npcListTemp;
     	startScreen = centralDB.startScreenTemp;
-    	counter = centralDB.counterTemp;
     }
     
     public static void writeToFile() {

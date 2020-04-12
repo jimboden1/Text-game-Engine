@@ -90,6 +90,7 @@ public class SkillsPanel
 		modLabel.setBounds(361, 206, 56, 16);
 		base.add(modLabel);
 		
+		IntFilter.makeIntOnly(modField);
 		modField.setBounds(429, 203, 32, 22);
 		base.add(modField);
 		modField.setColumns(10);
