@@ -328,7 +328,9 @@ public class ItemPanel{
             }
         }
     	
-    }public void update() {
+    }
+    
+    public void update() {
 		list = CentralDB.itemList;
 		dlm.removeAllElements();
 		for(Item item: list) {

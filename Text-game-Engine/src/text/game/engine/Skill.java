@@ -8,7 +8,9 @@ public class Skill implements java.io.Serializable
     
     public Skill() 
     {
-    	
+    	name = "New Skill";
+    	type = "strength";
+    	modifier = 0;
     }
     public void setName(String name) {this.name = name;}
     public void setDescription(String description) {this.description = description;}

@@ -168,8 +168,8 @@ public class LocationPanel
 		addActButton.setBounds(629, 363, 97, 25);
 		base.add(addActButton);
 		
-		JLabel itemsLabel = new JLabel("Items:");
-		itemsLabel.setBounds(218, 418, 56, 16);
+		JLabel itemsLabel = new JLabel("Items/NPCs:");
+		itemsLabel.setBounds(218, 418, 76, 16);
 		base.add(itemsLabel);
 		
 		itemsCBox.setBounds(572, 434, 194, 27);

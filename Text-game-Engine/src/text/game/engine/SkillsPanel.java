@@ -1,9 +1,6 @@
 package text.game.engine;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -11,8 +8,8 @@ import javax.swing.border.TitledBorder;
 public class SkillsPanel
 {
 	JPanel base;
-	DefaultListModel listModel = new DefaultListModel();
-	JList skillsList = new JList(listModel);
+	DefaultListModel<String> listModel = new DefaultListModel<String>();
+	JList<String> skillsList = new JList<String>(listModel);
 	JTextField textField = new JTextField();
 	JTextPane textPane_1 = new JTextPane();
 	JTextField modField = new JTextField();
@@ -23,7 +20,9 @@ public class SkillsPanel
         JRadioButton percRadButton = new JRadioButton("Perception");
         JRadioButton willRadButton = new JRadioButton("Will");
         ArrayList<Skill> skillList= new ArrayList<Skill>();
-	
+        int selected = -1;
+        Skill sSkill;
+        
 	public SkillsPanel(JPanel base)
 	{
 		this.base = base;
@@ -32,39 +31,56 @@ public class SkillsPanel
 	public JPanel createSkillsPanel()
 	{
 		base.setLayout(null);
+		JButton addSkill= new JButton("Add New");
+		JButton saveSkill= new JButton("Save");
+		JButton loadSkill= new JButton("Load");
+		JButton deleteSkill = new JButton("Delete");
+
+		saveSkill.setBounds(10,10,90,30);
+		saveSkill.addActionListener(e->saveSkill());
+		base.add(saveSkill);
 		
-		skillsList.setBounds(12, 13, 194, 231);
-		skillsList.setBorder(new TitledBorder(null, "Skill List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		base.add(skillsList);
+		addSkill.setBounds(10,485,90,30);
+		addSkill.addActionListener(e->addNewSkill());
+		base.add(addSkill);
 		
-		JSeparator separator_9 = new JSeparator();
-		separator_9.setBounds(12, 257, 754, 2);
-		base.add(separator_9);
+		loadSkill.setBounds(110,10,90,30);
+		base.add(loadSkill);
+		
+		deleteSkill.setBounds(110,485,90,30);
+		deleteSkill.addActionListener(e->deleteSelectedSkill());
+		base.add(deleteSkill);
+		
+		JScrollPane js = new JScrollPane(skillsList);
+		js.setBounds(10, 50, 195, 430);
+		js.setBorder(new TitledBorder(null, "Skill List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		base.add(js);
+		
 		
                 ButtonGroup statGroup = new ButtonGroup();
                 
                 statGroup.add(strRadButton);
-		strRadButton.setBounds(226, 37, 127, 25);
+		strRadButton.setBounds(230, 37, 127, 25);
 		base.add(strRadButton);
 		
                 statGroup.add(dexRadButton);
-		dexRadButton.setBounds(226, 67, 127, 25);
+		dexRadButton.setBounds(230, 67, 127, 25);
 		base.add(dexRadButton);
 		
                 statGroup.add(iqRadButton);
-		iqRadButton.setBounds(226, 97, 127, 25);
+		iqRadButton.setBounds(230, 97, 127, 25);
 		base.add(iqRadButton);
 		
                 statGroup.add(hpRadButton);
-		hpRadButton.setBounds(226, 127, 127, 25);
+		hpRadButton.setBounds(230, 127, 127, 25);
 		base.add(hpRadButton);
 		
                 statGroup.add(percRadButton);
-		percRadButton.setBounds(226, 157, 127, 25);
+		percRadButton.setBounds(230, 157, 127, 25);
 		base.add(percRadButton);
 		
                 statGroup.add(willRadButton);
-		willRadButton.setBounds(226, 187, 127, 25);
+		willRadButton.setBounds(230, 187, 127, 25);
 		base.add(willRadButton);
 		
 		JLabel sklChoiceLabel = new JLabel("Base Skill:");
@@ -87,49 +103,102 @@ public class SkillsPanel
 		base.add(textPane_1);
 		
 		JLabel modLabel = new JLabel("Modifier:");
-		modLabel.setBounds(361, 206, 56, 16);
+		modLabel.setBounds(230, 217, 56, 16);
 		base.add(modLabel);
 		
 		IntFilter.makeIntOnly(modField);
-		modField.setBounds(429, 203, 32, 22);
+		modField.setBounds(230, 233, 50, 22);
 		base.add(modField);
 		modField.setColumns(10);
 		
-		JButton addSkillButton = new JButton("Add Skill");
-		addSkillButton.setBounds(572, 206, 194, 38);
-		base.add(addSkillButton);
-		addSkillButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				Skill skill = new Skill();
-				String name, description,type;
-				name = textField.getText();
-				description = textPane_1.getText();
-				if(strRadButton.isSelected())
-					type = "strength";
-				else if(dexRadButton.isSelected())
-					type = "dexterity";
-				else if(iqRadButton.isSelected())
-					type = "iq";
-				else if(hpRadButton.isSelected())
-					type = "health";
-				else if(percRadButton.isSelected())
-					type = "perception";
-				else
-					type = "will";
-				skill.setName(name);
-				skill.setDescription(description);
-				skill.setType(type);
-				skill.setModifier(Integer.parseInt(modField.getText()));
-				skillList.add(skill);
-				System.out.println(name + " " + description + " " + type);
-				listModel.addElement(name);
-				//Add the skills that were just created to the database
-				CentralDB.skillList = skillList;
-			}
-		});
-		
 		return base;
+	}
+	
+	public Skill pullData() {
+
+		Skill skill = new Skill();
+		String name, description,type;
+		name = textField.getText();
+		description = textPane_1.getText();
+		if(strRadButton.isSelected())
+			type = "strength";
+		else if(dexRadButton.isSelected())
+			type = "dexterity";
+		else if(iqRadButton.isSelected())
+			type = "iq";
+		else if(hpRadButton.isSelected())
+			type = "health";
+		else if(percRadButton.isSelected())
+			type = "perception";
+		else
+			type = "will";
+		skill.setName(name);
+		skill.setDescription(description);
+		skill.setType(type);
+		skill.setModifier(Integer.parseInt(modField.getText()));
+
+		return skill;
+	}
+	
+	public void saveSkill(){
+        if(selected == -1){
+            Skill add = new Skill();
+            if(!textField.getText().equals("")){
+            	listModel.addElement(textField.getText());
+                add.setName(textField.getText());
+                sSkill = this.pullData();
+                skillList.add(add);
+            }
+            else{
+            	listModel.addElement("New Item");
+                add.setName("New Item");
+                skillList.add(add);
+            }
+        }
+        else{
+            selected = skillList.indexOf(sSkill);
+            listModel.set(selected, textField.getText());
+            sSkill = this.pullData();
+            skillList.set(selected, sSkill);
+        }
+        CentralDB.skillList = skillList;
+    }
+	
+	public void addNewSkill() {
+		Skill add = new Skill();
+    	listModel.addElement("New Item");
+    	skillList.add(add);
+        CentralDB.skillList = skillList;
+	}
+	
+	public void deleteSelectedSkill(){
+        if(!skillsList.isSelectionEmpty()){
+            if(skillsList.getSelectedIndices().length > 1){
+                int[] selection = skillsList.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	listModel.remove(selection[i]);
+                	skillList.remove(selection[i]);
+                    if(selection[i] == selected)
+                        selected = -1;
+                }
+            }
+            else{
+                int selection = skillsList.getSelectedIndex();
+                if (selection == selected)
+                    selected = -1;
+                listModel.remove(selection);
+                skillList.remove(selection);
+            }
+            CentralDB.skillList = skillList;
+        }
+    }
+	
+	public void update() {
+		skillList = CentralDB.skillList;
+		listModel.removeAllElements();
+		for(Skill skill: skillList) {
+			System.out.println(skill.getName());
+			listModel.addElement(skill.getName());
+		}
 	}
 }

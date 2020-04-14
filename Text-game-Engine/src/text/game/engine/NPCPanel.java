@@ -32,6 +32,10 @@ public class NPCPanel{
     ArrayList<Item> itemList = new ArrayList<>();
     ArrayList<Events> eventList = new ArrayList<>();
     
+    public NPCPanel(){
+        this.base = new JPanel();
+    }
+    
     public NPCPanel(JPanel base){
         this.base = base;
     }
@@ -370,4 +374,13 @@ public class NPCPanel{
             }
         }
     }
+    
+    public void update() {
+		list = CentralDB.npcList;
+		dlm.removeAllElements();
+		for(NPC npc: list) {
+			System.out.println(npc.getName());
+			dlm.addElement(npc.getName());
+		}
+	}
 }

@@ -19,7 +19,7 @@ public class TextGameEngine {
 	private CentralDB centralDB = new CentralDB();
 	private LocationPanel roomsTab = new LocationPanel();
     private ItemPanel itemTab = new ItemPanel();
-	
+    private NPCPanel npcTab = new NPCPanel();
 
 	/**
 	 * Launch the application.
@@ -87,8 +87,7 @@ public class TextGameEngine {
         PlayerPanel playerTab = new PlayerPanel(playerBase);
 		tabbedPane.addTab("Player", null, playerTab.createPlayerPanel(), null);
                 
-        JPanel NPCBase = new JPanel();
-        NPCPanel npcTab = new NPCPanel(NPCBase);
+        
 		tabbedPane.addTab("NPC", null, npcTab.createNPCPanel(), null);
 
 		
