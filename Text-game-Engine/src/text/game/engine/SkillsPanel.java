@@ -45,6 +45,7 @@ public class SkillsPanel
 		base.add(addSkill);
 		
 		loadSkill.setBounds(110,10,90,30);
+		loadSkill.addActionListener(e->loadSkill());
 		base.add(loadSkill);
 		
 		deleteSkill.setBounds(110,485,90,30);
@@ -150,8 +151,8 @@ public class SkillsPanel
                 skillList.add(add);
             }
             else{
-            	listModel.addElement("New Item");
-                add.setName("New Item");
+            	listModel.addElement("New Skill");
+                add.setName("New Skill");
                 skillList.add(add);
             }
         }
@@ -166,7 +167,7 @@ public class SkillsPanel
 	
 	public void addNewSkill() {
 		Skill add = new Skill();
-    	listModel.addElement("New Item");
+    	listModel.addElement("New Skill");
     	skillList.add(add);
         CentralDB.skillList = skillList;
 	}
@@ -192,6 +193,28 @@ public class SkillsPanel
             CentralDB.skillList = skillList;
         }
     }
+	
+	public void loadSkill(){
+		selected = skillsList.getSelectedIndex();
+		if(selected>=0) {
+			sSkill = skillList.get(selected);
+			textField.setText(sSkill.getName());
+			textPane_1.setText(sSkill.getDescription());
+			if(sSkill.getType()=="strength")
+				strRadButton.setSelected(true);
+			else if(sSkill.getType()=="dexterity")
+				dexRadButton.setSelected(true);
+			else if(sSkill.getType()=="iq")
+				iqRadButton.setSelected(true);
+			else if(sSkill.getType()=="health")
+				hpRadButton.setSelected(true);
+			else if(sSkill.getType()=="perception")
+				percRadButton.setSelected(true);
+			else
+				willRadButton.setSelected(true);
+			modField.setText(""+sSkill.getModifier());
+		}
+	}
 	
 	public void update() {
 		skillList = CentralDB.skillList;
