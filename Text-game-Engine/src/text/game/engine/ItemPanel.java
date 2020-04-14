@@ -196,6 +196,16 @@ public class ItemPanel{
                 itemName.setText(sItem.getName());
                 itemDescription.setText(sItem.getDescription());
                 itemCost.setText(""+sItem.getCost());
+                benefitsList = sItem.getBenefits();
+                benefitlm.removeAllElements();
+                for(Benefit benefit: benefitsList) {
+                	benefitlm.addElement(benefit.attribute + ": " + benefit.modifier);
+                }
+                skillsList = sItem.getSkills();
+                skilllm.removeAllElements();
+                for(Skill skill:skillsList) {
+                	skilllm.addElement(skill.getName());
+                }
                 this.selectType(sItem);
             }
         }
