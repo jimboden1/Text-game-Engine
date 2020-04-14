@@ -16,10 +16,10 @@ public class NPCPanel{
     NPC sNPC;
     JPanel listPanel = new JPanel();
     JList npcList = new JList(dlm);
-    JTextField npcName = new JTextField(), strength = new JTextField(),
-            dexterity = new JTextField(), iq = new JTextField(),
-            health = new JTextField(), perception = new JTextField(),
-            will = new JTextField();
+    JTextField npcName = new JTextField(), strength = new JTextField("0"),
+            dexterity = new JTextField("0"), iq = new JTextField("0"),
+            health = new JTextField("0"), perception = new JTextField("0"),
+            will = new JTextField("0");
     JTextArea npcDescription = new JTextArea();
     JRadioButton other = new JRadioButton("Other"), enemy = new JRadioButton("Enemy"), 
             merchant = new JRadioButton("Merchant");
@@ -186,6 +186,31 @@ public class NPCPanel{
                 npcName.setText(sNPC.getName());
                 npcDescription.setText(sNPC.getDescription());
                 this.selectType(sNPC);
+                if(sNPC.getType()==1) {
+                	strength.setText(""+sNPC.getStrength());
+                	health.setText(""+sNPC.getHealth());
+                	dexterity.setText(""+sNPC.getDexterity());
+                	iq.setText(""+sNPC.getIQ());
+                	perception.setText(""+sNPC.getPerception());
+                	will.setText(""+sNPC.getWill());
+                }
+                else {
+                	eventList = sNPC.getEvents();
+                	eventlm.removeAllElements();
+                	for(Events event: eventList) {
+                		eventlm.addElement(event.getName());
+                	}
+                }
+                skillsList = sNPC.getSkills();
+                skilllm.removeAllElements();
+                for(Skill skill: skillsList) {
+                	skilllm.addElement(skill.getName());
+                }
+                itemList = sNPC.getItems();
+                itemlm.removeAllElements();
+                for(Item item: itemList) {
+                	itemlm.addElement(item.getName());
+                }
             }
         }
     }
@@ -194,6 +219,19 @@ public class NPCPanel{
         created.setName(npcName.getText());
         created.setDescription(npcDescription.getText());
         created.setType(this.getType());
+        if(created.getType()==1) {
+        	created.setStrength(Integer.parseInt(strength.getText()));
+        	created.setHealth(Integer.parseInt(health.getText()));
+        	created.setDexterity(Integer.parseInt(dexterity.getText()));
+        	created.setIQ(Integer.parseInt(iq.getText()));
+        	created.setPerception(Integer.parseInt(perception.getText()));
+        	created.setWill(Integer.parseInt(will.getText()));
+        }
+        else {
+        	created.setEvents(eventList);
+        }
+        created.setItems(itemList);
+        created.setSkills(skillsList);
         return created;
     }
     
@@ -207,12 +245,15 @@ public class NPCPanel{
         int type = npc.getType();
         if(type==0){
             merchant.setSelected(true);
+            merchantPanel();
         }
         else if(type == 1){
             enemy.setSelected(true);
+            enemyPanel();
         }
         else{
             other.setSelected(true);
+            merchantPanel();
         }
     }
     
