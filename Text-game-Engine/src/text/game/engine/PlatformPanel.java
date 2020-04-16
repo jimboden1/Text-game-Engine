@@ -2,6 +2,7 @@ package text.game.engine;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -57,4 +58,18 @@ public class PlatformPanel {
     public void checkCommand() {
     	
     }
+    public String checkString(String string, ArrayList<String> stringList) {
+		String result = null;
+		for(int i=0; i<stringList.size();i++)
+		{
+			//Compares Strings regardless of capitalization
+			if(string.equalsIgnoreCase(stringList.get(i)))
+			{
+				result = stringList.get(i);
+			}
+				
+		}
+		//When you call it, just insert a try catch or a requireNotNull
+		return result;
+	}
 }
