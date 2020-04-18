@@ -20,6 +20,7 @@ public class TextGameEngine {
 	private LocationPanel roomsTab = new LocationPanel();
     private ItemPanel itemTab = new ItemPanel();
     private NPCPanel npcTab = new NPCPanel();
+    private PlatformPanel platPanel = new PlatformPanel();
 
 	/**
 	 * Launch the application.
@@ -60,12 +61,15 @@ public class TextGameEngine {
                 JMenuItem save = new JMenuItem("Save");
                 save.addActionListener(e->save());
                 JMenuItem saveAs = new JMenuItem("Save As");
+                saveAs.addActionListener(e->saveAs());
                 JMenuItem load = new JMenuItem("Load");
                 load.addActionListener(e->load());
                 JMenuItem create = new JMenuItem("New");
                 JMenu play = new JMenu("Play");
                 JMenuItem playNew = new JMenuItem("Load Game");
+                playNew.addActionListener(e->play());
                 JMenuItem playThis = new JMenuItem("Play This");
+                playThis.addActionListener(e->playThis());
                 play.add(playNew);
                 play.add(playThis);
                 files.add(save);
@@ -184,5 +188,17 @@ public class TextGameEngine {
 			currentFile = fileChooser.getSelectedFile();
 			this.save();
 		}
+	}
+	
+	public void play() {
+		load();
+		playThis();
+	}
+	
+	public void playThis() {
+		frame.getContentPane().removeAll();
+		frame = platPanel.initializePlatformPanel(frame, CentralDB.startScreen);
+		frame.repaint();
+		frame.revalidate();
 	}
 }

@@ -27,8 +27,8 @@ public class LocationPanel
 	JComboBox haveEventCBox = new JComboBox();
 	JComboBox actCBox = new JComboBox();
 	JComboBox roomActCBox = new JComboBox();
-	JComboBox itemsCBox = new JComboBox();
-	JComboBox roomItemsCBox = new JComboBox();
+	JComboBox npcCBox = new JComboBox();
+	JComboBox roomNpcCBox = new JComboBox();
 	
 	ArrayList<Location> list = new ArrayList<Location>();
 	CentralDB centralDB;
@@ -168,15 +168,15 @@ public class LocationPanel
 		addActButton.setBounds(629, 363, 97, 25);
 		base.add(addActButton);
 		
-		JLabel itemsLabel = new JLabel("Items/NPCs:");
-		itemsLabel.setBounds(218, 418, 76, 16);
-		base.add(itemsLabel);
+		JLabel npcLabel = new JLabel("NPCs:");
+		npcLabel.setBounds(218, 418, 76, 16);
+		base.add(npcLabel);
 		
-		itemsCBox.setBounds(572, 434, 194, 27);
-		base.add(itemsCBox);
+		npcCBox.setBounds(572, 434, 194, 27);
+		base.add(npcCBox);
 		
-		roomItemsCBox.setBounds(310, 434, 194, 27);
-		base.add(roomItemsCBox);
+		roomNpcCBox.setBounds(310, 434, 194, 27);
+		base.add(roomNpcCBox);
 		
 		JLabel roomItemsLabel = new JLabel("In Location:");
 		roomItemsLabel.setBounds(379, 416, 76, 16);

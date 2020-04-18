@@ -10,7 +10,7 @@ public class CentralDB implements java.io.Serializable{
     public static ArrayList<Command> commandList =  new ArrayList<Command>();
     public static ArrayList<Location> locationList =  new ArrayList<Location>();
     public static ArrayList<NPC> npcList = new ArrayList<NPC>();
-    public static Location startScreen = new Location();
+    public static Location startScreen = Location.startScreen();
     public Player playerTemp = new Player();
     public ArrayList<Item> itemListTemp = new ArrayList<Item>();
     public ArrayList<Skill> skillListTemp = new ArrayList<Skill>();
@@ -18,7 +18,7 @@ public class CentralDB implements java.io.Serializable{
     public ArrayList<Command> commandListTemp =  new ArrayList<Command>();
     public ArrayList<Location> locationListTemp =  new ArrayList<Location>();
     public ArrayList<NPC> npcListTemp = new ArrayList<NPC>();
-    public Location startScreenTemp = new Location();
+    public Location startScreenTemp = Location.startScreen();
     
     public void loadOutCentralDB() {
     	this.playerTemp = player;
@@ -43,7 +43,4 @@ public class CentralDB implements java.io.Serializable{
     	startScreen = centralDB.startScreenTemp;
     }
     
-    public static void writeToFile() {
-    	
-    }
 }

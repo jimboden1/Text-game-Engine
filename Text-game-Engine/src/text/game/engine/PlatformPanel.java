@@ -9,7 +9,7 @@ import javax.swing.*;
 public class PlatformPanel {
 
 	public static JPanel main = new JPanel(new BorderLayout(10,10)), leftSide = new JPanel(new GridLayout(10,10)), 
-			top = new JPanel(), bottom = new JPanel(new BorderLayout(10,10)), buttonPanel = new JPanel(new GridLayout(2,5,10,10));
+			bottom = new JPanel(new BorderLayout(10,10)), buttonPanel = new JPanel(new GridLayout(2,5,10,10));
 	public static JTextField commandLine = new JTextField(200);
 	public static JTextArea descriptionArea = new JTextArea();
 	public static JButton button1 = new JButton(""), button2 = new JButton(""),
@@ -21,8 +21,9 @@ public class PlatformPanel {
 	public CentralDB currentGame = new CentralDB();
     
     public JFrame initializePlatformPanel(JFrame base,Location start) {
-    	base.removeAll();
     	
+    	here = start;
+    	base.getContentPane().setLayout(new BorderLayout(10,10));
     	JMenuBar menu = new JMenuBar();
         JMenu files = new JMenu("File");
         JMenuItem save = new JMenuItem("Save Game"), load = new JMenuItem("Load Game"), saveAs = new JMenuItem("Create New Save Game");
@@ -30,8 +31,7 @@ public class PlatformPanel {
         files.add(save);
         files.add(load);
     	menu.add(files);
-    	top.add(menu);
-    	main.add(top, BorderLayout.NORTH);
+    	main.add(menu, BorderLayout.NORTH);
     	
     	/*
     	buttonPanel.add(button1);
@@ -49,10 +49,14 @@ public class PlatformPanel {
     	commandLine.addActionListener(e -> checkCommand());
     	bottom.add(commandLine, BorderLayout.NORTH);
     	
+    	descriptionArea.setEditable(false);
+    	descriptionArea.setText(here.getDescription());
     	JScrollPane js = new JScrollPane(descriptionArea);
+    	descriptionArea.setText(here.getDescription());
         main.add(js, BorderLayout.CENTER);
         main.add(bottom, BorderLayout.SOUTH);
     	
+        base.getContentPane().add(main, BorderLayout.CENTER);
     	return base;
     }
     public void checkCommand() {

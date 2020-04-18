@@ -1,18 +1,19 @@
 package text.game.engine;
 
 public class Command {
-    private String command, target;
+    private String command;
+    private Method method;
     
-    public Command(String command, String target){
+    public Command(String command, Method method){
         this.command= command;
-        this.target = target;
+        this.method = method;
     }
     public Command(String command){
         this.command= command;
-        this.target = null;
+        this.method = null;
     }
     public void setCommand(String command){this.command = command;}
-    public void setTarget(String target){this.target = target;}
+    public void setTarget(Method method){this.method = method;}
     public String getCommand(){return command;}
-    public String getTarget(){return target;}
+    public Method getTarget(){return method;}
 }
