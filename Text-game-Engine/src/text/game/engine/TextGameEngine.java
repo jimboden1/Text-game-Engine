@@ -52,7 +52,7 @@ public class TextGameEngine {
 	{
 
 		//creating the GUI
-		frame = new JFrame();
+		frame = new JFrame("Text-Based Adventure Engine");
 		frame.setBounds(100, 100, 800, 615);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.getContentPane().setLayout(new BorderLayout());
@@ -98,7 +98,7 @@ public class TextGameEngine {
 		tabbedPane.addTab("Locations", null, roomsTab.createLocationPanel(), null);
 		
 		JPanel eventsBase = new JPanel();
-        EventsPanel eventsTab = new EventsPanel(eventsBase);
+        EventsPanel eventsTab = new EventsPanel(eventsBase, centralDB);
 		tabbedPane.addTab("Events", null, eventsTab.createEventsPanel(), null);
 		
 
