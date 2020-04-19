@@ -23,9 +23,9 @@ public class SkillsPanel
         int selected = -1;
         Skill sSkill;
         
-	public SkillsPanel(JPanel base)
+	public SkillsPanel()
 	{
-		this.base = base;
+		this.base = new JPanel();
 	}
 	
 	public JPanel createSkillsPanel()

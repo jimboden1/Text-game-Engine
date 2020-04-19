@@ -12,6 +12,7 @@ public class PlatformPanel {
 			bottom = new JPanel(new BorderLayout(10,10)), buttonPanel = new JPanel(new GridLayout(2,5,10,10));
 	public static JTextField commandLine = new JTextField(200);
 	public static JTextArea descriptionArea = new JTextArea();
+	public static JLabel name = new JLabel("Name: "), health = new JLabel("Health: ");
 	public static JButton button1 = new JButton(""), button2 = new JButton(""),
 			button3 = new JButton(""), button4 = new JButton(""),
 			button5 = new JButton(""), button6 = new JButton(""),

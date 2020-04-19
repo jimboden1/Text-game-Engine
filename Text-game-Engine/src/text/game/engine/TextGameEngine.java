@@ -10,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TextGameEngine {
 
@@ -21,6 +20,7 @@ public class TextGameEngine {
     private ItemPanel itemTab = new ItemPanel();
     private NPCPanel npcTab = new NPCPanel();
     private PlatformPanel platPanel = new PlatformPanel();
+    SkillsPanel skillsTab = new SkillsPanel();
 
 	/**
 	 * Launch the application.
@@ -107,7 +107,6 @@ public class TextGameEngine {
         
                 
 		JPanel skillsBase = new JPanel();
-        SkillsPanel skillsTab = new SkillsPanel(skillsBase);
 		tabbedPane.addTab("Skills", null, skillsTab.createSkillsPanel(), null);
 		
 	}
@@ -150,6 +149,7 @@ public class TextGameEngine {
 	    {
 	    	try
         	{
+	    		currentFile = chooser.getSelectedFile();
 			
 				String filename = currentFile.getAbsolutePath();
 			
@@ -164,6 +164,8 @@ public class TextGameEngine {
             	CentralDB.loadIntoCentralDB(centralDB);
             	roomsTab.update();
             	itemTab.update();
+            	npcTab.update();
+            	skillsTab.update();
               
         	} 
           
