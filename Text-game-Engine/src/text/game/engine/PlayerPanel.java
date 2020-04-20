@@ -22,8 +22,10 @@ public class PlayerPanel
 	JPanel base;
 	JTextField txtName = new JTextField();
 	JTextArea txtrDescription = new JTextArea();
-	DefaultListModel listModel = new DefaultListModel();
-	JList playerSkillsList = new JList(listModel);
+	DefaultListModel<String> listModel = new DefaultListModel<String>();
+	JList<String> playerSkillsList = new JList<String>(listModel);
+	DefaultListModel<String> itemLM = new DefaultListModel<String>();
+	JList<String> playerItemList = new JList<String>(listModel);
 	JLabel picPane = new JLabel();
 	JTextField strField = new JTextField();
 	JTextField dexField = new JTextField();
@@ -37,6 +39,8 @@ public class PlayerPanel
 	JButton removeSkill = new JButton();
 	Player player = new Player();
 	ImageIcon playerPic = new ImageIcon();
+	ArrayList<Skill> skillList = new ArrayList<>();
+	ArrayList<Item> itemList = new ArrayList<>();
 	
 	
 	public PlayerPanel(JPanel base)
@@ -99,14 +103,13 @@ public class PlayerPanel
 				{
 					public void actionPerformed(ActionEvent e)
 					{
-						ArrayList<Skill> tempSkills = new ArrayList<>();
 						java.util.List selected = skills.getSelectedValuesList();
 						for(int i = 0; i<selected.size();i++)
 						{
 							listModel.addElement(CentralDB.skillList.get(i).getName());
-							tempSkills.add(CentralDB.skillList.get(i));
+							skillList.add(CentralDB.skillList.get(i));
 						}
-						player.setSkills(tempSkills);
+						player.setSkills(skillList);
 						popupFrame.dispose();
 					}
 				});
@@ -120,21 +123,20 @@ public class PlayerPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				ArrayList<Skill> tempSkills = player.getSkills();
 				if(!playerSkillsList.isSelectionEmpty()){
 		            if(playerSkillsList.getSelectedIndices().length > 1){
 		                int[] selection = playerSkillsList.getSelectedIndices();
 		                for(int i = selection.length-1 ; i>=0; i--){
 		                	listModel.remove(selection[i]);
-		                	tempSkills.remove(selection[i]);
+		                	skillList.remove(selection[i]);
 		                }
 		            }
 		            else{
 		                int selection = playerSkillsList.getSelectedIndex();
 		                listModel.remove(selection);
-		                tempSkills.remove(selection);
+		                skillList.remove(selection);
 		            }
-		            player.setSkills(tempSkills);
+		            player.setSkills(skillList);
 		        }
 			}
 		});
@@ -275,10 +277,8 @@ public class PlayerPanel
 		JLabel statsLabel = new JLabel("Stats:");
 		statsLabel.setBounds(341, 176, 40, 16);
 		base.add(statsLabel);
+
 		
-		JLabel placeholder = new JLabel("put other stuff here");
-		placeholder.setBounds(180, 414, 129, 16);
-		base.add(placeholder);
 		
 		return base;
 	}

@@ -3,10 +3,10 @@ package text.game.engine;
 import java.util.ArrayList;
 
 public class Location implements java.io.Serializable{
-    private String name, description;
-    private ArrayList<Events> events;
-    private ArrayList<Location> locations;
-    private ArrayList<NPC> npcs;
+    private String name = "", description = "";
+    private ArrayList<Events> events = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<NPC> npcs = new ArrayList<>();
     
     public Location() {
     	name = "New Location";

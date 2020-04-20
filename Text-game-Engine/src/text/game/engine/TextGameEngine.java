@@ -101,12 +101,9 @@ public class TextGameEngine {
         EventsPanel eventsTab = new EventsPanel(eventsBase, centralDB);
 		tabbedPane.addTab("Events", null, eventsTab.createEventsPanel(), null);
 		
-
-        JPanel itemBase = new JPanel();
         tabbedPane.addTab("Items", null, itemTab.createItemPanel(), null);
         
-                
-		JPanel skillsBase = new JPanel();
+        
 		tabbedPane.addTab("Skills", null, skillsTab.createSkillsPanel(), null);
 		
 	}
@@ -199,7 +196,7 @@ public class TextGameEngine {
 	
 	public void playThis() {
 		frame.getContentPane().removeAll();
-		frame = platPanel.initializePlatformPanel(frame, CentralDB.startScreen);
+		frame = platPanel.initializePlatformPanel(frame);
 		frame.repaint();
 		frame.revalidate();
 	}

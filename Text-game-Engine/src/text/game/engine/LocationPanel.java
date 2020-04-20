@@ -12,23 +12,23 @@ import javax.swing.border.TitledBorder;
 public class LocationPanel
 {
 	private JPanel base;
-	DefaultListModel dlm = new DefaultListModel();
-	DefaultListModel eventlm = new DefaultListModel();
-	DefaultListModel commandlm = new DefaultListModel();
-	DefaultListModel itemlm = new DefaultListModel();
+	DefaultListModel<String> dlm = new DefaultListModel<String>();
+	DefaultListModel<String> eventlm = new DefaultListModel<String>();
+	DefaultListModel<String> commandlm = new DefaultListModel<String>();
+	DefaultListModel<String> itemlm = new DefaultListModel<String>();
 	int selected = -1;
 	JCheckBox startScreenChkBox = new JCheckBox("Set as Start Screen");
 	
 	Location sLoc;
-	JList locationList = new JList(dlm);
+	JList<String> locationList = new JList<String>(dlm);
 	JTextPane locationName = new JTextPane();
 	JTextArea descArea = new JTextArea();
-	JComboBox eventsCBox = new JComboBox();
-	JComboBox haveEventCBox = new JComboBox();
-	JComboBox actCBox = new JComboBox();
-	JComboBox roomActCBox = new JComboBox();
-	JComboBox npcCBox = new JComboBox();
-	JComboBox roomNpcCBox = new JComboBox();
+	JComboBox<String> eventsCBox = new JComboBox<String>();
+	JComboBox<String> haveEventCBox = new JComboBox<String>();
+	JComboBox<String> actCBox = new JComboBox<String>();
+	JComboBox<String> roomActCBox = new JComboBox<String>();
+	JComboBox<String> npcCBox = new JComboBox<String>();
+	JComboBox<String> roomNpcCBox = new JComboBox<String>();
 	
 	ArrayList<Location> list = new ArrayList<Location>();
 	CentralDB centralDB;

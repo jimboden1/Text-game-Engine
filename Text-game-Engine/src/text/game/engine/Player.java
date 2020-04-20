@@ -9,8 +9,9 @@ import javax.swing.ImageIcon;
 public class Player implements java.io.Serializable
 {
 	private String name, description;
-	private int strength, dexterity, iq, health, perception, will;
+	private int strength = 0, dexterity = 0, iq = 0, health = 0, perception = 0, will=  0;
 	private ArrayList<Skill> skills = new ArrayList<>();
+	public ArrayList<Item> inventory = new ArrayList<>();
 	private ImageIcon playerPic;
 	
 	public Player(){}
