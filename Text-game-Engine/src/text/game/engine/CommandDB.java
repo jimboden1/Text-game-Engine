@@ -23,6 +23,15 @@ public class CommandDB {
 				PlatformPanel.descriptionArea.append(skill.getName()+": " + skill.getDescription()+"\n");
 			}
 		}));
+		commands.add(new Command("check self", ()-> {
+			PlatformPanel.descriptionArea.setText(PlatformPanel.player.getDescription());
+		}));
+		commands.add(new Command("check items", ()-> {
+			PlatformPanel.descriptionArea.setText("You have the following items\n");
+			for(Item item: PlatformPanel.player.inventory) {
+				PlatformPanel.descriptionArea.append(item.getName() + ": " + item.getDescription()+"\n");
+			}
+		}));
 	}
 	
 	public void addLocationCommands(Location here) {
