@@ -19,6 +19,11 @@ public class LocationPanel
 	int selected = -1;
 	JCheckBox startScreenChkBox = new JCheckBox("Set as Start Screen");
 	
+	ArrayList<Item> iList = new ArrayList<Item>();
+	JList itemList = new JList(itemlm);
+	
+	JList eventsList = new JList(eventlm);
+	
 	Location sLoc;
 	JList<String> locationList = new JList<String>(dlm);
 	JTextPane locationName = new JTextPane();
@@ -102,9 +107,6 @@ public class LocationPanel
 		eventsLabel.setBounds(218, 216, 56, 16);
 		base.add(eventsLabel);
 		
-		eventsCBox.setBounds(572, 232, 194, 27);
-		base.add(eventsCBox);
-		
 		locationName.setBounds(334, 13, 432, 36);
 		base.add(locationName);
 		
@@ -119,24 +121,19 @@ public class LocationPanel
 		fillNPCChkBox.setBounds(210, 155, 113, 25);
 		base.add(fillNPCChkBox);
 		
-		haveEventCBox.setBounds(310, 232, 194, 27);
-		base.add(haveEventCBox);
+		eventsList.setBorder(new TitledBorder(null, "Events List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		eventsList.setBounds(286, 211, 218, 85);
+		base.add(eventsList);
 		
-		JLabel roomEventsLabel = new JLabel("In Location:");
-		roomEventsLabel.setBounds(379, 214, 76, 16);
-		base.add(roomEventsLabel);
+		JButton removeEventButton = new JButton("Remove Event");
+		removeEventButton.setBounds(572, 257, 120, 25);
+		//removeEventButton.addActionListener(e -> removeEvent());
+		base.add(removeEventButton);
 		
-		JLabel availableEventsLabel = new JLabel("Available:");
-		availableEventsLabel.setBounds(646, 216, 56, 16);
-		base.add(availableEventsLabel);
-		
-		JButton evntRmvButton = new JButton("Remove");
-		evntRmvButton.setBounds(349, 264, 114, 25);
-		base.add(evntRmvButton);
-		
-		JButton evntAddButton = new JButton("Add");
-		evntAddButton.setBounds(629, 264, 97, 25);
-		base.add(evntAddButton);
+		JButton addEventButton = new JButton("Add Event");
+		addEventButton.setBounds(572, 216, 120, 25);
+		//addEventButton.addActionListener(e -> addNewEvent());
+		base.add(addEventButton);
 		
 		JSeparator separator_6 = new JSeparator();
 		separator_6.setBounds(218, 401, 548, 2);
@@ -146,29 +143,59 @@ public class LocationPanel
 		actionsLabel.setBounds(218, 315, 76, 16);
 		base.add(actionsLabel);
 		
-		actCBox.setBounds(572, 331, 194, 27);
-		base.add(actCBox);
+		JLabel northLbl = new JLabel("North:");
+		northLbl.setBounds(296, 317, 97, 16);
+		base.add(northLbl);
 		
-		roomActCBox.setBounds(310, 331, 194, 27);
-		base.add(roomActCBox);
+		JTextField northTxt = new JTextField();
+		northTxt.setBounds(296, 341, 97, 22);
+		base.add(northTxt);
+		northTxt.setColumns(10);
 		
-		JLabel roomActLabel = new JLabel("In Location:");
-		roomActLabel.setBounds(379, 313, 76, 16);
-		base.add(roomActLabel);
+		JLabel southLbl = new JLabel("South:");
+		southLbl.setBounds(405, 317, 98, 16);
+		base.add(southLbl);
 		
-		JLabel availableActLabel = new JLabel("Available:");
-		availableActLabel.setBounds(646, 315, 56, 16);
-		base.add(availableActLabel);
+		JTextField southTxt = new JTextField();
+		southTxt.setColumns(10);
+		southTxt.setBounds(405, 341, 97, 22);
+		base.add(southTxt);
 		
-		JButton remActButton = new JButton("Remove");
-		remActButton.setBounds(349, 363, 114, 25);
-		base.add(remActButton);
+		JLabel eastLbl = new JLabel("East:");
+		eastLbl.setBounds(515, 317, 97, 16);
+		base.add(eastLbl);
 		
-		JButton addActButton = new JButton("Add");
-		addActButton.setBounds(629, 363, 97, 25);
-		base.add(addActButton);
+		JTextField eastTxt = new JTextField();
+		eastTxt.setColumns(10);
+		eastTxt.setBounds(515, 341, 97, 22);
+		base.add(eastTxt);
 		
-		JLabel npcLabel = new JLabel("NPCs:");
+		JLabel westLbl = new JLabel("West:");
+		westLbl.setBounds(624, 317, 97, 16);
+		base.add(westLbl);
+		
+		JTextField westTxt = new JTextField();
+		westTxt.setColumns(10);
+		westTxt.setBounds(624, 341, 97, 22);
+		base.add(westTxt);
+		
+		JButton chngNorthButton = new JButton("Change");
+		chngNorthButton.setBounds(304, 364, 80, 25);
+		base.add(chngNorthButton);
+		
+		JButton chngSouthButton = new JButton("Change");
+		chngSouthButton.setBounds(415, 364, 80, 25);
+		base.add(chngSouthButton);
+		
+		JButton chngEastButton = new JButton("Change");
+		chngEastButton.setBounds(525, 364, 80, 25);
+		base.add(chngEastButton);
+		
+		JButton chngWestButton = new JButton("Change");
+		chngWestButton.setBounds(634, 364, 80, 25);
+		base.add(chngWestButton);
+		
+		/*JLabel npcLabel = new JLabel("NPCs:");
 		npcLabel.setBounds(218, 418, 76, 16);
 		base.add(npcLabel);
 		
@@ -176,23 +203,25 @@ public class LocationPanel
 		base.add(npcCBox);
 		
 		roomNpcCBox.setBounds(310, 434, 194, 27);
-		base.add(roomNpcCBox);
+		base.add(roomNpcCBox);*/
 		
-		JLabel roomItemsLabel = new JLabel("In Location:");
-		roomItemsLabel.setBounds(379, 416, 76, 16);
-		base.add(roomItemsLabel);
+		JLabel itemsLabel = new JLabel("Items:");
+		itemsLabel.setBounds(218, 418, 56, 16);
+		base.add(itemsLabel);
 		
-		JLabel availableItemsLabel = new JLabel("Available:");
-		availableItemsLabel.setBounds(646, 418, 56, 16);
-		base.add(availableItemsLabel);
+		itemList.setBounds(286, 416, 218, 95);
+		base.add(itemList);
+		itemList.setBorder(new TitledBorder(null, "Item List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		JButton removeItemsButton = new JButton("Remove");
-		removeItemsButton.setBounds(349, 466, 114, 25);
-		base.add(removeItemsButton);
+		JButton removeItem = new JButton("Remove Item");
+		removeItem.setBounds(572, 472, 113, 25);
+		//removeItem.addActionListener(e -> removeItem());
+		base.add(removeItem);
 		
-		JButton addItemsButton = new JButton("Add");
-		addItemsButton.setBounds(629, 466, 97, 25);
-		base.add(addItemsButton);
+		JButton addItem = new JButton("Add Item");
+		addItem.setBounds(572, 431, 113, 25);
+		base.add(addItem);
+		//addItem.addActionListener(e -> addNewItem());
 		
 		return base;
 	}
