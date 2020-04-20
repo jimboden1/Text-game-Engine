@@ -17,13 +17,18 @@ public class CommandDB {
 	
 	public void addBaseCommands() {
 		commands.add(new Command("back", ()-> goBack()));
+		commands.add(new Command("check skills", ()-> {
+			PlatformPanel.descriptionArea.setText("You have the following skills\n");
+			for(Skill skill: PlatformPanel.player.getSkills()) {
+				PlatformPanel.descriptionArea.append(skill.getName()+": " + skill.getDescription()+"\n");
+			}
+		}));
 	}
 	
 	public void addLocationCommands(Location here) {
 		for(Location move : here.getLocations()) {
 			commands.add(new Command("move to "+ move.getName(), () -> moveTo(move)));
 		}
-		
 		for(NPC npc:here.getNPCs()) {
 			commands.add(new Command("talk "+ npc.getName()));
 		}
@@ -36,6 +41,7 @@ public class CommandDB {
 	public void goBack() {
 		PlatformPanel.descriptionArea.setText(PlatformPanel.here.getDescription());
 		PlatformPanel.descriptionArea.append("");
+		clearCommands();
 	}
 	
 	

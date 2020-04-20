@@ -2,7 +2,7 @@ package text.game.engine;
 
 public class Command {
     private String command;
-    private Method method;
+    public Method method;
     
     public Command(String command, Method method){
         this.command= command;
@@ -16,4 +16,5 @@ public class Command {
     public void setTarget(Method method){this.method = method;}
     public String getCommand(){return command;}
     public Method getTarget(){return method;}
+    public void runMethod() { method.method();}
 }

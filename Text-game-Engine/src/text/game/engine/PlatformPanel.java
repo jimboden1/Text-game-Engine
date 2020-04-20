@@ -83,6 +83,7 @@ public class PlatformPanel {
         main.add(js, BorderLayout.CENTER);
         main.add(bottom, BorderLayout.SOUTH);
     	
+        database.addBaseCommands();
     	database.addLocationCommands(here);
     	
         base.getContentPane().add(main, BorderLayout.CENTER);
@@ -100,7 +101,7 @@ public class PlatformPanel {
 			//Compares Strings regardless of capitalization
 			if(string.equalsIgnoreCase(database.commands.get(i).getCommand()))
 			{
-				database.commands.get(i).getTarget();
+				database.commands.get(i).runMethod();
 				System.out.println("command Recongnised as " + database.commands.get(i).getCommand());
 			}
 				
