@@ -1,5 +1,7 @@
 package text.game.engine;
 
+// serialization and deserialization code provided by: https://www.geeksforgeeks.org/serialization-in-java/
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.File;

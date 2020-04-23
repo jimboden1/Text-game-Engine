@@ -1,5 +1,7 @@
 package text.game.engine;
 
+//main code provided by: https://stackoverflow.com/questions/11093326/restricting-jtextfield-input-to-integers
+
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

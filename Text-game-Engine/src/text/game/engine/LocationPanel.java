@@ -15,25 +15,21 @@ public class LocationPanel
 	DefaultListModel<String> dlm = new DefaultListModel<String>();
 	DefaultListModel<String> eventlm = new DefaultListModel<String>();
 	DefaultListModel<String> commandlm = new DefaultListModel<String>();
-	DefaultListModel<String> itemlm = new DefaultListModel<String>();
+	DefaultListModel<String> npclm = new DefaultListModel<String>();
 	int selected = -1;
+	JTextField[] positionFields = new JTextField[4];
 	JCheckBox startScreenChkBox = new JCheckBox("Set as Start Screen");
+	Location[] locations = new Location[4];
 	
-	ArrayList<Item> iList = new ArrayList<Item>();
-	JList itemList = new JList(itemlm);
-	
+	ArrayList<Events> events = new ArrayList<>();
+	ArrayList<NPC> npcs = new ArrayList<NPC>();
+	JList npcList = new JList(npclm);
 	JList eventsList = new JList(eventlm);
 	
 	Location sLoc;
 	JList<String> locationList = new JList<String>(dlm);
 	JTextPane locationName = new JTextPane();
 	JTextArea descArea = new JTextArea();
-	JComboBox<String> eventsCBox = new JComboBox<String>();
-	JComboBox<String> haveEventCBox = new JComboBox<String>();
-	JComboBox<String> actCBox = new JComboBox<String>();
-	JComboBox<String> roomActCBox = new JComboBox<String>();
-	JComboBox<String> npcCBox = new JComboBox<String>();
-	JComboBox<String> roomNpcCBox = new JComboBox<String>();
 	
 	ArrayList<Location> list = new ArrayList<Location>();
 	CentralDB centralDB;
@@ -121,18 +117,18 @@ public class LocationPanel
 		fillNPCChkBox.setBounds(210, 155, 113, 25);
 		base.add(fillNPCChkBox);
 		
-		eventsList.setBorder(new TitledBorder(null, "Events List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		eventsList.setBounds(286, 211, 218, 85);
-		base.add(eventsList);
+		JScrollPane eventPane = makeScrollList(eventsList, "Events List");
+		eventPane.setBounds(286, 211, 218, 85);
+		base.add(eventPane);
 		
 		JButton removeEventButton = new JButton("Remove Event");
 		removeEventButton.setBounds(572, 257, 120, 25);
-		//removeEventButton.addActionListener(e -> removeEvent());
+		removeEventButton.addActionListener(e -> removeEvent());
 		base.add(removeEventButton);
 		
 		JButton addEventButton = new JButton("Add Event");
 		addEventButton.setBounds(572, 216, 120, 25);
-		//addEventButton.addActionListener(e -> addNewEvent());
+		addEventButton.addActionListener(e -> addEvent());
 		base.add(addEventButton);
 		
 		JSeparator separator_6 = new JSeparator();
@@ -147,52 +143,60 @@ public class LocationPanel
 		northLbl.setBounds(296, 317, 97, 16);
 		base.add(northLbl);
 		
-		JTextField northTxt = new JTextField();
-		northTxt.setBounds(296, 341, 97, 22);
-		base.add(northTxt);
-		northTxt.setColumns(10);
+		positionFields[0] = new JTextField();
+		positionFields[0].setEditable(false);
+		positionFields[0].setBounds(296, 341, 97, 22);
+		base.add(positionFields[0]);
+		positionFields[0].setColumns(10);
 		
 		JLabel southLbl = new JLabel("South:");
 		southLbl.setBounds(405, 317, 98, 16);
 		base.add(southLbl);
 		
-		JTextField southTxt = new JTextField();
-		southTxt.setColumns(10);
-		southTxt.setBounds(405, 341, 97, 22);
-		base.add(southTxt);
+		positionFields[2] = new JTextField();
+		positionFields[2].setEditable(false);
+		positionFields[2].setColumns(10);
+		positionFields[2].setBounds(405, 341, 97, 22);
+		base.add(positionFields[2]);
 		
 		JLabel eastLbl = new JLabel("East:");
 		eastLbl.setBounds(515, 317, 97, 16);
 		base.add(eastLbl);
 		
-		JTextField eastTxt = new JTextField();
-		eastTxt.setColumns(10);
-		eastTxt.setBounds(515, 341, 97, 22);
-		base.add(eastTxt);
+		positionFields[1] = new JTextField();
+		positionFields[1].setEditable(false);
+		positionFields[1].setColumns(10);
+		positionFields[1].setBounds(515, 341, 97, 22);
+		base.add(positionFields[1]);
 		
 		JLabel westLbl = new JLabel("West:");
 		westLbl.setBounds(624, 317, 97, 16);
 		base.add(westLbl);
 		
-		JTextField westTxt = new JTextField();
-		westTxt.setColumns(10);
-		westTxt.setBounds(624, 341, 97, 22);
-		base.add(westTxt);
+		positionFields[3] = new JTextField();
+		positionFields[3].setEditable(false);
+		positionFields[3].setColumns(10);
+		positionFields[3].setBounds(624, 341, 97, 22);
+		base.add(positionFields[3]);
 		
 		JButton chngNorthButton = new JButton("Change");
 		chngNorthButton.setBounds(304, 364, 80, 25);
+		chngNorthButton.addActionListener(e->changeLocation(0));
 		base.add(chngNorthButton);
 		
 		JButton chngSouthButton = new JButton("Change");
 		chngSouthButton.setBounds(415, 364, 80, 25);
+		chngSouthButton.addActionListener(e->changeLocation(2));
 		base.add(chngSouthButton);
 		
 		JButton chngEastButton = new JButton("Change");
 		chngEastButton.setBounds(525, 364, 80, 25);
+		chngEastButton.addActionListener(e->changeLocation(1));
 		base.add(chngEastButton);
 		
 		JButton chngWestButton = new JButton("Change");
 		chngWestButton.setBounds(634, 364, 80, 25);
+		chngWestButton.addActionListener(e->changeLocation(3));
 		base.add(chngWestButton);
 		
 		/*JLabel npcLabel = new JLabel("NPCs:");
@@ -205,31 +209,34 @@ public class LocationPanel
 		roomNpcCBox.setBounds(310, 434, 194, 27);
 		base.add(roomNpcCBox);*/
 		
-		JLabel itemsLabel = new JLabel("Items:");
-		itemsLabel.setBounds(218, 418, 56, 16);
-		base.add(itemsLabel);
+		JScrollPane npcPane = makeScrollList(npcList, "NPC List");
+		npcPane.setBounds(286, 416, 218, 95);
+		base.add(npcPane);
 		
-		itemList.setBounds(286, 416, 218, 95);
-		base.add(itemList);
-		itemList.setBorder(new TitledBorder(null, "Item List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		JButton removeNPC = new JButton("Remove NPC");
+		removeNPC.setBounds(572, 472, 113, 25);
+		removeNPC.addActionListener(e -> removeNPC());
+		base.add(removeNPC);
 		
-		JButton removeItem = new JButton("Remove Item");
-		removeItem.setBounds(572, 472, 113, 25);
-		//removeItem.addActionListener(e -> removeItem());
-		base.add(removeItem);
-		
-		JButton addItem = new JButton("Add Item");
-		addItem.setBounds(572, 431, 113, 25);
-		base.add(addItem);
-		//addItem.addActionListener(e -> addNewItem());
+		JButton addNPC = new JButton("Add NPC");
+		addNPC.setBounds(572, 431, 113, 25);
+		base.add(addNPC);
+		addNPC.addActionListener(e -> addNPC());
 		
 		return base;
 	}
+	
+	public JScrollPane makeScrollList(JList list, String name){
+        JScrollPane js = new JScrollPane(list);
+        js.setBorder(new TitledBorder(null, name, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        return js;
+    }
 	
 	public void addNewLocation()
 	{
         dlm.addElement("New Location");
         list.add(new Location());
+        CentralDB.locationList = list;
     }
 
 	public void deleteSelectedLocation()
@@ -239,7 +246,8 @@ public class LocationPanel
             int[] selection = locationList.getSelectedIndices();
             dlm.removeRange(selection[0], selection[selection.length-1]);
             selected = -1;
-        }        
+        }  
+        CentralDB.locationList = list;
     }
 	
 	public void saveLocation()
@@ -265,6 +273,7 @@ public class LocationPanel
 	            sLoc = this.pullData();
 	            list.set(selected, sLoc);
 	        }
+		 CentralDB.locationList = list;
 	}
 	
 	public void loadLocation()
@@ -286,6 +295,24 @@ public class LocationPanel
                 else {
                 	startScreenChkBox.setSelected(false);
                 }
+                eventlm.clear();
+                for(Events event: sLoc.getEvents()) {
+                	eventlm.addElement(event.getName());
+                }
+                npclm.clear();
+                for(NPC npc: sLoc.getNPCs()) {
+                	eventlm.addElement(npc.getName());
+                }
+                int i = 0;
+                for(Location location: sLoc.getLocations()) {
+                	if(location == null) {
+                		positionFields[i].setText("");
+                	}
+                	else {
+                		positionFields[i].setText(location.getName());
+                	}
+                	i++;
+                }
                 //this.selectType(sLoc);
             }
         }
@@ -299,6 +326,12 @@ public class LocationPanel
         if (startScreenChkBox.isSelected()) {
     		CentralDB.startScreen = created;
         }
+        created.setEvents(events);
+        created.setNorth(locations[0]);
+        created.setEast(locations[1]);
+        created.setSouth(locations[2]);
+        created.setWest(locations[3]);
+        created.setNPCs(npcs);
         return created;
     }
 	
@@ -310,4 +343,103 @@ public class LocationPanel
 			dlm.addElement(location.getName());
 		}
 	}
+	
+	public void addNPC() {
+    	JOptionPane popup = new JOptionPane();
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel nlm = new DefaultListModel();
+    	JList npcList = new JList(nlm);
+    	for(NPC npc : CentralDB.npcList)
+		{
+    		nlm.addElement(npc.getName());
+		}
+    	main.add(this.makeScrollList(npcList, "NPCs"));
+        popup.showMessageDialog(main, main);
+        int[] selection = npcList.getSelectedIndices();
+        for(int i:selection) {
+        	npclm.addElement(CentralDB.npcList.get(i).getName());
+        	npcs.add(CentralDB.npcList.get(i));
+        }
+    }
+	
+	public void removeNPC() {
+    	if(!npcList.isSelectionEmpty()){
+            if(npcList.getSelectedIndices().length > 1){
+                int[] selection = npcList.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	npclm.remove(selection[i]);
+                	npcs.remove(selection[i]);
+                }
+            }
+            else{
+                int selection = npcList.getSelectedIndex();
+                npclm.remove(selection);
+                npcs.remove(selection);
+            }
+        }
+    }
+	
+	public void addEvent() {
+    	JOptionPane popup = new JOptionPane();
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel elm = new DefaultListModel();
+    	JList eventList = new JList(elm);
+    	for(Events event : CentralDB.eventList)
+		{
+    		elm.addElement(event.getName());
+		}
+    	main.add(this.makeScrollList(eventList, "Events"));
+        popup.showMessageDialog(main, main);
+        int[] selection = eventList.getSelectedIndices();
+        for(int i:selection) {
+        	eventlm.addElement(CentralDB.eventList.get(i).getName());
+        	events.add(CentralDB.eventList.get(i));
+        }
+    }
+	
+	public void removeEvent() {
+    	if(!eventsList.isSelectionEmpty()){
+            if(eventsList.getSelectedIndices().length > 1){
+                int[] selection = eventsList.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	eventlm.remove(selection[i]);
+                	events.remove(selection[i]);
+                }
+            }
+            else{
+                int selection = eventsList.getSelectedIndex();
+                eventlm.remove(selection);
+                events.remove(selection);
+            }
+        }
+    }
+	
+	public void changeLocation(int position) {
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel<String> locationlm = new DefaultListModel<String>();
+    	JList<String> locationList = new JList<String>(locationlm);
+    	locationlm.addElement("none");
+    	for(Location location : CentralDB.locationList)
+		{
+    		locationlm.addElement(location.getName());
+		}
+    	main.add(this.makeScrollList(locationList, "Locations"));
+    	JOptionPane.showMessageDialog(main, main);
+        if(locationList.getSelectedIndices().length>1) {
+        	JOptionPane.showMessageDialog(main, "You can only add a single location to a position");
+        }
+        else {
+        	if(locationList.getSelectedIndex() == 0) {
+            	locations[position]=null;
+            	positionFields[position].setText("");
+            }
+        	else if(locationList.isSelectionEmpty()) {
+        		
+        	}
+        	else {
+        		locations[position] = CentralDB.locationList.get(locationList.getSelectedIndex()-1);
+        		positionFields[position].setText(locations[position].getName());
+        	}
+        }
+    }
 }

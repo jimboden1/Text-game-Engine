@@ -219,6 +219,7 @@ public class PlayerPanel
 					player.applyModifiers();
 					//Set the image
 					player.setPic(playerPic);
+					CentralDB.player = player;
 				}
 		});
 		

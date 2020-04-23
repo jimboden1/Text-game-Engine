@@ -36,7 +36,9 @@ public class CommandDB {
 	
 	public void addLocationCommands(Location here) {
 		for(Location move : here.getLocations()) {
-			commands.add(new Command("move to "+ move.getName(), () -> moveTo(move)));
+			if(move!=null) {
+				commands.add(new Command("move to "+ move.getName(), () -> moveTo(move)));
+			}
 		}
 		for(NPC npc:here.getNPCs()) {
 			commands.add(new Command("talk "+ npc.getName()));
