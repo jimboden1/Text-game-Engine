@@ -3,18 +3,24 @@ package text.game.engine;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.NumberFormatter;
 
 public class EventsPanel extends JPanel
 {
 	DefaultListModel dlm = new DefaultListModel();
+	DefaultListModel skillslm = new DefaultListModel();
 	ArrayList<Events> list = new ArrayList<Events>();
 	Events sEvent;
 	int selected = -1;
 	CentralDB centralDB;
+	
+	JList eventSkillList = new JList(skillslm);
+	ArrayList<Skill> skills = new ArrayList<Skill>();
 	
 	JPanel base;
 	JTextField txtEventName = new JTextField();
@@ -24,10 +30,9 @@ public class EventsPanel extends JPanel
 	JComboBox itemConCBox = new JComboBox();
 	JComboBox NPCConCBox = new JComboBox();
 	JComboBox eventConCBox = new JComboBox();
-	JList eventSkillList = new JList();
 	JTextArea successArea = new JTextArea();
 	JTextArea failArea = new JTextArea();
-	JTextField DCField = new JTextField();
+	JFormattedTextField DCField;
 	JTextArea actionArea = new JTextArea();
 	
 	public EventsPanel(JPanel base, CentralDB centralDB)
@@ -117,13 +122,24 @@ public class EventsPanel extends JPanel
 		separator_8.setBounds(218, 297, 548, 2);
 		base.add(separator_8);
 				
-		eventSkillList.setBounds(218, 312, 167, 199);
-		eventSkillList.setBorder(new TitledBorder(null, "Skill List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		base.add(eventSkillList);
+		//eventSkillList.setBounds(218, 312, 167, 158);
+		JScrollPane skillPane = makeScrollList(eventSkillList, "Allowed Skill List");
+		skillPane.setBounds(218, 312, 167, 158);
+		base.add(skillPane);
 		
-		JCheckBox skillCheckBox = new JCheckBox("Allow Skill");
+		JButton addSkillButton = new JButton("Add");
+		addSkillButton.setBounds(236, 483, 57, 25);
+		base.add(addSkillButton);
+		addSkillButton.addActionListener(e -> addSkill());
+		
+		
+		JButton removeSkillButton = new JButton("Del");
+		removeSkillButton.setBounds(306, 483, 57, 25);
+		base.add(removeSkillButton);
+		
+		/*JCheckBox skillCheckBox = new JCheckBox("Allow Skill");
 		skillCheckBox.setBounds(393, 327, 113, 25);
-		base.add(skillCheckBox);
+		base.add(skillCheckBox);*/
 				
 		successArea.setText("Success Description");
 		successArea.setBounds(390, 397, 182, 114);
@@ -133,12 +149,19 @@ public class EventsPanel extends JPanel
 		failArea.setBounds(584, 397, 182, 114);
 		base.add(failArea);
 				
-		DCField.setBounds(476, 362, 30, 22);
+		//https://stackoverflow.com/questions/11093326/restricting-jtextfield-input-to-integers
+		NumberFormat format = NumberFormat.getInstance();
+		NumberFormatter formatter = new NumberFormatter(format);
+		formatter.setValueClass(Integer.class);
+		formatter.setMinimum(0);
+		formatter.setAllowsInvalid(false);
+		DCField = new JFormattedTextField(formatter);
+		DCField.setBounds(476, 338, 30, 22);
 		base.add(DCField);
 		DCField.setColumns(10);
 		
 		JLabel DCLabel = new JLabel("Skill Check:");
-		DCLabel.setBounds(397, 361, 70, 23);
+		DCLabel.setBounds(397, 337, 70, 23);
 		base.add(DCLabel);
 				
 		actionArea.setText("Action Description");
@@ -148,6 +171,32 @@ public class EventsPanel extends JPanel
 		return base;
 	}
 	
+	public JScrollPane makeScrollList(JList list, String name){
+        JScrollPane js = new JScrollPane(list);
+        js.setBorder(new TitledBorder(null, name, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        return js;
+    }
+	
+	public void addSkill() 
+	{
+		JOptionPane popup = new JOptionPane();
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel nlm = new DefaultListModel();
+		JList skillsList = new JList(nlm);
+		for(Skill s : CentralDB.skillList)
+		{
+			nlm.addElement(s.getName());
+		}
+		main.add(this.makeScrollList(skillsList, "Skills"));
+		popup.showMessageDialog(main, main);
+		int[] selection = skillsList.getSelectedIndices();
+		for (int i : selection)
+		{
+			skillslm.addElement(CentralDB.skillList.get(i).getName());
+			skills.add(CentralDB.skillList.get(i));
+		}
+	}
+
 	public void saveEvent()
 	{
 		if(selected == -1){
@@ -192,6 +241,9 @@ public class EventsPanel extends JPanel
                 successArea.setText(sEvent.getSuccessDesc());
                 failArea.setText(sEvent.getFailDesc());
                 //this.selectType(sLoc);
+                
+                skillslm.clear();
+               // for (Skills skill : sEvent.getSkill())
             }
         }
     }
