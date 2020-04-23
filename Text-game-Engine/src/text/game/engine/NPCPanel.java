@@ -10,12 +10,12 @@ import javax.swing.border.TitledBorder;
 public class NPCPanel{
     
     private JPanel base;
-    DefaultListModel dlm = new DefaultListModel(), itemlm = new DefaultListModel(),
-            skilllm = new DefaultListModel(), eventlm = new DefaultListModel();
+    DefaultListModel<String> dlm = new DefaultListModel<>(), itemlm = new DefaultListModel<>(),
+            skilllm = new DefaultListModel<>(), eventlm = new DefaultListModel<>();
     int selected = -1;
     NPC sNPC;
     JPanel listPanel = new JPanel();
-    JList npcList = new JList(dlm);
+    JList<String> npcList = new JList<>(dlm);
     JTextField npcName = new JTextField(), strength = new JTextField("0"),
             dexterity = new JTextField("0"), iq = new JTextField("0"),
             health = new JTextField("0"), perception = new JTextField("0"),
@@ -24,13 +24,13 @@ public class NPCPanel{
     JRadioButton other = new JRadioButton("Other"), enemy = new JRadioButton("Enemy"), 
             merchant = new JRadioButton("Merchant");
     JPanel npcType = new JPanel();
-    JList npcItems = new JList(itemlm), npcEvents = new JList(eventlm),
-            npcSkills = new JList(skilllm);
+    JList<String> npcItems = new JList<>(itemlm), npcEvents = new JList<>(eventlm),
+            npcSkills = new JList<>(skilllm);
     JPanel customPanel = new JPanel(new BorderLayout(10,10));
     ArrayList<NPC> list = new ArrayList<NPC>();
-    ArrayList<Skill> skillsList = new ArrayList<>();
-    ArrayList<Item> itemList = new ArrayList<>();
-    ArrayList<Events> eventList = new ArrayList<>();
+    ArrayList<Integer> skillsList = new ArrayList<>();
+    ArrayList<Integer> itemList = new ArrayList<>();
+    ArrayList<Integer> eventList = new ArrayList<>();
     
     public NPCPanel(){
         this.base = new JPanel();
@@ -197,19 +197,19 @@ public class NPCPanel{
                 else {
                 	eventList = sNPC.getEvents();
                 	eventlm.removeAllElements();
-                	for(Events event: eventList) {
-                		eventlm.addElement(event.getName());
+                	for(int event: eventList) {
+                		eventlm.addElement(CentralDB.eventList.get(event).getName());
                 	}
                 }
                 skillsList = sNPC.getSkills();
                 skilllm.removeAllElements();
-                for(Skill skill: skillsList) {
-                	skilllm.addElement(skill.getName());
+                for(int skill: skillsList) {
+                	skilllm.addElement(CentralDB.skillList.get(skill).getName());
                 }
                 itemList = sNPC.getItems();
                 itemlm.removeAllElements();
-                for(Item item: itemList) {
-                	itemlm.addElement(item.getName());
+                for(int item: itemList) {
+                	itemlm.addElement(CentralDB.itemList.get(item).getName());
                 }
             }
         }
@@ -312,7 +312,6 @@ public class NPCPanel{
     }
     
     public void addSkill() {
-    	JOptionPane popup = new JOptionPane();
     	JPanel main = new JPanel(new BorderLayout(10,10));
 		DefaultListModel skills = new DefaultListModel();
     	JList skillList = new JList(skills);
@@ -321,11 +320,11 @@ public class NPCPanel{
     		skills.addElement(skill.getName());
 		}
     	main.add(this.makeScrollList(skillList, "Skills"));
-        popup.showMessageDialog(main, main);
+    	JOptionPane.showMessageDialog(main, main);
         int[] selection = skillList.getSelectedIndices();
         for(int i:selection) {
             skilllm.addElement(CentralDB.skillList.get(i).getName());
-            skillsList.add(CentralDB.skillList.get(i));
+            skillsList.add(i);
         }
     }
     
@@ -347,20 +346,19 @@ public class NPCPanel{
     }
     
     public void addItem() {
-    	JOptionPane popup = new JOptionPane();
     	JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel items = new DefaultListModel();
-    	JList skillList = new JList(items);
+		DefaultListModel<String> items = new DefaultListModel<>();
+    	JList<String> itemsList = new JList<>(items);
     	for(Item item : CentralDB.itemList)
 		{
     		items.addElement(item.getName());
 		}
-    	main.add(this.makeScrollList(skillList, "Items"));
-        popup.showMessageDialog(main, main);
-        int[] selection = skillList.getSelectedIndices();
+    	main.add(this.makeScrollList(itemsList, "Items"));
+    	JOptionPane.showMessageDialog(main, main);
+        int[] selection = itemsList.getSelectedIndices();
         for(int i:selection) {
             itemlm.addElement(CentralDB.itemList.get(i).getName());
-            itemList.add(CentralDB.itemList.get(i));
+            itemList.add(i);
         }
     }
     
@@ -385,17 +383,17 @@ public class NPCPanel{
     	JOptionPane popup = new JOptionPane();
     	JPanel main = new JPanel(new BorderLayout(10,10));
 		DefaultListModel events = new DefaultListModel();
-    	JList skillList = new JList(events);
+    	JList eventsList = new JList(events);
     	for(Events event : CentralDB.eventList)
 		{
     		events.addElement(event.getName());
 		}
-    	main.add(this.makeScrollList(skillList, "Events"));
+    	main.add(this.makeScrollList(eventsList, "Events"));
         popup.showMessageDialog(main, main);
-        int[] selection = skillList.getSelectedIndices();
+        int[] selection = eventsList.getSelectedIndices();
         for(int i:selection) {
             eventlm.addElement(CentralDB.eventList.get(i).getName());
-            eventList.add(CentralDB.eventList.get(i));
+            eventList.add(i);
         }
     }
     

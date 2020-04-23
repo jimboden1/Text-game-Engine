@@ -21,10 +21,10 @@ public class LocationPanel
 	JCheckBox startScreenChkBox = new JCheckBox("Set as Start Screen");
 	int[] locations = {-1,-1,-1,-1};
 	
-	ArrayList<Events> events = new ArrayList<>();
-	ArrayList<NPC> npcs = new ArrayList<NPC>();
-	JList npcList = new JList(npclm);
-	JList eventsList = new JList(eventlm);
+	ArrayList<Integer> events = new ArrayList<>();
+	ArrayList<Integer> npcs = new ArrayList<>();
+	JList<String> npcList = new JList<>(npclm);
+	JList<String> eventsList = new JList<>(eventlm);
 	
 	Location sLoc;
 	JList<String> locationList = new JList<String>(dlm);
@@ -296,12 +296,12 @@ public class LocationPanel
                 	startScreenChkBox.setSelected(false);
                 }
                 eventlm.clear();
-                for(Events event: sLoc.getEvents()) {
-                	eventlm.addElement(event.getName());
+                for(int event: sLoc.getEvents()) {
+                	eventlm.addElement(CentralDB.eventList.get(event).getName());
                 }
                 npclm.clear();
-                for(NPC npc: sLoc.getNPCs()) {
-                	eventlm.addElement(npc.getName());
+                for(int npc: sLoc.getNPCs()) {
+                	npclm.addElement(CentralDB.npcList.get(npc).getName());
                 }
                 int i = 0;
                 for(int location: sLoc.getLocations()) {
@@ -361,7 +361,7 @@ public class LocationPanel
         int[] selection = npcList.getSelectedIndices();
         for(int i:selection) {
         	npclm.addElement(CentralDB.npcList.get(i).getName());
-        	npcs.add(CentralDB.npcList.get(i));
+        	npcs.add(i);
         }
     }
 	
@@ -396,7 +396,7 @@ public class LocationPanel
         int[] selection = eventList.getSelectedIndices();
         for(int i:selection) {
         	eventlm.addElement(CentralDB.eventList.get(i).getName());
-        	events.add(CentralDB.eventList.get(i));
+        	events.add(i);
         }
     }
 	

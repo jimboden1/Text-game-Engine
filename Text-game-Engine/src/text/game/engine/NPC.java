@@ -6,10 +6,10 @@ public class NPC implements java.io.Serializable
 {
 	private String name, description;
 	private int type;//0 is merchant; 1 is enemy; 2 is other
-	private ArrayList<Item> items= new ArrayList<>();
-	private ArrayList<Events> events= new ArrayList<>();
+	private ArrayList<Integer> items= new ArrayList<>();
+	private ArrayList<Integer> events= new ArrayList<>();
         private int strength, dexterity, iq, health, perception, will;
-	private ArrayList<Skill> skills = new ArrayList<>();
+	private ArrayList<Integer> skills = new ArrayList<>();
         
 	public NPC() {
             name = "New NPC";
@@ -38,9 +38,9 @@ public class NPC implements java.io.Serializable
 	public int getHealth() {return health;}
 	public int getPerception() {return perception;}
 	public int getWill() {return will;}
-	public ArrayList<Item> getItems() {return items;}
-	public ArrayList<Events> getEvents() {return events;}
-	public ArrayList<Skill> getSkills() {return skills;}
+	public ArrayList<Integer> getItems() {return items;}
+	public ArrayList<Integer> getEvents() {return events;}
+	public ArrayList<Integer> getSkills() {return skills;}
 	
 
 }

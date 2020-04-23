@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Item implements java.io.Serializable{
     private String name, description;
     private int cost, type;
-    private ArrayList<Skill> skills = new ArrayList<Skill>();
+    private ArrayList<Integer> skills = new ArrayList<Integer>();
     private ArrayList<Benefit> benefits = new ArrayList<>();
     
     public Item(){
@@ -25,15 +25,15 @@ public class Item implements java.io.Serializable{
     public void setCost(int cost){
         this.cost = cost;
     }
-    public void setSkills(ArrayList<Skill> skills){
+    public void setSkills(ArrayList<Integer> skills){
         this.skills = skills;
     }
-    public void addSkill(Skill skill){
+    public void addSkill(int skill){
         if(!skills.contains(skill)){
             skills.add(skill);
         }
     }
-    public void removeSkill(Skill skill){
+    public void removeSkill(int skill){
         if(skills.contains(skill)){
             skills.remove(skill);
         }
@@ -64,7 +64,7 @@ public class Item implements java.io.Serializable{
     public int getCost(){
         return cost;
     }
-    public ArrayList<Skill> getSkills(){
+    public ArrayList<Integer> getSkills(){
         return skills;
     }
     public ArrayList<Benefit> getBenefits(){

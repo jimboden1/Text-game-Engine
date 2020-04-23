@@ -45,8 +45,10 @@ public class CommandDB {
 				System.out.println("Command move to " + CentralDB.locationList.get(move).getName() + " added "+ CentralDB.locationList.get(move).getDescription());
 			}
 		}
-		for(NPC npc:here.getNPCs()) {
-			commands.add(new Command("talk "+ npc.getName()));
+		for(int npc : here.getNPCs()) {
+			commands.add(new Command("look at "+ CentralDB.npcList.get(npc).getName(), ()-> { 
+				PlatformPanel.descriptionArea.setText(CentralDB.npcList.get(npc).getDescription());
+			}));
 		}
 	}
 	
@@ -79,11 +81,12 @@ public class CommandDB {
 	public void talkTo(NPC target) {
 		PlatformPanel.focus = target;
 		PlatformPanel.descriptionArea.setText("You approch " + target.getName() + "to Talk to them.\n");
+		
 		if(target.getType()==0) {
 			PlatformPanel.descriptionArea.append(target.getName() + " is a merchant would you like to buy something?\n");
-			for(Item item: target.getItems()) {
-				PlatformPanel.descriptionArea.append(item.getName() + " for " + item.getCost() + "\n");
-				commands.add(new Command("Buy: " + item.getName()));
+			for(int item: target.getItems()) {
+				PlatformPanel.descriptionArea.append(CentralDB.itemList.get(item).getName() + " for " + CentralDB.itemList.get(item).getCost() + "\n");
+				commands.add(new Command("Buy: " + CentralDB.itemList.get(item).getName()));
 			}
 		}
 	}

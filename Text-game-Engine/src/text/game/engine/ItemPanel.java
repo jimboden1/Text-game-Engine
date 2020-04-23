@@ -12,27 +12,27 @@ import javax.swing.text.PlainDocument;
 public class ItemPanel{
     
     JPanel base;
-    DefaultListModel dlm = new DefaultListModel();
-    DefaultListModel skilllm = new DefaultListModel();
-    DefaultListModel benefitlm = new DefaultListModel();
+    DefaultListModel<String> dlm = new DefaultListModel<String>();
+    DefaultListModel<String> skilllm = new DefaultListModel<String>();
+    DefaultListModel<String> benefitlm = new DefaultListModel<String>();
     JPanel listPanel = new JPanel();
     int selected = -1;
     Item sItem;
-    JList itemList = new JList(dlm);
+    JList<String> itemList = new JList<String>(dlm);
     JTextField itemName = new JTextField();
     JTextField itemCost = new JTextField();
     JTextArea itemDescription = new JTextArea();
     JRadioButton consumable = new JRadioButton("Consumable");
     String[] equipmentType = {"Helm","Chest","Arms","Main Hand","Off Hand","Pants","Shoes", "Accessory"};
-    JComboBox equipmentBox = new JComboBox(equipmentType);
+    JComboBox<String> equipmentBox = new JComboBox<String>(equipmentType);
     JRadioButton equipment = new JRadioButton("Equipment");
     JRadioButton key = new JRadioButton("Key Item");
     JPanel itemType = new JPanel();
-    JList itemBenefits = new JList(benefitlm);
-    JList itemSkills = new JList(skilllm);
+    JList<String> itemBenefits = new JList<String>(benefitlm);
+    JList<String> itemSkills = new JList<String>(skilllm);
     ArrayList<Item> list = CentralDB.itemList;
     ArrayList<Benefit> benefitsList = new ArrayList<>();
-    ArrayList<Skill> skillsList = new ArrayList<>();
+    ArrayList<Integer> skillsList = new ArrayList<>();
     
     public ItemPanel() {
     	base = new JPanel();
@@ -203,8 +203,8 @@ public class ItemPanel{
                 }
                 skillsList = sItem.getSkills();
                 skilllm.removeAllElements();
-                for(Skill skill:skillsList) {
-                	skilllm.addElement(skill.getName());
+                for(int skill:skillsList) {
+                	skilllm.addElement(CentralDB.skillList.get(skill).getName());
                 }
                 this.selectType(sItem);
             }
@@ -268,7 +268,7 @@ public class ItemPanel{
     	
     	mod.setBorder(new TitledBorder(null, "Modifier", TitledBorder.LEADING, TitledBorder.TOP, null, null));
     	
-        JComboBox statbox = new JComboBox(stats);
+        JComboBox<String> statbox = new JComboBox<>(stats);
         
         main.add(mod, BorderLayout.NORTH);
         main.add(statbox, BorderLayout.CENTER);
@@ -317,8 +317,10 @@ public class ItemPanel{
         popup.showMessageDialog(main, main);
         int[] selection = skillList.getSelectedIndices();
         for(int i:selection) {
-            skilllm.addElement(CentralDB.skillList.get(i).getName());
-            skillsList.add(CentralDB.skillList.get(i));
+        	if(!skillsList.contains(i)) {
+                skilllm.addElement(CentralDB.skillList.get(i).getName());
+                skillsList.add(i);
+        	}
         }
     }
     
