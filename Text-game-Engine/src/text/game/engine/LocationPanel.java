@@ -19,7 +19,7 @@ public class LocationPanel
 	int selected = -1;
 	JTextField[] positionFields = new JTextField[4];
 	JCheckBox startScreenChkBox = new JCheckBox("Set as Start Screen");
-	Location[] locations = new Location[4];
+	int[] locations = {-1,-1,-1,-1};
 	
 	ArrayList<Events> events = new ArrayList<>();
 	ArrayList<NPC> npcs = new ArrayList<NPC>();
@@ -304,15 +304,18 @@ public class LocationPanel
                 	eventlm.addElement(npc.getName());
                 }
                 int i = 0;
-                for(Location location: sLoc.getLocations()) {
-                	if(location == null) {
+                for(int location: sLoc.getLocations()) {
+                	if(location == -1) {
                 		positionFields[i].setText("");
+                		locations[i]=-1;
                 	}
                 	else {
-                		positionFields[i].setText(location.getName());
+                		positionFields[i].setText(CentralDB.locationList.get(location).getName());
+                		locations[i]=location;
                 	}
                 	i++;
                 }
+                
                 //this.selectType(sLoc);
             }
         }
@@ -430,15 +433,15 @@ public class LocationPanel
         }
         else {
         	if(locationList.getSelectedIndex() == 0) {
-            	locations[position]=null;
+            	locations[position] = -1;
             	positionFields[position].setText("");
             }
         	else if(locationList.isSelectionEmpty()) {
         		
         	}
         	else {
-        		locations[position] = CentralDB.locationList.get(locationList.getSelectedIndex()-1);
-        		positionFields[position].setText(locations[position].getName());
+        		locations[position] = locationList.getSelectedIndex()-1;
+        		positionFields[position].setText(CentralDB.locationList.get(locations[position]).getName());
         	}
         }
     }

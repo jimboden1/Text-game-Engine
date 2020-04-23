@@ -32,12 +32,17 @@ public class CommandDB {
 				PlatformPanel.descriptionArea.append(item.getName() + ": " + item.getDescription()+"\n");
 			}
 		}));
+		for(Location location: CentralDB.locationList) {
+			System.out.println(location.getName());
+			System.out.println(location.getDescription());
+		}
 	}
 	
 	public void addLocationCommands(Location here) {
-		for(Location move : here.getLocations()) {
-			if(move!=null) {
-				commands.add(new Command("move to "+ move.getName(), () -> moveTo(move)));
+		for(int move : here.getLocations()) {
+			if(move!=-1) {
+				commands.add(new Command("move to "+ CentralDB.locationList.get(move).getName(), () -> moveTo(CentralDB.locationList.get(move))));
+				System.out.println("Command move to " + CentralDB.locationList.get(move).getName() + " added "+ CentralDB.locationList.get(move).getDescription());
 			}
 		}
 		for(NPC npc:here.getNPCs()) {
@@ -51,14 +56,24 @@ public class CommandDB {
 	
 	public void goBack() {
 		PlatformPanel.descriptionArea.setText(PlatformPanel.here.getDescription());
-		PlatformPanel.descriptionArea.append("");
-		clearCommands();
+		System.out.println("" + PlatformPanel.here.getDescription());
+		//PlatformPanel.descriptionArea.append("");
 	}
 	
 	
 	public void moveTo(Location place) {
+		System.out.println("Changing location to " + place.getName());
 		PlatformPanel.here = place;
+		System.out.println("" + PlatformPanel.here.getDescription());
+		System.out.println("Clearing commands for "+ place.getName());
+		clearCommands();
+		System.out.println("" + PlatformPanel.here.getDescription());
+		System.out.println("adding commads for location " + PlatformPanel.here.getName());
+		addLocationCommands(PlatformPanel.here);
+		System.out.println("" + PlatformPanel.here.getDescription());
+		System.out.println("setting description for " + place.getName());
 		goBack();
+		System.out.println("everything done for " + place.getName());
 	}
 	
 	public void talkTo(NPC target) {

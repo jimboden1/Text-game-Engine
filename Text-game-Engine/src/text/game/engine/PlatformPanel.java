@@ -22,7 +22,6 @@ public class PlatformPanel {
 			button7 = new JButton(""), button8 = new JButton(""),
 			button9 = new JButton(""), button10 = new JButton("");
 	public static Location here = new Location();
-	public CentralDB currentGame = new CentralDB();
 	public static Player player = new Player();
 	public static NPC focus = new NPC();
 	public CommandDB database = new CommandDB();
@@ -101,8 +100,8 @@ public class PlatformPanel {
 			//Compares Strings regardless of capitalization
 			if(string.equalsIgnoreCase(database.commands.get(i).getCommand()))
 			{
-				database.commands.get(i).runMethod();
 				System.out.println("command Recongnised as " + database.commands.get(i).getCommand());
+				database.commands.get(i).runMethod();
 			}
 				
 		}
