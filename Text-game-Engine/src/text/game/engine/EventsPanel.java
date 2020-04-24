@@ -20,11 +20,11 @@ public class EventsPanel extends JPanel
 	CentralDB centralDB;
 	
 	JList skillList = new JList(skillslm);
-	ArrayList<Skill> skills = new ArrayList<Skill>();
-	int itemCon;
-	int locationCon;
-	int npcCon;
-	int eventCon;
+	ArrayList<Integer> skills = new ArrayList<Integer>();
+	int itemCon = -1;
+	int locationCon = -1;
+	int npcCon = -1;
+	int eventCon = -1;
 	
 	JTextField itemConField;
 	JTextField npcConField;
@@ -353,7 +353,7 @@ public class EventsPanel extends JPanel
 		for (int i : selection)
 		{
 			skillslm.addElement(CentralDB.skillList.get(i).getName());
-			skills.add(CentralDB.skillList.get(i));
+			skills.add(i);
 		}
 	}
 	
@@ -391,8 +391,8 @@ public class EventsPanel extends JPanel
             }
             else
             {
-                dlm.addElement("New Location");
-                add.setName("New Location");
+                dlm.addElement("New Event");
+                add.setName("New Event");
                 list.add(add);
             }
         }
@@ -422,10 +422,56 @@ public class EventsPanel extends JPanel
                 actionArea.setText(sEvent.getActionDesc());
                 successArea.setText(sEvent.getSuccessDesc());
                 failArea.setText(sEvent.getFailDesc());
-                //this.selectType(sLoc);
                 
                 skillslm.clear();
-               // for (Skills skill : sEvent.getSkill())
+               for (int skill : sEvent.getSkills())
+               {
+            	   skillslm.addElement(CentralDB.skillList.get(skill).getName());
+               }
+               
+               if(sEvent.getLocation() == -1)
+               {
+            	   locationConField.setText("");
+            	   locationCon = -1;
+               }
+               else
+               {
+            	   locationConField.setText(CentralDB.locationList.get(locationCon).getName());
+            	   locationCon = sEvent.getLocation();
+               }
+               
+               if(sEvent.getItem() == -1)
+               {
+            	   itemConField.setText("");
+            	   itemCon = -1;
+               }
+               else
+               {
+            	   itemConField.setText(CentralDB.itemList.get(itemCon).getName());
+            	   itemCon = sEvent.getItem();
+               }
+               
+               if(sEvent.getNpc() == -1)
+               {
+            	   npcConField.setText("");
+            	   npcCon = -1;
+               }
+               else
+               {
+            	   npcConField.setText(CentralDB.npcList.get(npcCon).getName());
+            	   npcCon = sEvent.getNpc();
+               }
+               
+               if(sEvent.getOtherEvent() == -1)
+               {
+            	   eventConField.setText("");
+            	   eventCon = -1;
+               }
+               else
+               {
+            	   eventConField.setText(CentralDB.eventList.get(eventCon).getName());
+            	   eventCon = sEvent.getOtherEvent();
+               }
             }
         }
     }
@@ -454,6 +500,13 @@ public class EventsPanel extends JPanel
         created.setActionDesc(actionArea.getText());
         created.setSuccessDesc(successArea.getText());
         created.setFailDesc(failArea.getText());
+        created.setSkillCheck(Integer.parseInt(DCField.getText()));
+        
+        created.setLocation(locationCon);
+        created.setItem(itemCon);
+        created.setNpc(npcCon);
+        created.setOtherEvent(eventCon);
+        created.setSkills(skills);
         return created;
     }
 }
