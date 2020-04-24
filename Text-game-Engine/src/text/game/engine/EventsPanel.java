@@ -19,8 +19,17 @@ public class EventsPanel extends JPanel
 	int selected = -1;
 	CentralDB centralDB;
 	
-	JList eventSkillList = new JList(skillslm);
+	JList skillList = new JList(skillslm);
 	ArrayList<Skill> skills = new ArrayList<Skill>();
+	int itemCon;
+	int locationCon;
+	int npcCon;
+	int eventCon;
+	
+	JTextField itemConField;
+	JTextField npcConField;
+	JTextField eventConField;
+	JTextField locationConField;
 	
 	JPanel base;
 	JTextField txtEventName = new JTextField();
@@ -77,11 +86,7 @@ public class EventsPanel extends JPanel
 		deleteEventButton.setBounds(118, 486, 88, 25);
 		base.add(deleteEventButton);
 		deleteEventButton.addActionListener(e -> deleteSelectedEvent());
-		
-		/*JButton btnNewButton = new JButton("Create Event");
-		btnNewButton.setBounds(641, 29, 113, 23);
-		base.add(btnNewButton);*/
-		
+
 		JSeparator separator_3 = new JSeparator();
 		separator_3.setBounds(218, 69, 548, 2);
 		base.add(separator_3);
@@ -90,40 +95,71 @@ public class EventsPanel extends JPanel
 		separator_7.setBounds(218, 188, 548, 2);
 		base.add(separator_7);
 		
-		JCheckBox locConChkBox = new JCheckBox("Location");
-		locConChkBox.setBounds(228, 213, 113, 25);
-		base.add(locConChkBox);
+		JLabel locationConLabel = new JLabel("Location:");
+		locationConLabel.setBounds(293, 205, 97, 16);
+		base.add(locationConLabel);
 		
-		JCheckBox itemConChkBox = new JCheckBox("Item");
-		itemConChkBox.setBounds(380, 213, 55, 25);
-		base.add(itemConChkBox);
+		locationConField = new JTextField();
+		locationConField.setEditable(false);
+		locationConField.setBounds(268, 230, 97, 22);
+		base.add(locationConField);
+		locationConField.setColumns(10);
 		
-		JCheckBox NPCConChkBox = new JCheckBox("NPC Interaction");
-		NPCConChkBox.setBounds(478, 213, 117, 25);
-		base.add(NPCConChkBox);
+		JButton chngLocation = new JButton("Change");
+		chngLocation.setBounds(268, 263, 97, 25);
+		base.add(chngLocation);
+		chngLocation.addActionListener(e -> changeLocationCon());
 		
-		JCheckBox evntConChkBox = new JCheckBox("Other Event");
-		evntConChkBox.setBounds(641, 213, 113, 25);
-		base.add(evntConChkBox);
-				
-		locConCBox.setBounds(228, 247, 90, 22);
-		base.add(locConCBox);
-				
-		itemConCBox.setBounds(360, 247, 90, 22);
-		base.add(itemConCBox);
-				
-		NPCConCBox.setBounds(498, 247, 90, 22);
-		base.add(NPCConCBox);
-				
-		eventConCBox.setBounds(641, 247, 90, 22);
-		base.add(eventConCBox);
+		JLabel itemConLbl = new JLabel("Item:");
+		itemConLbl.setBounds(410, 205, 98, 16);
+		base.add(itemConLbl);
+		
+		itemConField = new JTextField();
+		itemConField.setEditable(false);
+		itemConField.setColumns(10);
+		itemConField.setBounds(377, 230, 97, 22);
+		base.add(itemConField);
+		
+		JButton chngItem = new JButton("Change");
+		chngItem.setBounds(377, 263, 97, 25);
+		base.add(chngItem);
+		chngItem.addActionListener(e -> changeItemCon());
+		
+		JLabel npcConLabel = new JLabel("NPC Interaction:");
+		npcConLabel.setBounds(489, 205, 97, 16);
+		base.add(npcConLabel);
+		
+		npcConField = new JTextField();
+		npcConField.setEditable(false);
+		npcConField.setColumns(10);
+		npcConField.setBounds(486, 230, 97, 22);
+		base.add(npcConField);
+		
+		JButton chngNPC = new JButton("Change");
+		chngNPC.setBounds(486, 263, 97, 25);
+		base.add(chngNPC);
+		chngNPC.addActionListener(e -> changeNPCCon());
+		
+		JLabel eventConLabel = new JLabel("Other Event:");
+		eventConLabel.setBounds(610, 205, 97, 16);
+		base.add(eventConLabel);
+		
+		eventConField = new JTextField();
+		eventConField.setEditable(false);
+		eventConField.setColumns(10);
+		eventConField.setBounds(595, 230, 97, 22);
+		base.add(eventConField);
+		
+		JButton chngOtherEvent = new JButton("Change");
+		chngOtherEvent.setBounds(595, 263, 97, 25);
+		base.add(chngOtherEvent);
+		chngOtherEvent.addActionListener(e -> changeEventCon());
 		
 		JSeparator separator_8 = new JSeparator();
 		separator_8.setBounds(218, 297, 548, 2);
 		base.add(separator_8);
 				
-		//eventSkillList.setBounds(218, 312, 167, 158);
-		JScrollPane skillPane = makeScrollList(eventSkillList, "Allowed Skill List");
+		JScrollPane skillPane = makeScrollList(skillList, "Allowed Skill List");
 		skillPane.setBounds(218, 312, 167, 158);
 		base.add(skillPane);
 		
@@ -131,15 +167,11 @@ public class EventsPanel extends JPanel
 		addSkillButton.setBounds(236, 483, 57, 25);
 		base.add(addSkillButton);
 		addSkillButton.addActionListener(e -> addSkill());
-		
-		
+				
 		JButton removeSkillButton = new JButton("Del");
 		removeSkillButton.setBounds(306, 483, 57, 25);
 		base.add(removeSkillButton);
-		
-		/*JCheckBox skillCheckBox = new JCheckBox("Allow Skill");
-		skillCheckBox.setBounds(393, 327, 113, 25);
-		base.add(skillCheckBox);*/
+		removeSkillButton.addActionListener(e -> removeSkill());
 				
 		successArea.setText("Success Description");
 		successArea.setBounds(390, 397, 182, 114);
@@ -171,6 +203,134 @@ public class EventsPanel extends JPanel
 		return base;
 	}
 	
+	private void changeLocationCon()
+	{
+		JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel<String> locationlm = new DefaultListModel();
+		JList<String> locationList = new JList<String>(locationlm);
+		locationlm.addElement("none");
+		
+		for(Location location : CentralDB.locationList)
+			locationlm.addElement(location.getName());
+		
+		main.add(this.makeScrollList(locationList, "Locations"));
+		JOptionPane.showMessageDialog(main, main);
+		
+		if(locationList.getSelectedIndices().length > 1)
+			JOptionPane.showMessageDialog(main, "You can only add one location as a condition");
+		else
+		{
+			if(locationList.getSelectedIndex() == 0)
+			{
+				locationCon = -1;
+				locationConField.setText("");
+			}
+			else if (locationList.isSelectionEmpty())
+			{}	
+			else
+			{
+				locationCon = locationList.getSelectedIndex()-1;
+				locationConField.setText(CentralDB.locationList.get(locationCon).getName());
+			}
+		}
+	}
+	
+	private void changeItemCon() 
+	{
+		JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel<String> itemlm = new DefaultListModel();
+		JList<String> itemList = new JList<String>(itemlm);
+		itemlm.addElement("none");
+		
+		for(Item item : CentralDB.itemList)
+			itemlm.addElement(item.getName());
+		
+		main.add(this.makeScrollList(itemList, "Items"));
+		JOptionPane.showMessageDialog(main, main);
+		
+		if(itemList.getSelectedIndices().length > 1)
+			JOptionPane.showMessageDialog(main, "You can only add one item as a condition");
+		else
+		{
+			if(itemList.getSelectedIndex() == 0)
+			{
+				itemCon = -1;
+				itemConField.setText("");
+			}
+			else if (itemList.isSelectionEmpty())
+			{}	
+			else
+			{
+				itemCon = itemList.getSelectedIndex()-1;
+				itemConField.setText(CentralDB.itemList.get(itemCon).getName());
+			}
+		}
+	}
+	
+	public void changeNPCCon()
+	{
+		JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel<String> npclm = new DefaultListModel();
+		JList<String> npcList = new JList<String>(npclm);
+		npclm.addElement("none");
+		
+		for(NPC npc : CentralDB.npcList)
+			npclm.addElement(npc.getName());
+		
+		main.add(this.makeScrollList(npcList, "NPCs"));
+		JOptionPane.showMessageDialog(main, main);
+		
+		if(npcList.getSelectedIndices().length > 1)
+			JOptionPane.showMessageDialog(main, "You can only add one NPC as a condition");
+		else
+		{
+			if(npcList.getSelectedIndex() == 0)
+			{
+				npcCon = -1;
+				npcConField.setText("");
+			}
+			else if (npcList.isSelectionEmpty())
+			{}	
+			else
+			{
+				npcCon = npcList.getSelectedIndex()-1;
+				npcConField.setText(CentralDB.npcList.get(npcCon).getName());
+			}
+		}
+	}
+	
+	public void changeEventCon()
+	{
+		JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel<String> eventlm = new DefaultListModel();
+		JList<String> eventList = new JList<String>(eventlm);
+		eventlm.addElement("none");
+		
+		for(Events event : CentralDB.eventList)
+			eventlm.addElement(event.getName());
+		
+		main.add(this.makeScrollList(eventList, "Events"));
+		JOptionPane.showMessageDialog(main, main);
+		
+		if(eventList.getSelectedIndices().length > 1)
+			JOptionPane.showMessageDialog(main, "You can only add one Event as a condition");
+		else
+		{
+			if(eventList.getSelectedIndex() == 0)
+			{
+				eventCon = -1;
+				eventConField.setText("");
+			}
+			else if (eventList.isSelectionEmpty())
+			{}	
+			else
+			{
+				eventCon = eventList.getSelectedIndex()-1;
+				eventConField.setText(CentralDB.eventList.get(npcCon).getName());
+			}
+		}
+	}
+
 	public JScrollPane makeScrollList(JList list, String name){
         JScrollPane js = new JScrollPane(list);
         js.setBorder(new TitledBorder(null, name, TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -194,6 +354,28 @@ public class EventsPanel extends JPanel
 		{
 			skillslm.addElement(CentralDB.skillList.get(i).getName());
 			skills.add(CentralDB.skillList.get(i));
+		}
+	}
+	
+	public void removeSkill()
+	{
+		if(!skillList.isSelectionEmpty())
+		{
+			if(skillList.getSelectedIndices().length > 1)
+			{
+				int[] selection = skillList.getSelectedIndices();
+				for(int i = selection.length-1; i >= 0; i--)
+				{
+					skillslm.remove(selection[i]);
+					skills.remove(selection[i]);
+				}
+			}
+			else
+			{
+				int selection = skillList.getSelectedIndex();
+				skillslm.remove(selection);
+				skills.remove(selection);
+			}
 		}
 	}
 
