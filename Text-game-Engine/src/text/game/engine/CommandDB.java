@@ -49,61 +49,59 @@ public class CommandDB {
 		}
 		for(int npcIndex : here.getNPCs()) {
 			NPC npc = CentralDB.npcList.get(npcIndex);
-			commands.add(new Command("look at "+ npc.getName(), ()-> { 
-				PlatformPanel.descriptionArea.setText(npc.getDescription());
-			}));
-			commands.add(new Command("approach "+ npc.getName(), ()-> { 
-				PlatformPanel.descriptionArea.setText("You approach "+ npc.getName()+ ", what would you like to do?");
-				if(npc.getType()==0) {
-					commands.add(new Command("Buy",()-> { 
-						PlatformPanel.descriptionArea.setText("What would you like to buy?\n");
-						for(int index: npc.getItems()) {
-							Item item = CentralDB.itemList.get(index);
-							PlatformPanel.descriptionArea.append(item.getName() +": "+ item.getCost()+"\n");
-							commands.add(new Command("buy "+item.getName(), ()->{}));
-						}
-					}));
-				}
-			}));
+			addNPCCommands(npc);
 		}
 	}
 	
-	public void addNPCCommands() {
-		
+	public void addNPCCommands(NPC npc) {
+		commands.add(new Command("look at "+ npc.getName(), ()-> { 
+			PlatformPanel.descriptionArea.setText(npc.getDescription());
+		}));
+		commands.add(new Command("approach "+ npc.getName(), ()-> { 
+			PlatformPanel.descriptionArea.setText("You approach "+ npc.getName()+ ", what would you like to do?");
+			if(npc.getType()==0) {
+				commands.add(new Command("buy",()-> { 
+					PlatformPanel.descriptionArea.setText("What would you like to buy?\n");
+					for(int index: npc.getItems()) {
+						Item item = CentralDB.itemList.get(index);
+						PlatformPanel.descriptionArea.append(item.getName() +": "+ item.getCost()+"\n");
+						commands.add(new Command("buy "+item.getName(), ()->{
+							if(PlatformPanel.player.money>item.getCost()) {
+								PlatformPanel.player.money-=item.getCost();
+								PlatformPanel.player.inventory.add(CentralDB.itemList.indexOf(item));
+								PlatformPanel.descriptionArea.append("you have purchased "+ item.getName()+"\n");
+							}
+						}));
+					}
+				}));
+				commands.add(new Command("sell", ()->{
+					PlatformPanel.descriptionArea.setText("What would you like to sell?\n");
+					for(int index: PlatformPanel.player.inventory) {
+						Item item = CentralDB.itemList.get(index);
+						PlatformPanel.descriptionArea.append(item.getName() +": "+ item.getCost()+"\n");
+						commands.add(new Command("sell "+item.getName(), ()->{
+							if(item.getType()!=9) {
+								PlatformPanel.player.money+=item.getCost();
+								PlatformPanel.player.inventory.remove(CentralDB.itemList.indexOf(item));
+								PlatformPanel.descriptionArea.append("you have sold "+ item.getName()+"\n");
+							}
+						}));
+					}
+				}));
+			}
+		}));
 	}
 	
 	public void goBack() {
+		clearCommands();
+		addLocationCommands(PlatformPanel.here);
 		PlatformPanel.descriptionArea.setText(PlatformPanel.here.getDescription());
-		System.out.println("" + PlatformPanel.here.getDescription());
-		//PlatformPanel.descriptionArea.append("");
 	}
 	
 	
 	public void moveTo(Location place) {
-		System.out.println("Changing location to " + place.getName());
 		PlatformPanel.here = place;
-		System.out.println("" + PlatformPanel.here.getDescription());
-		System.out.println("Clearing commands for "+ place.getName());
-		clearCommands();
-		System.out.println("" + PlatformPanel.here.getDescription());
-		System.out.println("adding commads for location " + PlatformPanel.here.getName());
-		addLocationCommands(PlatformPanel.here);
-		System.out.println("" + PlatformPanel.here.getDescription());
-		System.out.println("setting description for " + place.getName());
 		goBack();
-		System.out.println("everything done for " + place.getName());
 	}
 	
-	public void talkTo(NPC target) {
-		PlatformPanel.focus = target;
-		PlatformPanel.descriptionArea.setText("You approch " + target.getName() + "to Talk to them.\n");
-		
-		if(target.getType()==0) {
-			PlatformPanel.descriptionArea.append(target.getName() + " is a merchant would you like to buy something?\n");
-			for(int item: target.getItems()) {
-				PlatformPanel.descriptionArea.append(CentralDB.itemList.get(item).getName() + " for " + CentralDB.itemList.get(item).getCost() + "\n");
-				commands.add(new Command("Buy: " + CentralDB.itemList.get(item).getName()));
-			}
-		}
-	}
 }

@@ -23,7 +23,6 @@ public class PlatformPanel {
 			button9 = new JButton(""), button10 = new JButton("");
 	public static Location here = new Location();
 	public static Player player = new Player();
-	public static NPC focus = new NPC();
 	public CommandDB database = new CommandDB();
     
     public JFrame initializePlatformPanel(JFrame base) {
