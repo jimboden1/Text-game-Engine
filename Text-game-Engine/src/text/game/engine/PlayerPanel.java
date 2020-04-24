@@ -20,7 +20,7 @@ import javax.swing.text.PlainDocument;
 public class PlayerPanel
 {
 	JPanel base;
-	JTextField txtName = new JTextField();
+	JTextField txtName = new JTextField(), funds = new JTextField("0");
 	JTextArea txtrDescription = new JTextArea();
 	DefaultListModel<String> listModel = new DefaultListModel<String>();
 	JList<String> playerSkillsList = new JList<String>(listModel);
@@ -39,8 +39,8 @@ public class PlayerPanel
 	JButton removeSkill = new JButton();
 	Player player = new Player();
 	ImageIcon playerPic = new ImageIcon();
-	ArrayList<Skill> skillList = new ArrayList<>();
-	ArrayList<Item> itemList = new ArrayList<>();
+	ArrayList<Integer> skillList = new ArrayList<>();
+	ArrayList<Integer> itemList = new ArrayList<>();
 	
 	
 	public PlayerPanel(JPanel base)
@@ -53,9 +53,14 @@ public class PlayerPanel
 		base.setLayout(null);
 		
 		txtName.setText("Name");
-		txtName.setBounds(10, 10, 100, 30);
+		txtName.setBounds(10, 10, 300, 30);
 		base.add(txtName);
 		txtName.setColumns(100);
+		
+		funds.setBorder(new TitledBorder("Starting Funds"));
+		IntFilter.makeIntOnly(funds);
+		funds.setBounds(350, 10, 300, 50);
+		base.add(funds);
 		
 		txtrDescription.setText("Description");
 		txtrDescription.setBounds(10, 62, 755, 85);
@@ -103,11 +108,11 @@ public class PlayerPanel
 				{
 					public void actionPerformed(ActionEvent e)
 					{
-						java.util.List selected = skills.getSelectedValuesList();
-						for(int i = 0; i<selected.size();i++)
+						int[] selected = skills.getSelectedIndices();
+						for(int i = 0; i<selected.length;i++)
 						{
 							listModel.addElement(CentralDB.skillList.get(i).getName());
-							skillList.add(CentralDB.skillList.get(i));
+							skillList.add(selected[i]);
 						}
 						player.setSkills(skillList);
 						popupFrame.dispose();
@@ -208,6 +213,7 @@ public class PlayerPanel
 					player = new Player();
 					player.setName(txtName.getText());
 					player.setDescription(txtrDescription.getText());
+					player.money = Integer.parseInt(funds.getText());
 					player.setStrength(Integer.parseInt(strField.getText()));
 					player.setDexterity(Integer.parseInt(dexField.getText()));
 					player.setIQ(Integer.parseInt(iqField.getText()));

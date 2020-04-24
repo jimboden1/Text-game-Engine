@@ -10,8 +10,9 @@ public class Player implements java.io.Serializable
 {
 	private String name, description;
 	private int strength = 0, dexterity = 0, iq = 0, health = 0, perception = 0, will=  0;
-	private ArrayList<Skill> skills = new ArrayList<>();
-	public ArrayList<Item> inventory = new ArrayList<>();
+	private ArrayList<Integer> skills = new ArrayList<>();
+	public ArrayList<Integer> inventory = new ArrayList<>();
+	public int money = 0;
 	private ImageIcon playerPic;
 	
 	public Player(){}
@@ -24,7 +25,7 @@ public class Player implements java.io.Serializable
 	public void setHealth(int health) {this.health = health;}
 	public void setPerception(int perception) {this.perception = perception;}
 	public void setWill(int will) {this.will = will;}
-	public void setSkills(ArrayList<Skill> skills) {this.skills = skills;}
+	public void setSkills(ArrayList<Integer> skills) {this.skills = skills;}
 	public void setPic(ImageIcon playerPic) {this.playerPic = playerPic;}
 	public void getInfo()
 	{
@@ -48,12 +49,13 @@ public class Player implements java.io.Serializable
 	public int getHealth() {return health;}
 	public int getPerception() {return perception;}
 	public int getWill() {return will;}
-	public ArrayList<Skill> getSkills() {return skills;}
+	public ArrayList<Integer> getSkills() {return skills;}
 	
 	public void applyModifiers()
 	{
-		for (Skill skill : skills)
+		for (int index : skills)
 		{
+			Skill skill = CentralDB.skillList.get(index);
 			if(skill.getType() == "stregnth")
 				strength += skill.getModifier();
 			else if(skill.getType() == "dexterity")

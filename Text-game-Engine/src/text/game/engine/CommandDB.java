@@ -19,7 +19,8 @@ public class CommandDB {
 		commands.add(new Command("back", ()-> goBack()));
 		commands.add(new Command("check skills", ()-> {
 			PlatformPanel.descriptionArea.setText("You have the following skills\n");
-			for(Skill skill: PlatformPanel.player.getSkills()) {
+			for(int index: PlatformPanel.player.getSkills()) {
+				Skill skill = CentralDB.skillList.get(index);
 				PlatformPanel.descriptionArea.append(skill.getName()+": " + skill.getDescription()+"\n");
 			}
 		}));
@@ -28,7 +29,8 @@ public class CommandDB {
 		}));
 		commands.add(new Command("check items", ()-> {
 			PlatformPanel.descriptionArea.setText("You have the following items\n");
-			for(Item item: PlatformPanel.player.inventory) {
+			for(int index: PlatformPanel.player.inventory) {
+				Item item = CentralDB.itemList.get(index);
 				PlatformPanel.descriptionArea.append(item.getName() + ": " + item.getDescription()+"\n");
 			}
 		}));
@@ -45,9 +47,23 @@ public class CommandDB {
 				System.out.println("Command move to " + CentralDB.locationList.get(move).getName() + " added "+ CentralDB.locationList.get(move).getDescription());
 			}
 		}
-		for(int npc : here.getNPCs()) {
-			commands.add(new Command("look at "+ CentralDB.npcList.get(npc).getName(), ()-> { 
-				PlatformPanel.descriptionArea.setText(CentralDB.npcList.get(npc).getDescription());
+		for(int npcIndex : here.getNPCs()) {
+			NPC npc = CentralDB.npcList.get(npcIndex);
+			commands.add(new Command("look at "+ npc.getName(), ()-> { 
+				PlatformPanel.descriptionArea.setText(npc.getDescription());
+			}));
+			commands.add(new Command("approach "+ npc.getName(), ()-> { 
+				PlatformPanel.descriptionArea.setText("You approach "+ npc.getName()+ ", what would you like to do?");
+				if(npc.getType()==0) {
+					commands.add(new Command("Buy",()-> { 
+						PlatformPanel.descriptionArea.setText("What would you like to buy?\n");
+						for(int index: npc.getItems()) {
+							Item item = CentralDB.itemList.get(index);
+							PlatformPanel.descriptionArea.append(item.getName() +": "+ item.getCost()+"\n");
+							commands.add(new Command("buy "+item.getName(), ()->{}));
+						}
+					}));
+				}
 			}));
 		}
 	}
