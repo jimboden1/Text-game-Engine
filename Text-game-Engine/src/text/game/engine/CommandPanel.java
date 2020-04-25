@@ -10,12 +10,12 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.NumberFormatter;
 
-public class EventsPanel extends JPanel
+public class CommandPanel extends JPanel
 {
 	DefaultListModel dlm = new DefaultListModel();
 	DefaultListModel skillslm = new DefaultListModel();
-	ArrayList<Events> list = new ArrayList<Events>();
-	Events sEvent;
+	ArrayList<Command> list = new ArrayList<Command>();
+	Command sCommand;
 	int selected = -1;
 	CentralDB centralDB;
 	
@@ -24,68 +24,73 @@ public class EventsPanel extends JPanel
 	int itemCon = -1;
 	int locationCon = -1;
 	int npcCon = -1;
-	int eventCon = -1;
+	//int eventCon = -1;
 	
 	JTextField itemConField;
 	JTextField npcConField;
-	JTextField eventConField;
+	//JTextField eventConField;
 	JTextField locationConField;
 	
 	JPanel base;
-	JTextField txtEventName = new JTextField();
-	JTextArea txtEventDescription = new JTextArea();
-	JList eventList = new JList(dlm);
+	JTextField txtCommandName = new JTextField();
+	JTextArea txtCommandDescription = new JTextArea();
+	JList commandList = new JList(dlm);
 	JComboBox locConCBox = new JComboBox();
 	JComboBox itemConCBox = new JComboBox();
 	JComboBox NPCConCBox = new JComboBox();
-	JComboBox eventConCBox = new JComboBox();
+	//JComboBox eventConCBox = new JComboBox();
 	JTextArea successArea = new JTextArea();
 	JTextArea failArea = new JTextArea();
 	JFormattedTextField DCField;
 	JTextArea actionArea = new JTextArea();
 	
-	public EventsPanel(JPanel base, CentralDB centralDB)
+	public CommandPanel()
+	{
+		base = new JPanel();
+	}
+	
+	public CommandPanel(JPanel base, CentralDB centralDB)
 	{
 		this.base = base;
 		this.centralDB = centralDB;
 	}
 	
-	public JPanel createEventsPanel()
+	public JPanel createCommandPanel()
 	{
 		base.setLayout(null);
 		
-		txtEventName.setText("Event Name");
-		txtEventName.setBounds(228, 30, 246, 20);
-		base.add(txtEventName);
-		txtEventName.setColumns(10);
+		txtCommandName.setText("Command Name");
+		txtCommandName.setBounds(228, 30, 246, 20);
+		base.add(txtCommandName);
+		txtCommandName.setColumns(10);
 				
-		txtEventDescription.setText("Event Description");
-		txtEventDescription.setBounds(228, 84, 526, 91);
-		base.add(txtEventDescription);
+		txtCommandDescription.setText("Command Description");
+		txtCommandDescription.setBounds(228, 84, 526, 91);
+		base.add(txtCommandDescription);
 				
-		eventList.setBorder(new TitledBorder(null, "Event List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		eventList.setBounds(12, 43, 194, 433);
-		base.add(eventList);
+		commandList.setBorder(new TitledBorder(null, "Command List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		commandList.setBounds(12, 43, 194, 433);
+		base.add(commandList);
 		
 		JButton saveButton = new JButton("Save");
 		saveButton.setBounds(12, 13, 88, 25);
 		base.add(saveButton);
-		saveButton.addActionListener(e -> saveEvent());
+		saveButton.addActionListener(e -> saveCommand());
 		
 		JButton loadButton = new JButton("Load");
 		loadButton.setBounds(118, 13, 88, 25);
 		base.add(loadButton);
-		loadButton.addActionListener(e -> loadEvent());
+		loadButton.addActionListener(e -> loadCommand());
 		
-		JButton addEventButton = new JButton("Add");
-		addEventButton.setBounds(12, 486, 88, 25);
-		base.add(addEventButton);
-		addEventButton.addActionListener(e -> addNewEvent());
+		JButton addCommandButton = new JButton("Add");
+		addCommandButton.setBounds(12, 486, 88, 25);
+		base.add(addCommandButton);
+		addCommandButton.addActionListener(e -> addNewCommand());
 		
-		JButton deleteEventButton = new JButton("Delete");
-		deleteEventButton.setBounds(118, 486, 88, 25);
-		base.add(deleteEventButton);
-		deleteEventButton.addActionListener(e -> deleteSelectedEvent());
+		JButton deleteCommandButton = new JButton("Delete");
+		deleteCommandButton.setBounds(118, 486, 88, 25);
+		base.add(deleteCommandButton);
+		deleteCommandButton.addActionListener(e -> deleteSelectedCommand());
 
 		JSeparator separator_3 = new JSeparator();
 		separator_3.setBounds(218, 69, 548, 2);
@@ -140,7 +145,7 @@ public class EventsPanel extends JPanel
 		base.add(chngNPC);
 		chngNPC.addActionListener(e -> changeNPCCon());
 		
-		JLabel eventConLabel = new JLabel("Other Event:");
+		/*JLabel eventConLabel = new JLabel("Other Event:");
 		eventConLabel.setBounds(610, 205, 97, 16);
 		base.add(eventConLabel);
 		
@@ -153,7 +158,7 @@ public class EventsPanel extends JPanel
 		JButton chngOtherEvent = new JButton("Change");
 		chngOtherEvent.setBounds(595, 263, 97, 25);
 		base.add(chngOtherEvent);
-		chngOtherEvent.addActionListener(e -> changeEventCon());
+		chngOtherEvent.addActionListener(e -> changeEventCon());*/
 		
 		JSeparator separator_8 = new JSeparator();
 		separator_8.setBounds(218, 297, 548, 2);
@@ -299,7 +304,7 @@ public class EventsPanel extends JPanel
 		}
 	}
 	
-	public void changeEventCon()
+	/*public void changeEventCon()
 	{
 		JPanel main = new JPanel(new BorderLayout(10,10));
 		DefaultListModel<String> eventlm = new DefaultListModel();
@@ -329,7 +334,7 @@ public class EventsPanel extends JPanel
 				eventConField.setText(CentralDB.eventList.get(npcCon).getName());
 			}
 		}
-	}
+	}*/
 
 	public JScrollPane makeScrollList(JList list, String name){
         JScrollPane js = new JScrollPane(list);
@@ -379,57 +384,57 @@ public class EventsPanel extends JPanel
 		}
 	}
 
-	public void saveEvent()
+	public void saveCommand()
 	{
 		if(selected == -1){
-            Events add = new Events();
-            if(!txtEventName.getText().equals(""))
+			Command add = new Command("");
+            if(!txtCommandName.getText().equals(""))
             {
-                dlm.addElement(txtEventName.getText());
-                add.setName(txtEventName.getText());
+                dlm.addElement(txtCommandName.getText());
+                add.setCommand(txtCommandName.getText());
                 list.add(add);
             }
             else
             {
-                dlm.addElement("New Event");
-                add.setName("New Event");
+                dlm.addElement("New Command");
+                add.setCommand("New Command");
                 list.add(add);
             }
         }
         else
         {
-            selected = list.indexOf(sEvent);
-            dlm.set(selected, txtEventName.getText());
-            sEvent = this.pullData();
-            list.set(selected, sEvent);
+            selected = list.indexOf(sCommand);
+            dlm.set(selected, txtCommandName.getText());
+            sCommand = this.pullData();
+            list.set(selected, sCommand);
         }
-		centralDB.eventList = list;
+		centralDB.commandList = list;
 	}
 	
-	public void loadEvent()
+	public void loadCommand()
 	{
-        if(!eventList.isSelectionEmpty())
+        if(!commandList.isSelectionEmpty())
         {
-            if(eventList.getSelectedIndices().length > 1)
+            if(commandList.getSelectedIndices().length > 1)
             {
             }
             else
             {
-                selected = eventList.getSelectedIndex();
-                sEvent = list.get(selected);
-                txtEventName.setText(sEvent.getName());
-                txtEventDescription.setText(sEvent.getDescription());
-                actionArea.setText(sEvent.getActionDesc());
-                successArea.setText(sEvent.getSuccessDesc());
-                failArea.setText(sEvent.getFailDesc());
+                selected = commandList.getSelectedIndex();
+                sCommand = list.get(selected);
+                txtCommandName.setText(sCommand.getCommand());
+                //txtCommandDescription.setText(sCommand.getDescription());
+                actionArea.setText(sCommand.getActionDesc());
+                successArea.setText(sCommand.getSuccessDesc());
+                failArea.setText(sCommand.getFailDesc());
                 
                 skillslm.clear();
-               for (int skill : sEvent.getSkills())
+               for (int skill : sCommand.getSkills())
                {
             	   skillslm.addElement(CentralDB.skillList.get(skill).getName());
                }
                
-               if(sEvent.getLocation() == -1)
+               if(sCommand.getLocation() == -1)
                {
             	   locationConField.setText("");
             	   locationCon = -1;
@@ -437,10 +442,10 @@ public class EventsPanel extends JPanel
                else
                {
             	   locationConField.setText(CentralDB.locationList.get(locationCon).getName());
-            	   locationCon = sEvent.getLocation();
+            	   locationCon = sCommand.getLocation();
                }
                
-               if(sEvent.getItem() == -1)
+               if(sCommand.getItem() == -1)
                {
             	   itemConField.setText("");
             	   itemCon = -1;
@@ -448,10 +453,10 @@ public class EventsPanel extends JPanel
                else
                {
             	   itemConField.setText(CentralDB.itemList.get(itemCon).getName());
-            	   itemCon = sEvent.getItem();
+            	   itemCon = sCommand.getItem();
                }
                
-               if(sEvent.getNpc() == -1)
+               if(sCommand.getNpc() == -1)
                {
             	   npcConField.setText("");
             	   npcCon = -1;
@@ -459,10 +464,10 @@ public class EventsPanel extends JPanel
                else
                {
             	   npcConField.setText(CentralDB.npcList.get(npcCon).getName());
-            	   npcCon = sEvent.getNpc();
+            	   npcCon = sCommand.getNpc();
                }
                
-               if(sEvent.getOtherEvent() == -1)
+               /*if(sEvent.getOtherEvent() == -1)
                {
             	   eventConField.setText("");
             	   eventCon = -1;
@@ -471,36 +476,35 @@ public class EventsPanel extends JPanel
                {
             	   eventConField.setText(CentralDB.eventList.get(eventCon).getName());
             	   eventCon = sEvent.getOtherEvent();
-               }
+               }*/
             }
         }
     }
 	
-	public void addNewEvent()
+	public void addNewCommand()
 	{
-        dlm.addElement("New Event");
-        list.add(new Events());
-        centralDB.eventList = list;
+        dlm.addElement("New Command");
+        list.add(new Command("New Command"));
+        centralDB.commandList = list;
     }
 	
-	public void deleteSelectedEvent()
+	public void deleteSelectedCommand()
 	{
-        if(!eventList.isSelectionEmpty())
+        if(!commandList.isSelectionEmpty())
         {
-            int[] selection = eventList.getSelectedIndices();
+            int[] selection = commandList.getSelectedIndices();
             dlm.removeRange(selection[0], selection[selection.length-1]);
         }        
     }
 	
-	public Events pullData()
+	public Command pullData()
 	{
-        Events created = new Events();
-        created.setName(txtEventName.getText());
-        created.setDescription(txtEventDescription.getText());
+		Command created = new Command(txtCommandName.getText());
+        created.setCommand(txtCommandName.getText());
+        //created.setDescription(txtEventDescription.getText());
         created.setActionDesc(actionArea.getText());
         created.setSuccessDesc(successArea.getText());
         created.setFailDesc(failArea.getText());
-        System.out.println(DCField.getText());
         if (DCField.getText().isEmpty())
         	created.setSkillCheck(-1);
         else
@@ -509,7 +513,7 @@ public class EventsPanel extends JPanel
         created.setLocation(locationCon);
         created.setItem(itemCon);
         created.setNpc(npcCon);
-        created.setOtherEvent(eventCon);
+        //created.setOtherEvent(eventCon);
         created.setSkills(skills);
         return created;
     }

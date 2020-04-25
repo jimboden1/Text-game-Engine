@@ -99,9 +99,11 @@ public class TextGameEngine {
 		
 		tabbedPane.addTab("Locations", null, roomsTab.createLocationPanel(), null);
 		
-		JPanel eventsBase = new JPanel();
+		/*JPanel eventsBase = new JPanel();
         EventsPanel eventsTab = new EventsPanel(eventsBase, centralDB);
-		tabbedPane.addTab("Events", null, eventsTab.createEventsPanel(), null);
+		tabbedPane.addTab("Events", null, eventsTab.createEventsPanel(), null);*/
+		CommandPanel commandTab = new CommandPanel();
+		tabbedPane.addTab("Commands", null, commandTab.createCommandPanel(), null);
 		
         tabbedPane.addTab("Items", null, itemTab.createItemPanel(), null);
         
