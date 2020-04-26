@@ -217,7 +217,7 @@ public class PlayerPanel
 					player.setStrength(Integer.parseInt(strField.getText()));
 					player.setDexterity(Integer.parseInt(dexField.getText()));
 					player.setIQ(Integer.parseInt(iqField.getText()));
-					player.setHealth(Integer.parseInt(hpField.getText()));
+					player.setMaxHealth(Integer.parseInt(hpField.getText()));
 					player.setPerception(Integer.parseInt(perField.getText()));
 					player.setWill(Integer.parseInt(willField.getText()));
 					player.getInfo();

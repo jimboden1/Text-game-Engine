@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 public class Player implements java.io.Serializable
 {
 	private String name, description;
-	private int strength = 0, dexterity = 0, iq = 0, health = 0, perception = 0, will=  0;
+	private int strength = 0, dexterity = 0, iq = 0,maxHealth = 0, health = 0, perception = 0, will=  0;
 	private ArrayList<Integer> skills = new ArrayList<>();
 	public ArrayList<Integer> inventory = new ArrayList<>();
 	public int money = 0;
@@ -23,10 +23,27 @@ public class Player implements java.io.Serializable
 	public void setDexterity(int dexterity) {this.dexterity = dexterity;}
 	public void setIQ(int iq) {this.iq = iq;}
 	public void setHealth(int health) {this.health = health;}
+	public void setMaxHealth(int health) {
+		this.maxHealth = health;
+		this.health = health;
+		}
 	public void setPerception(int perception) {this.perception = perception;}
 	public void setWill(int will) {this.will = will;}
 	public void setSkills(ArrayList<Integer> skills) {this.skills = skills;}
 	public void setPic(ImageIcon playerPic) {this.playerPic = playerPic;}
+	public void takeDamgage(int damage) {
+		health-=damage;
+		if(health<0) {
+			health=0;
+		}
+	}
+	public void heal(int heal) {
+		health+=heal;
+		if(health>maxHealth) {
+			health=maxHealth;
+		}
+	}
+	
 	public void getInfo()
 	{
 		System.out.println("Player: " + name + "\n"
@@ -47,6 +64,7 @@ public class Player implements java.io.Serializable
 	public int getDexterity() {return dexterity;}
 	public int getIQ() {return iq;}
 	public int getHealth() {return health;}
+	public int getMaxHealth() {return maxHealth;}
 	public int getPerception() {return perception;}
 	public int getWill() {return will;}
 	public ArrayList<Integer> getSkills() {return skills;}

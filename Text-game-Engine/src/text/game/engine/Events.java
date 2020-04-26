@@ -14,6 +14,7 @@ public class Events implements java.io.Serializable{
     private String actionDesc;
     private String successDesc;
     private String failDesc;
+    public Method method;
 
 	public String getName() {return name;}
 	public String getDescription() {return description;}
@@ -37,4 +38,8 @@ public class Events implements java.io.Serializable{
 	public void setActionDesc(String actionDesc) {this.actionDesc = actionDesc;}
 	public void setSuccessDesc(String successDesc) {this.successDesc = successDesc;}
 	public void setFailDesc(String failDesc) {this.failDesc = failDesc;}
+	
+	public void display(String display) {
+		method = ()->{PlatformPanel.descriptionArea.setText(display);};
+	}
 }

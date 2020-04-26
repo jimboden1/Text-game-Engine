@@ -30,6 +30,12 @@ public class NPC implements java.io.Serializable
 	public void setEvents(ArrayList events) {this.events = events;}
 	public void setSkills(ArrayList skills) {this.skills = skills;}
 	public void setDialog(String dialog) {this.dialog = dialog;}
+	public void takeHealth(int damage) {
+		health-=damage;
+		if(health<0) {
+			health=0;
+		}
+	}
 	
 	public String getName() {return name;}
 	public String getDescription() {return description;}

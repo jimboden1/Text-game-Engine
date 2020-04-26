@@ -1,10 +1,12 @@
 package text.game.engine;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CommandDB {
 
 	public ArrayList<Command> commands = new ArrayList<>();
+	private Random random = new Random();
 	
 	public CommandDB() {
 		
@@ -51,6 +53,12 @@ public class CommandDB {
 			NPC npc = CentralDB.npcList.get(npcIndex);
 			addNPCCommands(npc);
 		}
+		commands.add(new Command("explore",()-> {}));
+		commands.add(new Command("rest",()-> {
+			PlatformPanel.descriptionArea.append("You rest for a bit to regain your strength");
+			PlatformPanel.player.heal(50);
+			PlatformPanel.updatePlayerDisplay();
+		}));
 	}
 	
 	public void addNPCCommands(NPC npc) {
@@ -75,6 +83,7 @@ public class CommandDB {
 								PlatformPanel.player.money-=item.getCost();
 								PlatformPanel.player.inventory.add(CentralDB.itemList.indexOf(item));
 								PlatformPanel.descriptionArea.append("you have purchased "+ item.getName()+"\n");
+								PlatformPanel.updatePlayerDisplay();
 							}
 						}));
 					}
@@ -89,6 +98,7 @@ public class CommandDB {
 								PlatformPanel.player.money+=item.getCost();
 								PlatformPanel.player.inventory.remove(CentralDB.itemList.indexOf(item));
 								PlatformPanel.descriptionArea.append("you have sold "+ item.getName()+"\n");
+								PlatformPanel.updatePlayerDisplay();
 							}
 						}));
 					}
@@ -109,4 +119,52 @@ public class CommandDB {
 		goBack();
 	}
 	
+	public void battle(NPC enemy) {
+		commands.removeAll(commands);
+		PlatformPanel.descriptionArea.setText("You are fighting " + enemy.getName()+" they have "+ enemy.getHealth()+" health left.\n");
+		commands.add(new Command("attack",()->{
+			PlatformPanel.descriptionArea.append("You attack " + enemy.getName()+"\n");
+			if(attackCheck(PlatformPanel.player.getPerception(),PlatformPanel.player.getDexterity(),enemy.getPerception(),enemy.getDexterity())) {
+				PlatformPanel.descriptionArea.append("You hit " + enemy.getName()+" for "+ PlatformPanel.player.getStrength()/2+" damage.\n");
+				enemy.takeHealth(PlatformPanel.player.getStrength()/2);
+				if(enemy.getHealth()==0) {
+					goBack();
+				}
+				else {
+					enemyAttack(enemy);
+				}
+			}
+		}));
+		commands.add(new Command("run",()-> { 
+			int escapeRoll = random.nextInt(100)+1;
+			if(escapeRoll+ PlatformPanel.player.getDexterity()>=enemy.getDexterity()) {
+				goBack();
+			}
+			else {
+				enemyAttack(enemy);
+			}
+		}));
+	}
+	
+	public void enemyAttack(NPC enemy) {
+		PlatformPanel.descriptionArea.append(enemy.getName()+" Attacks!\n");
+		if(attackCheck(enemy.getPerception(),enemy.getDexterity(),PlatformPanel.player.getPerception(),PlatformPanel.player.getDexterity())) {
+			PlatformPanel.descriptionArea.append(enemy.getName()+"hits you for "+ enemy.getStrength()/2+" damage.\n");
+			PlatformPanel.player.takeDamgage(enemy.getStrength()/2);
+			PlatformPanel.updatePlayerDisplay();
+			if(PlatformPanel.player.getHealth()==0) {
+				commands.removeAll(commands);
+				PlatformPanel.descriptionArea.append("Game Over");
+			}
+		}
+	}
+	
+	public boolean attackCheck(int attackerPer, int attackerDex, int defenderPer, int defenderDex) {
+		int attackRoll = random.nextInt(100) + 1;
+		if(attackRoll+attackerPer+(attackerDex)/4 >= 50+defenderPer/2+defenderDex/2) {
+			return true;
+		}
+		else
+			return false;
+	}
 }
