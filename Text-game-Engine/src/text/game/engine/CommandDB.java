@@ -59,6 +59,11 @@ public class CommandDB {
 		}));
 		commands.add(new Command("approach "+ npc.getName(), ()-> { 
 			PlatformPanel.descriptionArea.setText("You approach "+ npc.getName()+ ", what would you like to do?");
+			commands.add(new Command ("talk", () ->  {
+				PlatformPanel.descriptionArea.setText(npc.getDescription());
+			
+			}));
+			
 			if(npc.getType()==0) {
 				commands.add(new Command("buy",()-> { 
 					PlatformPanel.descriptionArea.setText("What would you like to buy?\n");

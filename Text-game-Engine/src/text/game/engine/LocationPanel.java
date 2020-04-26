@@ -18,7 +18,8 @@ public class LocationPanel
 	DefaultListModel<String> npclm = new DefaultListModel<String>();
 	int selected = -1;
 	JTextField[] positionFields = new JTextField[4];
-	JCheckBox startScreenChkBox = new JCheckBox("Set as Start Screen");
+	JCheckBox startScreenChkBox = new JCheckBox("<html>Set as<br>Start Screen</html>");
+	JCheckBox fillNPCChkBox = new JCheckBox("Auto-fill NPCs");
 	int[] locations = {-1,-1,-1,-1};
 	
 	ArrayList<Integer> events = new ArrayList<>();
@@ -86,8 +87,8 @@ public class LocationPanel
 		separator_1.setBounds(218, 201, 548, 2);
 		base.add(separator_1);
 		
-		JLabel roomDesc = new JLabel("Location Description:");
-		roomDesc.setBounds(218, 77, 105, 22);
+		JLabel roomDesc = new JLabel("<html>Location<br>Description:</html>");
+		roomDesc.setBounds(218, 70, 115, 35);
 		base.add(roomDesc);
 				
 		descArea.setBounds(334, 77, 432, 111);
@@ -106,15 +107,14 @@ public class LocationPanel
 		locationName.setBounds(334, 13, 432, 36);
 		base.add(locationName);
 		
-		startScreenChkBox.setBounds(210, 105, 113, 25);
+		startScreenChkBox.setBounds(210, 110, 113, 25);
 		base.add(startScreenChkBox);
 		
-		JCheckBox fillItemsChkBox = new JCheckBox("Auto-fill items");
-		fillItemsChkBox.setBounds(210, 130, 113, 25);
-		base.add(fillItemsChkBox);
+		/*JCheckBox fillItemsChkBox = new JCheckBox("Auto-fill items");
+		fillItemsChkBox.setBounds(210, 140, 113, 25);
+		base.add(fillItemsChkBox);*/
 		
-		JCheckBox fillNPCChkBox = new JCheckBox("Auto-fill NPCs");
-		fillNPCChkBox.setBounds(210, 155, 113, 25);
+		fillNPCChkBox.setBounds(210, 165, 113, 25);
 		base.add(fillNPCChkBox);
 		
 		JScrollPane eventPane = makeScrollList(eventsList, "Events List");
@@ -223,6 +223,10 @@ public class LocationPanel
 		base.add(addNPC);
 		addNPC.addActionListener(e -> addNPC());
 		
+		JLabel npcListLabel = new JLabel("NPCs:");
+		npcListLabel.setBounds(218, 418, 56, 16);
+		base.add(npcListLabel);
+		
 		return base;
 	}
 	
@@ -288,13 +292,17 @@ public class LocationPanel
                 selected = locationList.getSelectedIndex();
                 sLoc = list.get(selected);
                 locationName.setText(sLoc.getName());
-                descArea.setText(sLoc.getDescription());
+                descArea.setText(sLoc.getRawDescription());
                 if(CentralDB.startScreen.equals(sLoc)) {
                 	startScreenChkBox.setSelected(true);
                 }
                 else {
                 	startScreenChkBox.setSelected(false);
                 }
+                if(sLoc.isAutoFillNpcs())
+                	fillNPCChkBox.setSelected(true);
+                else
+                	fillNPCChkBox.setSelected(false);
                 eventlm.clear();
                 for(int event: sLoc.getEvents()) {
                 	eventlm.addElement(CentralDB.eventList.get(event).getName());
@@ -329,6 +337,8 @@ public class LocationPanel
         if (startScreenChkBox.isSelected()) {
     		CentralDB.startScreen = created;
         }
+        if(fillNPCChkBox.isSelected())
+        		created.setAutoFillNpcs(true);
         created.setEvents(events);
         created.setNorth(locations[0]);
         created.setEast(locations[1]);

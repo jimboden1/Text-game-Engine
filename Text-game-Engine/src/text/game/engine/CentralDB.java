@@ -43,4 +43,21 @@ public class CentralDB implements java.io.Serializable{
     	startScreen = centralDB.startScreenTemp;
     }
     
+    public ArrayList<Integer> changeIndex(ArrayList<Integer> list, int index)
+    {
+    	ArrayList<Integer> newList = list;
+    	
+    	for (int item : newList)
+    	{
+    		if (item == index)
+    			newList.remove(item);
+    		else if (item < index)
+    			item = item;
+    		else
+    			item = item-1;
+    	}
+    	
+    	return newList;
+    }
+    
 }

@@ -8,6 +8,8 @@ public class Location implements java.io.Serializable{
     private int[] locations = {-1,-1,-1,-1};
     private ArrayList<Integer> npcs = new ArrayList<>();
     
+    private boolean autoFillNpcs = false;
+    
     public Location() {
     	name = "New Location";
     }
@@ -31,7 +33,29 @@ public class Location implements java.io.Serializable{
 	public void setNPCs(ArrayList<Integer> npcs) {this.npcs = npcs;}
     
 	public String getName() {return name;}
-	public String getDescription() {return description;}
+	public String getDescription()
+	{
+		if (autoFillNpcs)
+		{
+			String npcDescs = " You see " + npcs.size() + " people here. ";
+			for (int i = 0; i < npcs.size(); i++)
+			{
+				if ( i != npcs.size()-2)
+					npcDescs += CentralDB.npcList.get(npcs.get(i)).getDescription() + ", ";
+				else
+					npcDescs += CentralDB.npcList.get(npcs.get(i)).getDescription() + ".";
+			}
+			return description + npcDescs;
+		}
+		else
+			return description;
+	}
+	
+	public String getRawDescription()
+	{
+		return description;
+	}
+	
 	public ArrayList<Integer> getEvents() {return events;}
 	public int[] getLocations() {return locations;}
 	public int getNorth() {return locations[0];}
@@ -39,6 +63,9 @@ public class Location implements java.io.Serializable{
 	public int getSouth() {return locations[2];}
 	public int getWest() {return locations[3];}
 	public ArrayList<Integer> getNPCs() {return npcs;}
+
+	public boolean isAutoFillNpcs() {return autoFillNpcs;}
+	public void setAutoFillNpcs(boolean autoFillNpcs) {this.autoFillNpcs = autoFillNpcs;}
     
 	
     

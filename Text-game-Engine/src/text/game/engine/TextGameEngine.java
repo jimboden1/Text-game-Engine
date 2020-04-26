@@ -204,4 +204,11 @@ public class TextGameEngine {
 		frame.repaint();
 		frame.revalidate();
 	}
+	
+	public void editThis() {
+		frame.getContentPane().removeAll();
+		this.initialize();
+		frame.repaint();
+		frame.revalidate();
+	}
 }

@@ -24,12 +24,12 @@ public class CommandPanel extends JPanel
 	int itemCon = -1;
 	int locationCon = -1;
 	int npcCon = -1;
-	//int eventCon = -1;
 	
 	JTextField itemConField;
 	JTextField npcConField;
-	//JTextField eventConField;
 	JTextField locationConField;
+	
+	JCheckBox requireSkillCBox;
 	
 	JPanel base;
 	JTextField txtCommandName = new JTextField();
@@ -49,11 +49,11 @@ public class CommandPanel extends JPanel
 		base = new JPanel();
 	}
 	
-	public CommandPanel(JPanel base, CentralDB centralDB)
+	/*public CommandPanel(JPanel base, CentralDB centralDB)
 	{
 		this.base = base;
 		this.centralDB = centralDB;
-	}
+	}*/
 	
 	public JPanel createCommandPanel()
 	{
@@ -101,47 +101,47 @@ public class CommandPanel extends JPanel
 		base.add(separator_7);
 		
 		JLabel locationConLabel = new JLabel("Location:");
-		locationConLabel.setBounds(293, 205, 97, 16);
+		locationConLabel.setBounds(340, 205, 97, 16);
 		base.add(locationConLabel);
 		
 		locationConField = new JTextField();
 		locationConField.setEditable(false);
-		locationConField.setBounds(268, 230, 97, 22);
+		locationConField.setBounds(340, 230, 97, 22);
 		base.add(locationConField);
 		locationConField.setColumns(10);
 		
 		JButton chngLocation = new JButton("Change");
-		chngLocation.setBounds(268, 263, 97, 25);
+		chngLocation.setBounds(340, 263, 97, 25);
 		base.add(chngLocation);
 		chngLocation.addActionListener(e -> changeLocationCon());
 		
 		JLabel itemConLbl = new JLabel("Item:");
-		itemConLbl.setBounds(410, 205, 98, 16);
+		itemConLbl.setBounds(450, 205, 98, 16);
 		base.add(itemConLbl);
 		
 		itemConField = new JTextField();
 		itemConField.setEditable(false);
 		itemConField.setColumns(10);
-		itemConField.setBounds(377, 230, 97, 22);
+		itemConField.setBounds(450, 230, 97, 22);
 		base.add(itemConField);
 		
 		JButton chngItem = new JButton("Change");
-		chngItem.setBounds(377, 263, 97, 25);
+		chngItem.setBounds(450, 263, 97, 25);
 		base.add(chngItem);
 		chngItem.addActionListener(e -> changeItemCon());
 		
 		JLabel npcConLabel = new JLabel("NPC Interaction:");
-		npcConLabel.setBounds(489, 205, 97, 16);
+		npcConLabel.setBounds(560, 205, 97, 16);
 		base.add(npcConLabel);
 		
 		npcConField = new JTextField();
 		npcConField.setEditable(false);
 		npcConField.setColumns(10);
-		npcConField.setBounds(486, 230, 97, 22);
+		npcConField.setBounds(560, 230, 97, 22);
 		base.add(npcConField);
 		
 		JButton chngNPC = new JButton("Change");
-		chngNPC.setBounds(486, 263, 97, 25);
+		chngNPC.setBounds(560, 263, 97, 25);
 		base.add(chngNPC);
 		chngNPC.addActionListener(e -> changeNPCCon());
 		
@@ -185,6 +185,10 @@ public class CommandPanel extends JPanel
 		failArea.setText("Fail Description");
 		failArea.setBounds(584, 397, 182, 114);
 		base.add(failArea);
+		
+		JCheckBox requireSkillCBox = new JCheckBox("Require Skill");
+		requireSkillCBox.setBounds(393, 315, 113, 25);
+		base.add(requireSkillCBox);
 				
 		//https://stackoverflow.com/questions/11093326/restricting-jtextfield-input-to-integers
 		NumberFormat format = NumberFormat.getInstance();
@@ -193,12 +197,12 @@ public class CommandPanel extends JPanel
 		formatter.setMinimum(0);
 		formatter.setAllowsInvalid(false);
 		DCField = new JFormattedTextField(formatter);
-		DCField.setBounds(476, 338, 30, 22);
+		DCField.setBounds(476, 350, 30, 22);
 		base.add(DCField);
 		DCField.setColumns(10);
 		
 		JLabel DCLabel = new JLabel("Skill Check:");
-		DCLabel.setBounds(397, 337, 70, 23);
+		DCLabel.setBounds(397, 350, 70, 23);
 		base.add(DCLabel);
 				
 		actionArea.setText("Action Description");
@@ -424,14 +428,16 @@ public class CommandPanel extends JPanel
                 sCommand = list.get(selected);
                 txtCommandName.setText(sCommand.getCommand());
                 //txtCommandDescription.setText(sCommand.getDescription());
-                actionArea.setText(sCommand.getActionDesc());
-                successArea.setText(sCommand.getSuccessDesc());
-                failArea.setText(sCommand.getFailDesc());
+                
                 
                 skillslm.clear();
-               for (int skill : sCommand.getSkills())
+                if (requireSkillCBox.isSelected())
                {
-            	   skillslm.addElement(CentralDB.skillList.get(skill).getName());
+                	for (int skill : sCommand.getSkills())
+	            	   skillslm.addElement(CentralDB.skillList.get(skill).getName());
+                	actionArea.setText(sCommand.getActionDesc());
+                    successArea.setText(sCommand.getSuccessDesc());
+                    failArea.setText(sCommand.getFailDesc());
                }
                
                if(sCommand.getLocation() == -1)

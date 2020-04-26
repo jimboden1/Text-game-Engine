@@ -52,10 +52,11 @@ public class PlatformPanel {
     	base.getContentPane().setLayout(new BorderLayout(10,10));
     	JMenuBar menu = new JMenuBar();
         JMenu files = new JMenu("File");
-        JMenuItem save = new JMenuItem("Save Game"), load = new JMenuItem("Load Game"), saveAs = new JMenuItem("Create New Save Game");
+        JMenuItem save = new JMenuItem("Save Game"), load = new JMenuItem("Load Game"), saveAs = new JMenuItem("Create New Save Game"), edit = new JMenuItem("Edit Game");
         files.add(saveAs);
         files.add(save);
         files.add(load);
+        files.add(edit);
     	menu.add(files);
     	main.add(menu, BorderLayout.NORTH);
     	

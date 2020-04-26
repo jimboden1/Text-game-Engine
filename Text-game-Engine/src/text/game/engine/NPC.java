@@ -10,6 +10,7 @@ public class NPC implements java.io.Serializable
 	private ArrayList<Integer> events= new ArrayList<>();
         private int strength, dexterity, iq, health, perception, will;
 	private ArrayList<Integer> skills = new ArrayList<>();
+	private String dialog;
         
 	public NPC() {
             name = "New NPC";
@@ -28,6 +29,7 @@ public class NPC implements java.io.Serializable
 	public void setItems(ArrayList items) {this.items = items;}
 	public void setEvents(ArrayList events) {this.events = events;}
 	public void setSkills(ArrayList skills) {this.skills = skills;}
+	public void setDialog(String dialog) {this.dialog = dialog;}
 	
 	public String getName() {return name;}
 	public String getDescription() {return description;}
@@ -41,6 +43,6 @@ public class NPC implements java.io.Serializable
 	public ArrayList<Integer> getItems() {return items;}
 	public ArrayList<Integer> getEvents() {return events;}
 	public ArrayList<Integer> getSkills() {return skills;}
-	
+	public String getDialog() {return dialog;}
 
 }
