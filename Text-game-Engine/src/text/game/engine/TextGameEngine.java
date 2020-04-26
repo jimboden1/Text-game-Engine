@@ -17,6 +17,7 @@ public class TextGameEngine {
 
 	private JFrame frame;
 	private File currentFile = null;
+    PlayerPanel playerTab = new PlayerPanel();
 	private CentralDB centralDB = new CentralDB();
 	private LocationPanel roomsTab = new LocationPanel();
     private ItemPanel itemTab = new ItemPanel();
@@ -66,7 +67,6 @@ public class TextGameEngine {
                 saveAs.addActionListener(e->saveAs());
                 JMenuItem load = new JMenuItem("Load");
                 load.addActionListener(e->load());
-                JMenuItem create = new JMenuItem("New");
                 JMenu play = new JMenu("Play");
                 JMenuItem playNew = new JMenuItem("Load Game");
                 playNew.addActionListener(e->play());
@@ -77,7 +77,6 @@ public class TextGameEngine {
                 files.add(save);
                 files.add(saveAs);
                 files.add(load);
-                files.add(create);
                 menu.add(files);
                 menu.add(play);
                 frame.getContentPane().add(menu, BorderLayout.NORTH);
@@ -89,8 +88,6 @@ public class TextGameEngine {
 
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
         
-		JPanel playerBase = new JPanel();
-        PlayerPanel playerTab = new PlayerPanel(playerBase);
 		tabbedPane.addTab("Player", null, playerTab.createPlayerPanel(), null);
                 
         
@@ -120,6 +117,7 @@ public class TextGameEngine {
 			
 			
 			String filename = currentFile.getAbsolutePath();
+			playerTab.savePlayer();
 			centralDB.loadOutCentralDB();
 			try
 		      
@@ -163,6 +161,7 @@ public class TextGameEngine {
             	file.close();
             
             	CentralDB.loadIntoCentralDB(centralDB);
+            	playerTab.update();
             	roomsTab.update();
             	itemTab.update();
             	npcTab.update();

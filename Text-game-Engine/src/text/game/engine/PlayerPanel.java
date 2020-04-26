@@ -19,20 +19,20 @@ import javax.swing.text.PlainDocument;
 
 public class PlayerPanel
 {
-	JPanel base;
+	JPanel base= new JPanel();
 	JTextField txtName = new JTextField(), funds = new JTextField("0");
 	JTextArea txtrDescription = new JTextArea();
-	DefaultListModel<String> listModel = new DefaultListModel<String>();
-	JList<String> playerSkillsList = new JList<String>(listModel);
+	DefaultListModel<String> skilllm = new DefaultListModel<String>();
+	JList<String> playerSkillsList = new JList<String>(skilllm);
 	DefaultListModel<String> itemLM = new DefaultListModel<String>();
-	JList<String> playerItemList = new JList<String>(listModel);
+	JList<String> playerItemList = new JList<String>(skilllm);
 	JLabel picPane = new JLabel();
-	JTextField strField = new JTextField();
-	JTextField dexField = new JTextField();
-	JTextField iqField = new JTextField();
-	JTextField hpField = new JTextField();
-	JTextField perField = new JTextField();
-	JTextField willField = new JTextField();
+	JTextField strField = new JTextField("0");
+	JTextField dexField = new JTextField("0");
+	JTextField iqField = new JTextField("0");
+	JTextField hpField = new JTextField("0");
+	JTextField perField = new JTextField("0");
+	JTextField willField = new JTextField("0");
 	JButton addPicButton = new JButton();
 	JButton createPlayer = new JButton();
 	JButton addSkill = new JButton();
@@ -43,9 +43,8 @@ public class PlayerPanel
 	ArrayList<Integer> itemList = new ArrayList<>();
 	
 	
-	public PlayerPanel(JPanel base)
+	public PlayerPanel()
 	{
-        this.base = base;
     }
 	
 	public JPanel createPlayerPanel()
@@ -71,7 +70,7 @@ public class PlayerPanel
         js.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         for(Skill skill: CentralDB.skillList)
         {
-            listModel.addElement(skill.getName());
+            skilllm.addElement(skill.getName());
         }
         base.add(js);
         base.repaint();
@@ -111,7 +110,7 @@ public class PlayerPanel
 						int[] selected = skills.getSelectedIndices();
 						for(int i = 0; i<selected.length;i++)
 						{
-							listModel.addElement(CentralDB.skillList.get(i).getName());
+							skilllm.addElement(CentralDB.skillList.get(i).getName());
 							skillList.add(selected[i]);
 						}
 						player.setSkills(skillList);
@@ -132,13 +131,13 @@ public class PlayerPanel
 		            if(playerSkillsList.getSelectedIndices().length > 1){
 		                int[] selection = playerSkillsList.getSelectedIndices();
 		                for(int i = selection.length-1 ; i>=0; i--){
-		                	listModel.remove(selection[i]);
+		                	skilllm.remove(selection[i]);
 		                	skillList.remove(selection[i]);
 		                }
 		            }
 		            else{
 		                int selection = playerSkillsList.getSelectedIndex();
-		                listModel.remove(selection);
+		                skilllm.remove(selection);
 		                skillList.remove(selection);
 		            }
 		            player.setSkills(skillList);
@@ -158,7 +157,7 @@ public class PlayerPanel
 		JSeparator separator_4 = new JSeparator();
 		separator_4.setBounds(10, 160, 755, 2);
 		base.add(separator_4);		
-		
+		/*
 		//Picture of the player if desired. 
 		picPane.setBounds(10, 176, 188, 174);
 		picPane.setVisible(true);
@@ -201,33 +200,12 @@ public class PlayerPanel
 			    }
 			}
 		});
-		
+		*/
 		//Create Player object
 		createPlayer.setBounds(300 ,350,100,20);
 		createPlayer.setText("Create");
 		base.add(createPlayer);
-		createPlayer.addActionListener(new ActionListener()
-		{
-				public void actionPerformed(ActionEvent e)
-				{
-					player = new Player();
-					player.setName(txtName.getText());
-					player.setDescription(txtrDescription.getText());
-					player.money = Integer.parseInt(funds.getText());
-					player.setStrength(Integer.parseInt(strField.getText()));
-					player.setDexterity(Integer.parseInt(dexField.getText()));
-					player.setIQ(Integer.parseInt(iqField.getText()));
-					player.setMaxHealth(Integer.parseInt(hpField.getText()));
-					player.setPerception(Integer.parseInt(perField.getText()));
-					player.setWill(Integer.parseInt(willField.getText()));
-					player.getInfo();
-					//apply the skills 
-					player.applyModifiers();
-					//Set the image
-					player.setPic(playerPic);
-					CentralDB.player = player;
-				}
-		});
+		createPlayer.addActionListener(e->savePlayer());
 		
 		strField.setBounds(290, 219, 48, 22);
 		base.add(strField);
@@ -288,6 +266,44 @@ public class PlayerPanel
 		
 		
 		return base;
+	}
+	
+	public void savePlayer() {
+		player = new Player();
+		player.setName(txtName.getText());
+		player.setDescription(txtrDescription.getText());
+		player.money = Integer.parseInt(funds.getText());
+		player.setStrength(Integer.parseInt(strField.getText()));
+		player.setDexterity(Integer.parseInt(dexField.getText()));
+		player.setIQ(Integer.parseInt(iqField.getText()));
+		player.setMaxHealth(Integer.parseInt(hpField.getText()));
+		player.setPerception(Integer.parseInt(perField.getText()));
+		player.setWill(Integer.parseInt(willField.getText()));
+		player.setSkills(skillList);
+		player.inventory = itemList;
+		player.getInfo();
+		//apply the skills 
+		player.applyModifiers();
+		//Set the image
+		player.setPic(playerPic);
+		CentralDB.player = player;
+	}
+	
+	public void update() {
+		player = CentralDB.player;
+		txtName.setText(player.getName());
+		txtrDescription.setText(player.getDescription());
+		funds.setText("" + player.money);
+		strField.setText(""+ player.getStrength());
+		dexField.setText(""+player.getDexterity());
+		iqField.setText(""+ player.getIQ());
+		hpField.setText(""+ player.getMaxHealth());
+		perField.setText(""+ player.getPerception());
+		willField.setText(""+ player.getWill());
+		skillList=player.getSkills();
+		for(int index: skillList) {
+			skilllm.addElement(CentralDB.skillList.get(index).getName());
+		}
 	}
 
 }
