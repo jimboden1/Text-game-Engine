@@ -245,13 +245,25 @@ public class LocationPanel
 
 	public void deleteSelectedLocation()
 	{
-        if(!locationList.isSelectionEmpty())
-        {
-            int[] selection = locationList.getSelectedIndices();
-            dlm.removeRange(selection[0], selection[selection.length-1]);
-            selected = -1;
-        }  
-        CentralDB.locationList = list;
+		if(!locationList.isSelectionEmpty()){
+            if(locationList.getSelectedIndices().length > 1){
+                int[] selection = locationList.getSelectedIndices();
+                for(int i = selection.length-1;i>=0;i--){
+                    dlm.remove(selection[i]);
+                    list.remove(selection[i]);
+                    if(selection[i]==selected)
+                        selected = -1;
+                }
+            }
+            else{
+                int selection = locationList.getSelectedIndex();
+                if (selection == selected)
+                    selected = -1;
+                dlm.remove(selection);
+                list.remove(selection);
+            }
+            CentralDB.locationList = list;
+        }
     }
 	
 	public void saveLocation()

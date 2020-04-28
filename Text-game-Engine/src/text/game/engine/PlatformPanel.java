@@ -16,7 +16,7 @@ public class PlatformPanel {
 
 	private JFrame base;
 	private File currentFile = null;
-	public static JPanel main = new JPanel(new BorderLayout(10,10)), leftSide = new JPanel(new GridLayout(7,2)), 
+	public static JPanel main = new JPanel(new BorderLayout(10,10)), leftSide = new JPanel(new GridLayout(8,2)), 
 			bottom = new JPanel(new BorderLayout(10,10)), buttonPanel = new JPanel(new GridLayout(2,6,10,10));
 	public static JTextField commandLine = new JTextField(200);
 	public static JTextArea descriptionArea = new JTextArea();
@@ -57,6 +57,8 @@ public class PlatformPanel {
     	leftSide.add(willlb);
     	leftSide.add(will);
     	main.add(leftSide, BorderLayout.WEST);
+    	player = CentralDB.player;
+    	updatePlayerDisplay();
     	
     	here = CentralDB.startScreen;
     	base.getContentPane().setLayout(new BorderLayout(10,10));

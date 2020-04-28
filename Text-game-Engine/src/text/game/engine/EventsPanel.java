@@ -2,6 +2,7 @@
 package text.game.engine;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -14,11 +15,14 @@ public class EventsPanel extends JPanel
 {
 	DefaultListModel dlm = new DefaultListModel();
 	DefaultListModel skillslm = new DefaultListModel();
+	DefaultListModel functionslm = new DefaultListModel();
 	ArrayList<Events> list = new ArrayList<Events>();
-	Events sEvent;
+	final String SETTARGET = "Set Target";
+	Events sEvent = new Events();
 	int selected = -1;
-	CentralDB centralDB;
-	
+	JRadioButton command = new JRadioButton("Command"), 
+			trigger = new JRadioButton("Conditional"), both = new JRadioButton("Both");
+	JList functionList = new JList(functionslm);
 	JList skillList = new JList(skillslm);
 	ArrayList<Integer> skills = new ArrayList<Integer>();
 	int itemCon = -1;
@@ -30,38 +34,54 @@ public class EventsPanel extends JPanel
 	JTextField npcConField;
 	JTextField eventConField;
 	JTextField locationConField;
+	JButton extra= new JButton(SETTARGET);
 	
-	JPanel base;
+	JPanel base = new JPanel();
 	JTextField txtEventName = new JTextField();
 	JTextArea txtEventDescription = new JTextArea();
 	JList eventList = new JList(dlm);
-	JComboBox locConCBox = new JComboBox();
-	JComboBox itemConCBox = new JComboBox();
-	JComboBox NPCConCBox = new JComboBox();
-	JComboBox eventConCBox = new JComboBox();
 	JTextArea successArea = new JTextArea();
 	JTextArea failArea = new JTextArea();
 	JFormattedTextField DCField;
 	JTextArea actionArea = new JTextArea();
 	
-	public EventsPanel(JPanel base, CentralDB centralDB)
+	public EventsPanel()
 	{
-		this.base = base;
-		this.centralDB = centralDB;
 	}
 	
 	public JPanel createEventsPanel()
 	{
 		base.setLayout(null);
 		
-		txtEventName.setText("Event Name");
-		txtEventName.setBounds(228, 30, 246, 20);
-		base.add(txtEventName);
-		txtEventName.setColumns(10);
-				
-		txtEventDescription.setText("Event Description");
-		txtEventDescription.setBounds(228, 84, 526, 91);
-		base.add(txtEventDescription);
+		JPanel name = new JPanel();
+		name.setBorder(new TitledBorder(null, "Event Name/Command", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		name.setBounds(220, 10, 246, 50);
+		name.add(txtEventName);
+		base.add(name);
+		txtEventName.setColumns(20);
+		JLabel plus = new JLabel("+");
+		plus.setBounds(480, 30, 30, 10);
+		base.add(plus);
+		
+		JPanel target = new JPanel(new BorderLayout());
+		target.setBorder(new TitledBorder(null, "Target", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		target.setBounds(500, 10, 200, 50);
+		target.add(extra, BorderLayout.CENTER);
+		extra.addActionListener(e->setTarget());
+		base.add(target);
+		
+		ButtonGroup type = new ButtonGroup();
+		type.add(command);
+		type.add(trigger);
+		type.add(both);
+		command.setBounds(220, 80, 100, 20);
+		base.add(command);
+		trigger.setBounds(320, 80,100,20);
+		base.add(trigger);
+		both.setBounds(420, 80,100,20);
+		base.add(both);
+
+		
 				
 		eventList.setBorder(new TitledBorder(null, "Event List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		eventList.setBounds(12, 43, 194, 433);
@@ -86,15 +106,21 @@ public class EventsPanel extends JPanel
 		deleteEventButton.setBounds(118, 486, 88, 25);
 		base.add(deleteEventButton);
 		deleteEventButton.addActionListener(e -> deleteSelectedEvent());
+		
+		JScrollPane functionScroll = makeScrollList(functionList, "Functions");
+		functionScroll.setBounds(220, 120, 500, 100);
+		base.add(functionScroll);
+		
+		JButton add = new JButton("Add");
+		JButton edit = new JButton("Edit");
+		JButton remove = new JButton("Remove");
+		JButton up = new JButton("Up");
+		JButton down = new JButton("Down");
+		add.addActionListener(e->addFunction());
+		add.setBounds(220, 230, 70, 30);
+		base.add(add);
 
-		JSeparator separator_3 = new JSeparator();
-		separator_3.setBounds(218, 69, 548, 2);
-		base.add(separator_3);
-		
-		JSeparator separator_7 = new JSeparator();
-		separator_7.setBounds(218, 188, 548, 2);
-		base.add(separator_7);
-		
+		/*
 		JLabel locationConLabel = new JLabel("Location:");
 		locationConLabel.setBounds(293, 205, 97, 16);
 		base.add(locationConLabel);
@@ -199,6 +225,7 @@ public class EventsPanel extends JPanel
 		actionArea.setText("Action Description");
 		actionArea.setBounds(520, 309, 234, 75);
 		base.add(actionArea);
+		*/
 		
 		return base;
 	}
@@ -385,7 +412,12 @@ public class EventsPanel extends JPanel
             Events add = new Events();
             if(!txtEventName.getText().equals(""))
             {
-                dlm.addElement(txtEventName.getText());
+            	if(extra.getText().equalsIgnoreCase(SETTARGET)) {
+                    dlm.addElement(txtEventName.getText());
+            	}
+            	else {
+            		dlm.addElement(txtEventName.getText()+" "+extra.getText());
+            	}
                 add.setName(txtEventName.getText());
                 list.add(add);
             }
@@ -399,11 +431,17 @@ public class EventsPanel extends JPanel
         else
         {
             selected = list.indexOf(sEvent);
-            dlm.set(selected, txtEventName.getText());
+            if(extra.getText().equalsIgnoreCase(SETTARGET)) {
+            	dlm.set(selected, txtEventName.getText());
+        	}
+        	else {
+        		dlm.set(selected, txtEventName.getText()+" "+extra.getText());
+        	}
+            
             sEvent = this.pullData();
             list.set(selected, sEvent);
         }
-		centralDB.eventList = list;
+		CentralDB.eventList = list;
 	}
 	
 	public void loadEvent()
@@ -418,59 +456,14 @@ public class EventsPanel extends JPanel
                 selected = eventList.getSelectedIndex();
                 sEvent = list.get(selected);
                 txtEventName.setText(sEvent.getName());
-                txtEventDescription.setText(sEvent.getDescription());
-                actionArea.setText(sEvent.getActionDesc());
-                successArea.setText(sEvent.getSuccessDesc());
-                failArea.setText(sEvent.getFailDesc());
+                if(sEvent.getTarget()!="") {
+                    extra.setText(sEvent.getTarget());
+                }
                 
                 skillslm.clear();
                for (int skill : sEvent.getSkills())
                {
             	   skillslm.addElement(CentralDB.skillList.get(skill).getName());
-               }
-               
-               if(sEvent.getLocation() == -1)
-               {
-            	   locationConField.setText("");
-            	   locationCon = -1;
-               }
-               else
-               {
-            	   locationConField.setText(CentralDB.locationList.get(locationCon).getName());
-            	   locationCon = sEvent.getLocation();
-               }
-               
-               if(sEvent.getItem() == -1)
-               {
-            	   itemConField.setText("");
-            	   itemCon = -1;
-               }
-               else
-               {
-            	   itemConField.setText(CentralDB.itemList.get(itemCon).getName());
-            	   itemCon = sEvent.getItem();
-               }
-               
-               if(sEvent.getNpc() == -1)
-               {
-            	   npcConField.setText("");
-            	   npcCon = -1;
-               }
-               else
-               {
-            	   npcConField.setText(CentralDB.npcList.get(npcCon).getName());
-            	   npcCon = sEvent.getNpc();
-               }
-               
-               if(sEvent.getOtherEvent() == -1)
-               {
-            	   eventConField.setText("");
-            	   eventCon = -1;
-               }
-               else
-               {
-            	   eventConField.setText(CentralDB.eventList.get(eventCon).getName());
-            	   eventCon = sEvent.getOtherEvent();
                }
             }
         }
@@ -480,7 +473,7 @@ public class EventsPanel extends JPanel
 	{
         dlm.addElement("New Event");
         list.add(new Events());
-        centralDB.eventList = list;
+        CentralDB.eventList = list;
     }
 	
 	public void deleteSelectedEvent()
@@ -496,7 +489,9 @@ public class EventsPanel extends JPanel
 	{
         Events created = new Events();
         created.setName(txtEventName.getText());
-        created.setDescription(txtEventDescription.getText());
+        if(!extra.getText().equalsIgnoreCase(SETTARGET)) {
+            created.setTarget(extra.getText());
+        }/*
         created.setActionDesc(actionArea.getText());
         created.setSuccessDesc(successArea.getText());
         created.setFailDesc(failArea.getText());
@@ -510,8 +505,143 @@ public class EventsPanel extends JPanel
         created.setItem(itemCon);
         created.setNpc(npcCon);
         created.setOtherEvent(eventCon);
-        created.setSkills(skills);
+        created.setSkills(skills);*/
         return created;
     }
+	public void setTarget() {
+		JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel<String> locationlm = new DefaultListModel<String>();
+    	JList<String> locationList = new JList<String>(locationlm);
+		DefaultListModel<String> npclm = new DefaultListModel<String>();
+    	JList<String> npcList = new JList<String>(locationlm);
+    	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+    	locationlm.addElement("none");
+    	for(Location location : CentralDB.locationList)
+		{
+    		locationlm.addElement(location.getName());
+		}
+    	tabbedPane.addTab("Locations", this.makeScrollList(locationList, "Locations"));
+    	npclm.addElement("none");
+    	for(NPC npc : CentralDB.npcList)
+		{
+    		npclm.addElement(npc.getName());
+		}
+    	tabbedPane.addTab("NPCs", this.makeScrollList(npcList, "NPCs"));
+    	
+    	
+    	main.add(tabbedPane);
+    	JOptionPane.showMessageDialog(main, main);
+        if(locationList.getSelectedIndices().length>1||npcList.getSelectedIndices().length>1) {
+        	JOptionPane.showMessageDialog(main, "You can only select a single npc or location!");
+        }
+        else if(!locationList.isSelectionEmpty()) {
+        	if(locationList.getSelectedIndex() == 0) {
+            	extra.setText(SETTARGET);
+            }
+        	else if(locationList.isSelectionEmpty()) {
+        		
+        	}
+        	else {
+        		extra.setText(CentralDB.locationList.get(locationList.getSelectedIndex()-1).getName());
+        	}
+        }
+	}
+	public void addFunction() {
+		JRadioButton display = new JRadioButton("Display"),
+				take = new JRadioButton("Take"), give = new JRadioButton("Give"), 
+				move = new JRadioButton("Move"), kill = new JRadioButton("Kill"),
+				skill = new JRadioButton("Skill"), item = new JRadioButton("Item");
+		JPanel main = new JPanel(new BorderLayout(10,10));
+		int before = sEvent.methods.size()-1;
+		JList<String> displayList = new JList<>();
+		int after;
+		JTextArea displayText = new JTextArea();
+		JPanel changePanel = new JPanel(new BorderLayout(10,10));
+		JPanel buttonPanel = new JPanel(new GridLayout(1,5,10,10));
+		ButtonGroup type = new ButtonGroup();
+		display.addActionListener(e->displayPanel(changePanel,displayText));
+		type.add(display);
+		take.addActionListener(e->giveAndTakePanel(changePanel,"Take from Player", displayList,skill,item));
+		type.add(take);
+		give.addActionListener(e->giveAndTakePanel(changePanel,"Give To Player", displayList,skill,item));
+		type.add(give);
+		type.add(move);
+		type.add(kill);
+		buttonPanel.add(display);
+		buttonPanel.add(take);
+		buttonPanel.add(give);
+		buttonPanel.add(move);
+		buttonPanel.add(kill);
+		main.add(buttonPanel, BorderLayout.NORTH);
+		main.add(changePanel, BorderLayout.CENTER);
+		main.setSize(500, 500);
+		main.setPreferredSize(new Dimension(500, 500));
+		JOptionPane.showMessageDialog(null, main);
+		
+		if(display.isSelected()) {
+			System.out.println(displayText.getText());
+			sEvent.display(displayText.getText());
+		}
+		else if(give.isSelected()&&!displayList.isSelectionEmpty()) {
+			if(skill.isSelected()) {
+				sEvent.giveSkill(displayList.getSelectedIndex());
+			}
+			else if(item.isSelected()) {
+				sEvent.giveItem(displayList.getSelectedIndex());
+			}
+		}
+		else if(take.isSelected()&&!displayList.isSelectionEmpty()) {
+			if(skill.isSelected()) {
+				sEvent.takeSkill(displayList.getSelectedIndex());
+			}
+			else if(item.isSelected()) {
+				sEvent.takeItem(displayList.getSelectedIndex());
+			}
+		}
+		after = sEvent.methods.size()-1;
+		if(before!=after) {
+			String add = sEvent.methods.get(after).getCommand();
+			functionslm.addElement(add);
+		}
+	}
+	public void displayPanel(JPanel base,JTextArea displayText) {
+		base.removeAll();
+		base.setBorder(new TitledBorder(null, "Display:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		displayText.setWrapStyleWord(true);
+		JScrollPane js = new JScrollPane(displayText);
+		base.add(js);
+		base.revalidate();
+		base.repaint();
+	}
+	public void giveAndTakePanel(JPanel base,String label,JList displayList,JRadioButton skill, JRadioButton item) {
+		base.removeAll();
+		base.setLayout(new BorderLayout(10,10));
+		base.setBorder(new TitledBorder(null, label, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		JPanel buttonPanel = new JPanel(new GridLayout(1,2,10,10));
+		buttonPanel.add(skill);
+		buttonPanel.add(item);
+		ButtonGroup type = new ButtonGroup();
+		DefaultListModel<String> skilllm = new DefaultListModel<String>(),
+				itemlm = new DefaultListModel<>();
+		for(Item items:CentralDB.itemList) {
+			itemlm.addElement(items.getName());
+		}
+		for(Skill skills:CentralDB.skillList) {
+			skilllm.addElement(skills.getName());
+		}
+		type.add(skill);
+		skill.addActionListener(e->{
+			displayList.setModel(skilllm);
+		});
+		type.add(item);
+		item.addActionListener(e->{
+			displayList.setModel(itemlm);
+		});
+		JScrollPane js = new JScrollPane(displayList);
+		base.add(buttonPanel, BorderLayout.NORTH);
+		base.add(js, BorderLayout.CENTER);
+		base.revalidate();
+		base.repaint();
+	}
 }
 

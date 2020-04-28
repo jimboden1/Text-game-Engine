@@ -5,8 +5,9 @@ import java.util.Random;
 
 public class CommandDB {
 
-	public ArrayList<Command> commands = new ArrayList<>();
+	public static ArrayList<Command> commands = new ArrayList<>();
 	private Random random = new Random();
+	private ArrayList<NPC> enemies = new ArrayList<>();
 	
 	public CommandDB() {
 		
@@ -49,11 +50,20 @@ public class CommandDB {
 				System.out.println("Command move to " + CentralDB.locationList.get(move).getName() + " added "+ CentralDB.locationList.get(move).getDescription());
 			}
 		}
+		enemies.clear();
 		for(int npcIndex : here.getNPCs()) {
 			NPC npc = CentralDB.npcList.get(npcIndex);
 			addNPCCommands(npc);
+			if(npc.getType()==1) {
+				enemies.add(npc);
+			}
 		}
-		commands.add(new Command("explore",()-> {}));
+		if(!enemies.isEmpty()) {
+			commands.add(new Command("explore",()-> {
+				int index = random.nextInt(enemies.size());
+				battle(enemies.get(index));
+			}));
+		}
 		commands.add(new Command("rest",()-> {
 			PlatformPanel.descriptionArea.append("You rest for a bit to regain your strength");
 			PlatformPanel.player.heal(50);

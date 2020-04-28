@@ -23,6 +23,7 @@ public class TextGameEngine {
     private ItemPanel itemTab = new ItemPanel();
     private NPCPanel npcTab = new NPCPanel();
     private PlatformPanel platPanel = new PlatformPanel();
+    EventsPanel eventsTab = new EventsPanel();
     SkillsPanel skillsTab = new SkillsPanel();
 
 	/**
@@ -96,11 +97,7 @@ public class TextGameEngine {
 		
 		tabbedPane.addTab("Locations", null, roomsTab.createLocationPanel(), null);
 		
-		/*JPanel eventsBase = new JPanel();
-        EventsPanel eventsTab = new EventsPanel(eventsBase, centralDB);
-		tabbedPane.addTab("Events", null, eventsTab.createEventsPanel(), null);*/
-		CommandPanel commandTab = new CommandPanel();
-		tabbedPane.addTab("Commands", null, commandTab.createCommandPanel(), null);
+		tabbedPane.addTab("Events", null, eventsTab.createEventsPanel(), null);
 		
         tabbedPane.addTab("Items", null, itemTab.createItemPanel(), null);
         
@@ -115,19 +112,24 @@ public class TextGameEngine {
 		}
 		else {
 			
-			
 			String filename = currentFile.getAbsolutePath();
 			playerTab.savePlayer();
 			centralDB.loadOutCentralDB();
 			try
 		      
 			{ 
+				System.out.println("break 1");
 				FileOutputStream file = new FileOutputStream(filename);
+				System.out.println("break 2");
 				ObjectOutputStream out = new ObjectOutputStream(file);
-				out.writeObject(centralDB); 
+				System.out.println("break 3");
+				out.writeObject(centralDB);
+				System.out.println("break 4");
 
 				out.close();
+				System.out.println("break 5");
 				file.close();
+				System.out.println("break 6");
 
 			}
 			catch(IOException ex)
@@ -146,9 +148,10 @@ public class TextGameEngine {
 	    int returnVal = chooser.showOpenDialog(frame);
 	    if(returnVal == JFileChooser.APPROVE_OPTION)
 	    {
+
+    		currentFile = chooser.getSelectedFile();
 	    	try
         	{
-	    		currentFile = chooser.getSelectedFile();
 			
 				String filename = currentFile.getAbsolutePath();
 			
