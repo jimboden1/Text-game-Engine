@@ -112,14 +112,15 @@ public class EventsPanel extends JPanel
 		base.add(functionScroll);
 		
 		JButton add = new JButton("Add");
-		JButton edit = new JButton("Edit");
-		JButton remove = new JButton("Remove");
-		JButton up = new JButton("Up");
-		JButton down = new JButton("Down");
 		add.addActionListener(e->addFunction());
 		add.setBounds(220, 230, 70, 30);
 		base.add(add);
 
+
+		JButton remove = new JButton("Remove");
+		remove.addActionListener(e->removeFunction());
+		remove.setBounds(300,230,70,30);
+		base.add(remove);
 		/*
 		JLabel locationConLabel = new JLabel("Location:");
 		locationConLabel.setBounds(293, 205, 97, 16);
@@ -407,9 +408,12 @@ public class EventsPanel extends JPanel
 	}
 
 	public void saveEvent()
-	{
+	{ 
+		for (Command method : sEvent.methods)
+    {
+    	System.out.println(method.getCommand());
+    }
 		if(selected == -1){
-            Events add = new Events();
             if(!txtEventName.getText().equals(""))
             {
             	if(extra.getText().equalsIgnoreCase(SETTARGET)) {
@@ -418,14 +422,14 @@ public class EventsPanel extends JPanel
             	else {
             		dlm.addElement(txtEventName.getText()+" "+extra.getText());
             	}
-                add.setName(txtEventName.getText());
-                list.add(add);
+            	sEvent.setName(txtEventName.getText());
+                list.add(sEvent);
             }
             else
             {
                 dlm.addElement("New Event");
-                add.setName("New Event");
-                list.add(add);
+                sEvent.setName("New Event");
+                list.add(sEvent);
             }
         }
         else
@@ -459,12 +463,14 @@ public class EventsPanel extends JPanel
                 if(sEvent.getTarget()!="") {
                     extra.setText(sEvent.getTarget());
                 }
-                
+
                 skillslm.clear();
-               for (int skill : sEvent.getSkills())
-               {
-            	   skillslm.addElement(CentralDB.skillList.get(skill).getName());
-               }
+                functionslm.clear();
+                for (Command method : sEvent.methods)
+                {
+                	System.out.println(method.getCommand());
+                	functionslm.addElement(method.getCommand());
+                }
             }
         }
     }
@@ -491,7 +497,9 @@ public class EventsPanel extends JPanel
         created.setName(txtEventName.getText());
         if(!extra.getText().equalsIgnoreCase(SETTARGET)) {
             created.setTarget(extra.getText());
-        }/*
+        }
+        created.methods=sEvent.methods;
+        /*
         created.setActionDesc(actionArea.getText());
         created.setSuccessDesc(successArea.getText());
         created.setFailDesc(failArea.getText());
@@ -546,10 +554,19 @@ public class EventsPanel extends JPanel
         	}
         }
 	}
+	
+	public void removeFunction() {
+		int[] remove = functionList.getSelectedIndices();
+		for(int i=remove.length-1; i>=0;i--) {
+			functionslm.remove(i);
+			sEvent.methods.remove(i);
+		}
+	}
+	
 	public void addFunction() {
 		JRadioButton display = new JRadioButton("Display"),
-				take = new JRadioButton("Take"), give = new JRadioButton("Give"), 
-				move = new JRadioButton("Move"), kill = new JRadioButton("Kill"),
+				take = new JRadioButton("Take"), give = new JRadioButton("Give")
+				, kill = new JRadioButton("Kill"),
 				skill = new JRadioButton("Skill"), item = new JRadioButton("Item");
 		JPanel main = new JPanel(new BorderLayout(10,10));
 		int before = sEvent.methods.size()-1;
@@ -565,12 +582,11 @@ public class EventsPanel extends JPanel
 		type.add(take);
 		give.addActionListener(e->giveAndTakePanel(changePanel,"Give To Player", displayList,skill,item));
 		type.add(give);
-		type.add(move);
+		kill.addActionListener(e->killPanel(changePanel));
 		type.add(kill);
 		buttonPanel.add(display);
 		buttonPanel.add(take);
 		buttonPanel.add(give);
-		buttonPanel.add(move);
 		buttonPanel.add(kill);
 		main.add(buttonPanel, BorderLayout.NORTH);
 		main.add(changePanel, BorderLayout.CENTER);
@@ -578,8 +594,7 @@ public class EventsPanel extends JPanel
 		main.setPreferredSize(new Dimension(500, 500));
 		JOptionPane.showMessageDialog(null, main);
 		
-		if(display.isSelected()) {
-			System.out.println(displayText.getText());
+		if(display.isSelected()&&!displayText.getText().isEmpty()) {
 			sEvent.display(displayText.getText());
 		}
 		else if(give.isSelected()&&!displayList.isSelectionEmpty()) {
@@ -597,6 +612,9 @@ public class EventsPanel extends JPanel
 			else if(item.isSelected()) {
 				sEvent.takeItem(displayList.getSelectedIndex());
 			}
+		}
+		else if(kill.isSelected()) {
+			sEvent.kill();
 		}
 		after = sEvent.methods.size()-1;
 		if(before!=after) {
@@ -640,6 +658,15 @@ public class EventsPanel extends JPanel
 		JScrollPane js = new JScrollPane(displayList);
 		base.add(buttonPanel, BorderLayout.NORTH);
 		base.add(js, BorderLayout.CENTER);
+		base.revalidate();
+		base.repaint();
+	}
+	
+	public void killPanel(JPanel base) {
+		base.removeAll();
+		base.setBorder(new TitledBorder(null, "Kill", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		//base.setLayout(new BorderLayout(10,10));
+		base.add(new JLabel("This will kill the Player and end the Game"), BorderLayout.CENTER);
 		base.revalidate();
 		base.repaint();
 	}

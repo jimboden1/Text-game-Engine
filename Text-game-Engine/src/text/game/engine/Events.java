@@ -20,6 +20,10 @@ public class Events implements java.io.Serializable{
 	public void setSkills(ArrayList<Integer> skills) {this.skills = skills;}
 	public void setSkillCheck(int skillCheck) {this.skillCheck = skillCheck;}
 	
+	public Events() {
+		name = "New Event";
+	}
+	
 	public void runMethod() {
 		for(Command method: methods) {
 			method.runMethod();
