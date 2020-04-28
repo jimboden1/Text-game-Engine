@@ -43,6 +43,16 @@ public class CommandDB {
 		}
 	}
 	
+	public void help()
+	{
+		String commandList = "";
+		for (Command c : commands)
+		{
+			commandList += c.getCommand() + "\n";
+		}
+		PlatformPanel.descriptionArea.append("Here is the list of available commands:\n" + commandList);
+	}
+	
 	public void addLocationCommands(Location here) {
 		for(int move : here.getLocations()) {
 			if(move!=-1) {
