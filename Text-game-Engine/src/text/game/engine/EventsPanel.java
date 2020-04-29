@@ -470,7 +470,7 @@ public class EventsPanel
 		DefaultListModel<String> locationlm = new DefaultListModel<String>();
     	JList<String> locationList = new JList<String>(locationlm);
 		DefaultListModel<String> npclm = new DefaultListModel<String>();
-    	JList<String> npcList = new JList<String>(locationlm);
+    	JList<String> npcList = new JList<String>(npclm);
     	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
     	locationlm.addElement("none");
     	for(Location location : CentralDB.locationList)
@@ -500,6 +500,17 @@ public class EventsPanel
         	}
         	else {
         		extra.setText(CentralDB.locationList.get(locationList.getSelectedIndex()-1).getName());
+        	}
+        }
+        else if(!npcList.isSelectionEmpty()) {
+        	if(npcList.getSelectedIndex() == 0) {
+            	extra.setText(SETTARGET);
+            }
+        	else if(npcList.isSelectionEmpty()) {
+        		
+        	}
+        	else {
+        		extra.setText(CentralDB.npcList.get(npcList.getSelectedIndex()-1).getName());
         	}
         }
 	}
