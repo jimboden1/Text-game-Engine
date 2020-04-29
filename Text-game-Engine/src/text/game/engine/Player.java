@@ -8,6 +8,7 @@ public class Player implements java.io.Serializable
 {
 	private String name, description;
 	private int strength = 0, dexterity = 0, iq = 0,maxHealth = 0, health = 0, perception = 0, will=  0;
+	public int modStrength=0, modDexterity = 0, modIq = 0,modMaxHealth = 0, modPerception = 0, modWill=  0;
 	private ArrayList<Integer> skills = new ArrayList<>();
 	public ArrayList<Integer> inventory = new ArrayList<>();
 	public int money = 0;
@@ -38,7 +39,7 @@ public class Player implements java.io.Serializable
 			else if (b.attribute == "IQ")
 				iq += b.modifier;
 			else if (b.attribute == "Health Points")
-				health += b.modifier;
+				modMaxHealth += b.modifier;
 			else if (b.attribute == "Perception")
 				perception += b.modifier;
 			else if (b.attribute == "Will")
@@ -58,7 +59,7 @@ public class Player implements java.io.Serializable
 			else if (b.attribute == "IQ")
 				iq -= b.modifier;
 			else if (b.attribute == "Health Points")
-				health -= b.modifier;
+				modMaxHealth -= b.modifier;
 			else if (b.attribute == "Perception")
 				perception -= b.modifier;
 			else if (b.attribute == "Will")
@@ -117,24 +118,42 @@ public class Player implements java.io.Serializable
 	public int getWill() {return will;}
 	public ArrayList<Integer> getSkills() {return skills;}
 	
-	public void applyModifiers()
+	public void getModifiers()
 	{
 		for (int index : skills)
 		{
 			Skill skill = CentralDB.skillList.get(index);
-			if(skill.getType() == "stregnth")
-				strength += skill.getModifier();
+			if(skill.getType() == "strength")
+				modStrength += skill.getModifier();
 			else if(skill.getType() == "dexterity")
-				dexterity +=skill.getModifier();
+				modDexterity +=skill.getModifier();
 			else if(skill.getType() == "iq")
-				iq += skill.getModifier();
+				modIq += skill.getModifier();
 			else if(skill.getType() == "health")
-				health += skill.getModifier();
+				modMaxHealth += skill.getModifier();
 			else if(skill.getType() == "perception")
-				perception += skill.getModifier();
+				modPerception += skill.getModifier();
 			else
-				will += skill.getModifier();
+				modWill += skill.getModifier();
 		}
+	}
+	
+	public void applyModifiers() {
+		strength += modStrength;
+		dexterity +=modDexterity;
+		iq += modIq;
+		maxHealth +=modMaxHealth;
+		perception += modPerception;
+		will  += modWill;
+	}
+	
+	public void removeModifiers() {
+		strength -= modStrength;
+		dexterity -=modDexterity;
+		iq -= modIq;
+		maxHealth -=modMaxHealth;
+		perception -= modPerception;
+		will  -= modWill;
 	}
 
 }

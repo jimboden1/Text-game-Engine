@@ -296,7 +296,6 @@ public class PlayerPanel
 		player.inventory = itemList;
 		player.getInfo();
 		//apply the skills 
-		player.applyModifiers();
 		//Set the image
 		CentralDB.player = player;
 	}
