@@ -235,7 +235,7 @@ public class NPCPanel{
         return created;
     }
     
-    public JScrollPane makeScrollList(JList list, String name){
+    public JScrollPane makeScrollList(JList<String> list, String name){
         JScrollPane js = new JScrollPane(list);
         js.setBorder(new TitledBorder(null, name, TitledBorder.LEADING, TitledBorder.TOP, null, null));
         return js;
@@ -313,8 +313,8 @@ public class NPCPanel{
     
     public void addSkill() {
     	JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel skills = new DefaultListModel();
-    	JList skillList = new JList(skills);
+		DefaultListModel<String> skills = new DefaultListModel<>();
+    	JList<String> skillList = new JList<>(skills);
     	for(Skill skill : CentralDB.skillList)
 		{
     		skills.addElement(skill.getName());
@@ -380,19 +380,19 @@ public class NPCPanel{
     }
     
     public void addEvent() {
-    	JOptionPane popup = new JOptionPane();
     	JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel events = new DefaultListModel();
-    	JList eventsList = new JList(events);
+		DefaultListModel<String> events = new DefaultListModel<>();
+    	JList<String>  eventsList = new JList<>(events);
     	for(Events event : CentralDB.eventList)
 		{
-    		events.addElement(event.getName());
+    		events.addElement(event.getName() + " " + event.getTarget());
 		}
     	main.add(this.makeScrollList(eventsList, "Events"));
-        popup.showMessageDialog(main, main);
+    	JOptionPane.showMessageDialog(main, main);
         int[] selection = eventsList.getSelectedIndices();
         for(int i:selection) {
-            eventlm.addElement(CentralDB.eventList.get(i).getName());
+        	Events event = CentralDB.eventList.get(i);
+            eventlm.addElement(CentralDB.eventList.get(i).getName() + " " + event.getTarget());
             eventList.add(i);
         }
     }

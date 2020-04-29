@@ -93,7 +93,7 @@ public class CommandDB {
 			}));
 		}
 		commands.add(new Command("rest",()-> {
-			PlatformPanel.descriptionArea.append("You rest for a bit to regain your strength");
+			PlatformPanel.descriptionArea.append("\nYou rest for a bit to regain your strength\n");
 			PlatformPanel.player.heal(50);
 			PlatformPanel.updatePlayerDisplay();
 		}));
@@ -104,12 +104,12 @@ public class CommandDB {
 			PlatformPanel.descriptionArea.setText(npc.getDescription());
 		}));
 		commands.add(new Command("approach "+ npc.getName(), ()-> { 
+			clearCommands();
 			PlatformPanel.descriptionArea.setText("You approach "+ npc.getName()+ ", what would you like to do?");
 			commands.add(new Command ("talk", () ->  {
 				PlatformPanel.descriptionArea.setText(npc.getDescription());
 			
 			}));
-			
 			if(npc.getType()==0) {
 				commands.add(new Command("buy",()-> { 
 					PlatformPanel.descriptionArea.setText("What would you like to buy?\n");
@@ -141,26 +141,27 @@ public class CommandDB {
 						}));
 					}
 				}));
-			}
-		}));
-		for(int index: npc.getEvents()) {
-			Events event = CentralDB.eventList.get(index);
-			if(event.getType()==0) {
-				commands.add(new Command(event.getName()+" "+event.getTarget(), ()->event.runMethod()));
-			}
-			else if(event.getType()==1) {
-				if(event.checkCondition()) {
-					event.runMethod();
+				for(int index: npc.getEvents()) {
+					Events event = CentralDB.eventList.get(index);
+					if(event.getType()==0) {
+						commands.add(new Command(event.getName()+" "+event.getTarget(), ()->event.runMethod()));
+					}
+					else if(event.getType()==1) {
+						if(event.checkCondition()) {
+							event.runMethod();
+						}
+					}
+					else {
+						commands.add(new Command(event.getName()+" "+event.getTarget(), ()->{
+							if(event.checkCondition()) {
+								event.runMethod();
+							}
+						}));
+					}
 				}
 			}
-			else {
-				commands.add(new Command(event.getName()+" "+event.getTarget(), ()->{
-					if(event.checkCondition()) {
-						event.runMethod();
-					}
-				}));
-			}
-		}
+		}));
+		
 	}
 	
 	public void goBack() {

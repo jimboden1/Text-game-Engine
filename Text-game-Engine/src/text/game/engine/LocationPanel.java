@@ -320,7 +320,8 @@ public class LocationPanel
                 	eventlm.addElement(CentralDB.eventList.get(event).getName());
                 }
                 npclm.clear();
-                for(int npc: sLoc.getNPCs()) {
+                npcs = sLoc.getNPCs();
+                for(int npc: npcs) {
                 	npclm.addElement(CentralDB.npcList.get(npc).getName());
                 }
                 int i = 0;

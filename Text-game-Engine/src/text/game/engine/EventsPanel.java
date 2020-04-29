@@ -438,9 +438,13 @@ public class EventsPanel
 	{
         if(!eventList.isSelectionEmpty())
         {
-            int[] selection = eventList.getSelectedIndices();
-            dlm.removeRange(selection[0], selection[selection.length-1]);
-        }        
+        	int[] remove = eventList.getSelectedIndices();
+        	for(int i=remove.length-1; i>=0;i--) {
+        		dlm.remove(i);
+        		list.remove(i);
+        	}
+        	CentralDB.eventList = list;
+        }
     }
 	
 	public void pullData()
@@ -494,6 +498,7 @@ public class EventsPanel
         else if(!locationList.isSelectionEmpty()) {
         	if(locationList.getSelectedIndex() == 0) {
             	extra.setText(SETTARGET);
+            	sEvent.setTarget("");
             }
         	else if(locationList.isSelectionEmpty()) {
         		
@@ -629,6 +634,18 @@ public class EventsPanel
 		base.add(new JLabel("This will kill the Player and end the Game"), BorderLayout.CENTER);
 		base.revalidate();
 		base.repaint();
+	}
+	public void update() {
+		list=CentralDB.eventList;
+		dlm.removeAllElements();
+		for(Events event: list) {
+			if(event.getTarget().isEmpty()) {
+				dlm.addElement(event.getName());
+			}
+			else {
+				dlm.addElement(event.getName()+ " "+ event.getTarget());
+			}
+		}
 	}
 }
 

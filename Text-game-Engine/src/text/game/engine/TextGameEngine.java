@@ -166,6 +166,7 @@ public class TextGameEngine {
             	CentralDB.loadIntoCentralDB(centralDB);
             	playerTab.update();
             	roomsTab.update();
+            	eventsTab.update();
             	itemTab.update();
             	npcTab.update();
             	skillsTab.update();
@@ -175,6 +176,15 @@ public class TextGameEngine {
         	catch(IOException ex) 
         	{ 
             	System.out.println("IOException is caught"); 
+            	System.out.println(ex.getLocalizedMessage());
+            	centralDB= new CentralDB();
+            	CentralDB.loadIntoCentralDB(centralDB);
+            	playerTab.update();
+            	roomsTab.update();
+            	eventsTab.update();
+            	itemTab.update();
+            	npcTab.update();
+            	skillsTab.update();
         	} 
           
 			catch(ClassNotFoundException ex) 
@@ -190,7 +200,7 @@ public class TextGameEngine {
 		currentFile = null;
 		int userSelection = fileChooser.showSaveDialog(frame);
 		if (userSelection == JFileChooser.APPROVE_OPTION) {
-			currentFile = fileChooser.getSelectedFile();
+			currentFile = fileChooser.getSelectedFile().getAbsoluteFile();
 			this.save();
 		}
 	}

@@ -19,7 +19,7 @@ public class CentralDB implements java.io.Serializable{
     public ArrayList<Location> locationListTemp =  new ArrayList<Location>();
     public ArrayList<NPC> npcListTemp = new ArrayList<NPC>();
     public Location startScreenTemp = Location.startScreen();
-    
+
     public void loadOutCentralDB() {
     	this.playerTemp = player;
     	this.itemListTemp = itemList;
@@ -52,8 +52,6 @@ public class CentralDB implements java.io.Serializable{
     		if (item == index)
     			newList.remove(item);
     		else if (item < index)
-    			item = item;
-    		else
     			item = item-1;
     	}
     	

@@ -1,7 +1,5 @@
 package text.game.engine;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -13,7 +11,6 @@ public class Player implements java.io.Serializable
 	private ArrayList<Integer> skills = new ArrayList<>();
 	public ArrayList<Integer> inventory = new ArrayList<>();
 	public int money = 0;
-	private ImageIcon playerPic;
 	
 	private int[] equipment = new int[8];
 	
@@ -82,7 +79,6 @@ public class Player implements java.io.Serializable
 	public void setPerception(int perception) {this.perception = perception;}
 	public void setWill(int will) {this.will = will;}
 	public void setSkills(ArrayList<Integer> skills) {this.skills = skills;}
-	public void setPic(ImageIcon playerPic) {this.playerPic = playerPic;}
 	public void takeDamgage(int damage) {
 		health-=damage;
 		if(health<0) {
