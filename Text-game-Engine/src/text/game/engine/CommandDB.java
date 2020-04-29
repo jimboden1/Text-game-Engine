@@ -37,6 +37,17 @@ public class CommandDB {
 				PlatformPanel.descriptionArea.append(item.getName() + ": " + item.getDescription()+"\n");
 			}
 		}));
+		
+		commands.add(new Command("equip all", () -> {
+			for (int item : CentralDB.player.inventory)
+			{
+				if (CentralDB.itemList.get(CentralDB.player.inventory.get(item)).getType() == 1)
+					CentralDB.player.equip(CentralDB.player.inventory.get(item), item);
+			}
+		}));
+		
+		commands.add(new Command("help", () -> help()));
+		
 		for(Location location: CentralDB.locationList) {
 			System.out.println(location.getName());
 			System.out.println(location.getDescription());
