@@ -6,19 +6,14 @@ import java.util.ArrayList;
 public class Events implements java.io.Serializable{
 	private int type = 0;//0 is command only, 1 checks a condition, and 2 takes a command and then checks a condition
 	private String name, target="";
-    private ArrayList<Integer> skills = new ArrayList<>();
     public ArrayList<Integer> connectedEvents = new ArrayList<>();
-    private int skillCheck;
+    private int location=-1, item=-1, skill=-1;
     public ArrayList<Command> methods = new ArrayList<>();
 
 	public String getName() {return name;}
 	public String getTarget() {return target;}
 	public void setName(String name) {this.name = name;}
 	public void setTarget(String description) {this.target = description;}
-	public ArrayList<Integer> getSkills() {return skills;}
-	public int getSkillCheck() {return skillCheck;}
-	public void setSkills(ArrayList<Integer> skills) {this.skills = skills;}
-	public void setSkillCheck(int skillCheck) {this.skillCheck = skillCheck;}
 	
 	public Events() {
 		name = "New Event";
@@ -94,4 +89,22 @@ public class Events implements java.io.Serializable{
 	}
 	public int getType() {return type;}
 	public void setType(int type) {this.type = type;}
+	public int getLocation() {
+		return location;
+	}
+	public void setLocation(int location) {
+		this.location = location;
+	}
+	public int getItem() {
+		return item;
+	}
+	public void setItem(int item) {
+		this.item = item;
+	}
+	public int getSkill() {
+		return skill;
+	}
+	public void setSkill(int skill) {
+		this.skill = skill;
+	}
 }

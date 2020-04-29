@@ -4,26 +4,26 @@ package text.game.engine;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.NumberFormatter;
 
-public class EventsPanel extends JPanel
+public class EventsPanel
 {
-	DefaultListModel dlm = new DefaultListModel();
-	DefaultListModel skillslm = new DefaultListModel();
-	DefaultListModel functionslm = new DefaultListModel();
+	DefaultListModel<String> dlm = new DefaultListModel<>();
+	DefaultListModel<String> functionslm = new DefaultListModel<>();
 	ArrayList<Events> list = new ArrayList<Events>();
 	final String SETTARGET = "Set Target";
+	final String SETCONDITION = "Set Condition";
+	String typeName = "location";
 	Events sEvent = new Events();
 	int selected = -1;
 	JRadioButton command = new JRadioButton("Command"), 
-			trigger = new JRadioButton("Conditional"), both = new JRadioButton("Both");
-	JList functionList = new JList(functionslm);
-	JList skillList = new JList(skillslm);
+			trigger = new JRadioButton("Conditional"), both = new JRadioButton("Both"),
+			locationAt= new JRadioButton("Location"), hasSkill= new JRadioButton("Skill"),
+			hasItem= new JRadioButton("Item");
+	JList<String> functionList = new JList<>(functionslm);
 	ArrayList<Integer> skills = new ArrayList<Integer>();
 	int itemCon = -1;
 	int locationCon = -1;
@@ -34,12 +34,12 @@ public class EventsPanel extends JPanel
 	JTextField npcConField;
 	JTextField eventConField;
 	JTextField locationConField;
-	JButton extra= new JButton(SETTARGET);
+	JButton extra= new JButton(SETTARGET),conditional = new JButton(SETCONDITION);
 	
 	JPanel base = new JPanel();
 	JTextField txtEventName = new JTextField();
 	JTextArea txtEventDescription = new JTextArea();
-	JList eventList = new JList(dlm);
+	JList<String> eventList = new JList<>(dlm);
 	JTextArea successArea = new JTextArea();
 	JTextArea failArea = new JTextArea();
 	JFormattedTextField DCField;
@@ -68,12 +68,30 @@ public class EventsPanel extends JPanel
 		target.setBounds(500, 10, 200, 50);
 		target.add(extra, BorderLayout.CENTER);
 		extra.addActionListener(e->setTarget());
+		extra.setEnabled(false);
 		base.add(target);
 		
-		ButtonGroup type = new ButtonGroup();
-		type.add(command);
-		type.add(trigger);
-		type.add(both);
+		ButtonGroup eventType = new ButtonGroup();
+		eventType.add(command);
+		command.addActionListener(e->{
+			extra.setEnabled(true);
+			conditional.setEnabled(false);
+			conditional.setText(SETCONDITION);
+			sEvent.setType(0);
+		});
+		eventType.add(trigger);
+		trigger.addActionListener(e->{
+			extra.setText(SETTARGET);
+			extra.setEnabled(false);
+			conditional.setEnabled(true);
+			sEvent.setType(1);
+			});
+		eventType.add(both);
+		both.addActionListener(e->{
+			extra.setEnabled(true);
+			conditional.setEnabled(true);
+			sEvent.setType(2);
+			});
 		command.setBounds(220, 80, 100, 20);
 		base.add(command);
 		trigger.setBounds(320, 80,100,20);
@@ -121,6 +139,32 @@ public class EventsPanel extends JPanel
 		remove.addActionListener(e->removeFunction());
 		remove.setBounds(300,230,70,30);
 		base.add(remove);
+		
+		ButtonGroup conditionType = new ButtonGroup();
+		locationAt.setSelected(true);
+		locationAt.addActionListener(e->{
+			typeName="location";
+		});
+		conditionType.add(locationAt);
+		hasSkill.addActionListener(e->{
+			typeName="skill";
+		});
+		conditionType.add(hasSkill);
+		hasItem.addActionListener(e->{
+			typeName="item";
+		});
+		conditionType.add(hasItem);
+		locationAt.setBounds(220,270,100,30);
+		base.add(locationAt);
+		hasSkill.setBounds(330,270,100,30);
+		base.add(hasSkill);
+		hasItem.setBounds(440,270,100,30);
+		base.add(hasItem);
+		
+		conditional.setEnabled(false);
+		conditional.setBounds(220, 300, 200, 30);
+		conditional.addActionListener(e->changeCon(typeName));
+		base.add(conditional);
 		/*
 		JLabel locationConLabel = new JLabel("Location:");
 		locationConLabel.setBounds(293, 205, 97, 16);
@@ -231,182 +275,57 @@ public class EventsPanel extends JPanel
 		return base;
 	}
 	
-	private void changeLocationCon()
+	private void changeCon(String typeName)
 	{
 		JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel<String> locationlm = new DefaultListModel();
-		JList<String> locationList = new JList<String>(locationlm);
-		locationlm.addElement("none");
+		DefaultListModel<String> defaultlm = new DefaultListModel<>();
+		JList<String> displayList = new JList<String>(defaultlm);
+		if(typeName.equalsIgnoreCase("location")) {
+			for(Location location : CentralDB.locationList)
+				defaultlm.addElement(location.getName());
+		}
+		if(typeName.equalsIgnoreCase("skill")) {
+			for(Skill location : CentralDB.skillList)
+				defaultlm.addElement(location.getName());
+		}
+		if(typeName.equalsIgnoreCase("item")) {
+			for(Item location : CentralDB.itemList)
+				defaultlm.addElement(location.getName());
+		}
 		
-		for(Location location : CentralDB.locationList)
-			locationlm.addElement(location.getName());
-		
-		main.add(this.makeScrollList(locationList, "Locations"));
+		main.add(this.makeScrollList(displayList, typeName));
 		JOptionPane.showMessageDialog(main, main);
 		
-		if(locationList.getSelectedIndices().length > 1)
-			JOptionPane.showMessageDialog(main, "You can only add one location as a condition");
+		if(displayList.getSelectedIndices().length > 1)
+			JOptionPane.showMessageDialog(main, "You can only add one location, skill, or item as a condition");
+		else if(displayList.isSelectionEmpty()) {
+			
+		}
 		else
 		{
-			if(locationList.getSelectedIndex() == 0)
-			{
-				locationCon = -1;
-				locationConField.setText("");
+			int index = displayList.getSelectedIndex();
+			if(typeName.equalsIgnoreCase("location")) {
+				sEvent.setLocation(index);
+				conditional.setText("If Player is at " + CentralDB.locationList.get(index).getName());
 			}
-			else if (locationList.isSelectionEmpty())
-			{}	
-			else
-			{
-				locationCon = locationList.getSelectedIndex()-1;
-				locationConField.setText(CentralDB.locationList.get(locationCon).getName());
+			else if(typeName.equalsIgnoreCase("skill")) {
+				sEvent.setSkill(index);
+				conditional.setText("If Player has " +CentralDB.skillList.get(index).getName());
+			}
+			if(typeName.equalsIgnoreCase("item")) {
+				sEvent.setItem(index);
+				conditional.setText("If Player has " +CentralDB.itemList.get(index).getName());
 			}
 		}
 	}
 	
-	private void changeItemCon() 
-	{
-		JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel<String> itemlm = new DefaultListModel();
-		JList<String> itemList = new JList<String>(itemlm);
-		itemlm.addElement("none");
-		
-		for(Item item : CentralDB.itemList)
-			itemlm.addElement(item.getName());
-		
-		main.add(this.makeScrollList(itemList, "Items"));
-		JOptionPane.showMessageDialog(main, main);
-		
-		if(itemList.getSelectedIndices().length > 1)
-			JOptionPane.showMessageDialog(main, "You can only add one item as a condition");
-		else
-		{
-			if(itemList.getSelectedIndex() == 0)
-			{
-				itemCon = -1;
-				itemConField.setText("");
-			}
-			else if (itemList.isSelectionEmpty())
-			{}	
-			else
-			{
-				itemCon = itemList.getSelectedIndex()-1;
-				itemConField.setText(CentralDB.itemList.get(itemCon).getName());
-			}
-		}
-	}
 	
-	public void changeNPCCon()
-	{
-		JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel<String> npclm = new DefaultListModel();
-		JList<String> npcList = new JList<String>(npclm);
-		npclm.addElement("none");
-		
-		for(NPC npc : CentralDB.npcList)
-			npclm.addElement(npc.getName());
-		
-		main.add(this.makeScrollList(npcList, "NPCs"));
-		JOptionPane.showMessageDialog(main, main);
-		
-		if(npcList.getSelectedIndices().length > 1)
-			JOptionPane.showMessageDialog(main, "You can only add one NPC as a condition");
-		else
-		{
-			if(npcList.getSelectedIndex() == 0)
-			{
-				npcCon = -1;
-				npcConField.setText("");
-			}
-			else if (npcList.isSelectionEmpty())
-			{}	
-			else
-			{
-				npcCon = npcList.getSelectedIndex()-1;
-				npcConField.setText(CentralDB.npcList.get(npcCon).getName());
-			}
-		}
-	}
-	
-	public void changeEventCon()
-	{
-		JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel<String> eventlm = new DefaultListModel();
-		JList<String> eventList = new JList<String>(eventlm);
-		eventlm.addElement("none");
-		
-		for(Events event : CentralDB.eventList)
-			eventlm.addElement(event.getName());
-		
-		main.add(this.makeScrollList(eventList, "Events"));
-		JOptionPane.showMessageDialog(main, main);
-		
-		if(eventList.getSelectedIndices().length > 1)
-			JOptionPane.showMessageDialog(main, "You can only add one Event as a condition");
-		else
-		{
-			if(eventList.getSelectedIndex() == 0)
-			{
-				eventCon = -1;
-				eventConField.setText("");
-			}
-			else if (eventList.isSelectionEmpty())
-			{}	
-			else
-			{
-				eventCon = eventList.getSelectedIndex()-1;
-				eventConField.setText(CentralDB.eventList.get(npcCon).getName());
-			}
-		}
-	}
-
-	public JScrollPane makeScrollList(JList list, String name){
+	public JScrollPane makeScrollList(JList<String> list, String name){
         JScrollPane js = new JScrollPane(list);
         js.setBorder(new TitledBorder(null, name, TitledBorder.LEADING, TitledBorder.TOP, null, null));
         return js;
     }
 	
-	public void addSkill() 
-	{
-		JOptionPane popup = new JOptionPane();
-    	JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel nlm = new DefaultListModel();
-		JList skillsList = new JList(nlm);
-		for(Skill s : CentralDB.skillList)
-		{
-			nlm.addElement(s.getName());
-		}
-		main.add(this.makeScrollList(skillsList, "Skills"));
-		popup.showMessageDialog(main, main);
-		int[] selection = skillsList.getSelectedIndices();
-		for (int i : selection)
-		{
-			skillslm.addElement(CentralDB.skillList.get(i).getName());
-			skills.add(i);
-		}
-	}
-	
-	public void removeSkill()
-	{
-		if(!skillList.isSelectionEmpty())
-		{
-			if(skillList.getSelectedIndices().length > 1)
-			{
-				int[] selection = skillList.getSelectedIndices();
-				for(int i = selection.length-1; i >= 0; i--)
-				{
-					skillslm.remove(selection[i]);
-					skills.remove(selection[i]);
-				}
-			}
-			else
-			{
-				int selection = skillList.getSelectedIndex();
-				skillslm.remove(selection);
-				skills.remove(selection);
-			}
-		}
-	}
-
 	public void saveEvent()
 	{ 
 		for (Command method : sEvent.methods)
@@ -442,7 +361,7 @@ public class EventsPanel extends JPanel
         		dlm.set(selected, txtEventName.getText()+" "+extra.getText());
         	}
             
-            sEvent = this.pullData();
+            pullData();
             list.set(selected, sEvent);
         }
 		CentralDB.eventList = list;
@@ -460,11 +379,38 @@ public class EventsPanel extends JPanel
                 selected = eventList.getSelectedIndex();
                 sEvent = list.get(selected);
                 txtEventName.setText(sEvent.getName());
+                if(sEvent.getType()==0) {
+                	command.setSelected(true);
+                	command.doClick();
+                }
+                else if(sEvent.getType()==1) {
+                	trigger.setSelected(true);
+                	trigger.doClick();
+                }
+                else {
+                	both.setSelected(true);
+                	both.doClick();
+                }
                 if(sEvent.getTarget()!="") {
                     extra.setText(sEvent.getTarget());
                 }
+                else {
+                    extra.setText(SETTARGET);
+                }
+                if(sEvent.getLocation()!=-1) {
+                	conditional.setText("If Player is at " +CentralDB.locationList.get(sEvent.getLocation()).getName());
+                	locationAt.setSelected(true);
+                }
+                else if(sEvent.getSkill()!=-1) {
+    				conditional.setText("If Player has " +CentralDB.skillList.get(sEvent.getSkill()).getName());
+                }
+                else if(sEvent.getItem()!=-1) {
+    				conditional.setText("If Player has " +CentralDB.itemList.get(sEvent.getItem()).getName());
+                }
+                else {
+                	conditional.setText(SETCONDITION);
+                }
 
-                skillslm.clear();
                 functionslm.clear();
                 for (Command method : sEvent.methods)
                 {
@@ -491,14 +437,12 @@ public class EventsPanel extends JPanel
         }        
     }
 	
-	public Events pullData()
+	public void pullData()
 	{
-        Events created = new Events();
-        created.setName(txtEventName.getText());
+        sEvent.setName(txtEventName.getText());
         if(!extra.getText().equalsIgnoreCase(SETTARGET)) {
-            created.setTarget(extra.getText());
+        	sEvent.setTarget(extra.getText());
         }
-        created.methods=sEvent.methods;
         /*
         created.setActionDesc(actionArea.getText());
         created.setSuccessDesc(successArea.getText());
@@ -514,7 +458,6 @@ public class EventsPanel extends JPanel
         created.setNpc(npcCon);
         created.setOtherEvent(eventCon);
         created.setSkills(skills);*/
-        return created;
     }
 	public void setTarget() {
 		JPanel main = new JPanel(new BorderLayout(10,10));
@@ -631,7 +574,7 @@ public class EventsPanel extends JPanel
 		base.revalidate();
 		base.repaint();
 	}
-	public void giveAndTakePanel(JPanel base,String label,JList displayList,JRadioButton skill, JRadioButton item) {
+	public void giveAndTakePanel(JPanel base,String label,JList<String> displayList,JRadioButton skill, JRadioButton item) {
 		base.removeAll();
 		base.setLayout(new BorderLayout(10,10));
 		base.setBorder(new TitledBorder(null, label, TitledBorder.LEADING, TitledBorder.TOP, null, null));
