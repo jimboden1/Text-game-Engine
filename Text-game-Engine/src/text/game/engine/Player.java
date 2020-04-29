@@ -15,7 +15,59 @@ public class Player implements java.io.Serializable
 	public int money = 0;
 	private ImageIcon playerPic;
 	
-	public Player(){}
+	private int[] equipment = new int[8];
+	
+	public Player(){
+		for (int i = 0; i < equipment.length; i++)
+			equipment[i] = -1;
+	}
+	
+	public void equip(int item, int type)
+	{
+		inventory.remove(item);
+		if (equipment[type] != -1)
+		{
+			unequip(equipment[type], type);
+		}
+		
+		equipment[type] = item;
+		
+		for (Benefit b : CentralDB.itemList.get(equipment[type]).getBenefits())
+		{
+			if (b.attribute == "Strength")
+				strength += b.modifier;
+			else if (b.attribute == "Dexterity")
+				dexterity += b.modifier;
+			else if (b.attribute == "IQ")
+				iq += b.modifier;
+			else if (b.attribute == "Health Points")
+				health += b.modifier;
+			else if (b.attribute == "Perception")
+				perception += b.modifier;
+			else if (b.attribute == "Will")
+				will += b.modifier;
+		}		
+	}
+	
+	public void unequip(int item, int type)
+	{
+		inventory.add(equipment[type]);
+		for (Benefit b : CentralDB.itemList.get(equipment[type]).getBenefits())
+		{
+			if (b.attribute == "Strength")
+				strength -= b.modifier;
+			else if (b.attribute == "Dexterity")
+				dexterity -= b.modifier;
+			else if (b.attribute == "IQ")
+				iq -= b.modifier;
+			else if (b.attribute == "Health Points")
+				health -= b.modifier;
+			else if (b.attribute == "Perception")
+				perception -= b.modifier;
+			else if (b.attribute == "Will")
+				will -= b.modifier;
+		}
+	}
 	
 	public void setName(String name) {this.name = name;}
 	public void setDescription(String description) {this.description = description;}
