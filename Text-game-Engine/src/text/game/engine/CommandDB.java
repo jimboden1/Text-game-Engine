@@ -68,6 +68,15 @@ public class CommandDB {
 				enemies.add(npc);
 			}
 		}
+		for(int index: here.getEvents()) {
+			Events event = CentralDB.eventList.get(index);
+			if(event.getType()==0) {
+				commands.add(new Command(event.getName()+" "+event.getTarget(), ()->event.runMethod()));
+			}
+			else if(event.getType()==1) {
+				
+			}
+		}
 		if(!enemies.isEmpty()) {
 			commands.add(new Command("explore",()-> {
 				int index = random.nextInt(enemies.size());

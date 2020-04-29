@@ -306,14 +306,20 @@ public class EventsPanel
 			int index = displayList.getSelectedIndex();
 			if(typeName.equalsIgnoreCase("location")) {
 				sEvent.setLocation(index);
+				sEvent.setSkill(-1);
+				sEvent.setItem(-1);
 				conditional.setText("If Player is at " + CentralDB.locationList.get(index).getName());
 			}
 			else if(typeName.equalsIgnoreCase("skill")) {
 				sEvent.setSkill(index);
+				sEvent.setLocation(-1);
+				sEvent.setItem(-1);
 				conditional.setText("If Player has " +CentralDB.skillList.get(index).getName());
 			}
 			if(typeName.equalsIgnoreCase("item")) {
 				sEvent.setItem(index);
+				sEvent.setLocation(-1);
+				sEvent.setSkill(-1);
 				conditional.setText("If Player has " +CentralDB.itemList.get(index).getName());
 			}
 		}
