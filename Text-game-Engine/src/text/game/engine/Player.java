@@ -122,7 +122,7 @@ public class Player implements java.io.Serializable
 		for (int index : skills)
 		{
 			Skill skill = CentralDB.skillList.get(index);
-			if(skill.getType() == "stregnth")
+			if(skill.getType() == "strength")
 				strength += skill.getModifier();
 			else if(skill.getType() == "dexterity")
 				dexterity +=skill.getModifier();
