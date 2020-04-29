@@ -141,6 +141,40 @@ public class ItemPanel{
         CentralDB.itemList = list;
     }
     
+    public void removeFromAll(int item)
+    {
+    	for (int i = 0; i < CentralDB.player.inventory.size(); i++)
+    	{
+    		if (CentralDB.player.inventory.get(i) == item)
+    		{
+    			CentralDB.player.inventory.remove(i);
+    			
+    			for (int j = 0; j < CentralDB.player.inventory.size(); j++)
+    			{
+    				if (CentralDB.player.inventory.get(j) > item)
+    					CentralDB.player.inventory.set(j, CentralDB.player.inventory.get(j)-1);
+    			}
+    		}
+    	}
+    	
+    	for (int k = 0; k < CentralDB.npcList.size(); k++)
+    	{
+    		for (int i = 0; i < CentralDB.npcList.get(k).getItems().size(); i++)
+        	{
+        		if (CentralDB.npcList.get(k).getItems().get(i) == item)
+        		{
+        			CentralDB.npcList.get(k).getItems().remove(i);
+        			
+        			for (int j = 0; j < CentralDB.npcList.get(k).getItems().size(); j++)
+        			{
+        				if (CentralDB.npcList.get(k).getItems().get(j) > item)
+        					CentralDB.npcList.get(k).getItems().set(j, CentralDB.npcList.get(k).getItems().get(j)-1);
+        			}
+        		}
+        	}
+    	}    	
+    }
+    
     public void deleteSelectedItem(){
         if(!itemList.isSelectionEmpty()){
             if(itemList.getSelectedIndices().length > 1){
@@ -150,6 +184,12 @@ public class ItemPanel{
                     list.remove(selection[i]);
                     if(selection[i] == selected)
                         selected = -1;
+                    
+                    for (int j = 0; j < selection.length; j++)
+                    {
+                    	removeFromAll(selection[j]);
+                    }
+                    
                 }
             }
             else{
@@ -158,6 +198,7 @@ public class ItemPanel{
                     selected = -1;
                 dlm.remove(selection);
                 list.remove(selection);
+                removeFromAll(selection);
             }
             CentralDB.itemList = list;
         }
