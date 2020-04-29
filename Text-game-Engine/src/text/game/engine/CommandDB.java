@@ -47,12 +47,6 @@ public class CommandDB {
 		}));
 		
 		commands.add(new Command("help", () -> help()));
-		
-		for(Location location: CentralDB.locationList) {
-			System.out.println(location.getName());
-			System.out.println(location.getDescription());
-		}
-		help();
 	}
 	
 	public void help()
@@ -190,24 +184,41 @@ public class CommandDB {
 	
 	public void battle(NPC enemy) {
 		commands.removeAll(commands);
-		PlatformPanel.descriptionArea.setText("You are fighting " + enemy.getName()+" they have "+ enemy.getHealth()+" health left.\n");
+		PlatformPanel.player.getModifiers();
+		PlatformPanel.player.applyModifiers();
+		PlatformPanel.updatePlayerDisplay();
+		PlatformPanel.descriptionArea.setText("You are fighting " + enemy.getName()+".\n");
 		commands.add(new Command("attack",()->{
+			PlatformPanel.descriptionArea.setText("You are fighting " + enemy.getName()+" they have "+ enemy.getHealth()+" health left.\n");
 			PlatformPanel.descriptionArea.append("You attack " + enemy.getName()+"\n");
 			if(attackCheck(PlatformPanel.player.getPerception(),PlatformPanel.player.getDexterity(),enemy.getPerception(),enemy.getDexterity())) {
 				PlatformPanel.descriptionArea.append("You hit " + enemy.getName()+" for "+ PlatformPanel.player.getStrength()/2+" damage.\n");
 				enemy.takeHealth(PlatformPanel.player.getStrength()/2);
 				if(enemy.getHealth()==0) {
-					goBack();
+					PlatformPanel.descriptionArea.append("You win " + enemy.getName()+" lies defeted at your feet enter back to return\n");
+					PlatformPanel.player.removeModifiers();
+					PlatformPanel.updatePlayerDisplay();
+					if(!enemy.getItems().isEmpty()) {
+						int loot = random.nextInt(enemy.getItems().size());
+						PlatformPanel.player.inventory.add(enemy.getItems().get(loot));
+					}
+					clearCommands();
 				}
 				else {
 					enemyAttack(enemy);
 				}
 			}
+			else {
+				PlatformPanel.descriptionArea.append("You miss!\n");
+				enemyAttack(enemy);
+			}
 		}));
 		commands.add(new Command("run",()-> { 
+			PlatformPanel.descriptionArea.setText("You are fighting " + enemy.getName()+".\n");
 			int escapeRoll = random.nextInt(100)+1;
 			if(escapeRoll+ PlatformPanel.player.getDexterity()>=enemy.getDexterity()) {
 				goBack();
+				PlatformPanel.player.removeModifiers();
 			}
 			else {
 				enemyAttack(enemy);
@@ -218,13 +229,16 @@ public class CommandDB {
 	public void enemyAttack(NPC enemy) {
 		PlatformPanel.descriptionArea.append(enemy.getName()+" Attacks!\n");
 		if(attackCheck(enemy.getPerception(),enemy.getDexterity(),PlatformPanel.player.getPerception(),PlatformPanel.player.getDexterity())) {
-			PlatformPanel.descriptionArea.append(enemy.getName()+"hits you for "+ enemy.getStrength()/2+" damage.\n");
+			PlatformPanel.descriptionArea.append(enemy.getName()+" hits you for "+ enemy.getStrength()/2+" damage.\n");
 			PlatformPanel.player.takeDamgage(enemy.getStrength()/2);
 			PlatformPanel.updatePlayerDisplay();
 			if(PlatformPanel.player.getHealth()==0) {
 				commands.removeAll(commands);
 				PlatformPanel.descriptionArea.append("Game Over");
 			}
+		}
+		else {
+			PlatformPanel.descriptionArea.append("They miss!\n");
 		}
 	}
 	
