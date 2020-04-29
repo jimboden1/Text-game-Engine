@@ -74,7 +74,16 @@ public class CommandDB {
 				commands.add(new Command(event.getName()+" "+event.getTarget(), ()->event.runMethod()));
 			}
 			else if(event.getType()==1) {
-				
+				if(event.checkCondition()) {
+					event.runMethod();
+				}
+			}
+			else {
+				commands.add(new Command(event.getName()+" "+event.getTarget(), ()->{
+					if(event.checkCondition()) {
+						event.runMethod();
+					}
+				}));
 			}
 		}
 		if(!enemies.isEmpty()) {
@@ -134,6 +143,24 @@ public class CommandDB {
 				}));
 			}
 		}));
+		for(int index: npc.getEvents()) {
+			Events event = CentralDB.eventList.get(index);
+			if(event.getType()==0) {
+				commands.add(new Command(event.getName()+" "+event.getTarget(), ()->event.runMethod()));
+			}
+			else if(event.getType()==1) {
+				if(event.checkCondition()) {
+					event.runMethod();
+				}
+			}
+			else {
+				commands.add(new Command(event.getName()+" "+event.getTarget(), ()->{
+					if(event.checkCondition()) {
+						event.runMethod();
+					}
+				}));
+			}
+		}
 	}
 	
 	public void goBack() {
