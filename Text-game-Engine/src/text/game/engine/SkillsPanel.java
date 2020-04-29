@@ -172,6 +172,58 @@ public class SkillsPanel
         CentralDB.skillList = skillList;
 	}
 	
+	
+	public void removeFromAll(int skill)
+    {
+    	for (int i = 0; i < CentralDB.player.getSkills().size(); i++)
+    	{
+    		if (CentralDB.player.getSkills().get(i) == skill)
+    		{
+    			CentralDB.player.getSkills().remove(i);
+    			
+    			for (int j = 0; j < CentralDB.player.getSkills().size(); j++)
+    			{
+    				if (CentralDB.player.getSkills().get(j) > skill)
+    					CentralDB.player.getSkills().set(j, CentralDB.player.getSkills().get(j)-1);
+    			}
+    		}
+    	}
+    	
+    	for (int k = 0; k < CentralDB.npcList.size(); k++)
+    	{
+    		for (int i = 0; i < CentralDB.npcList.get(k).getSkills().size(); i++)
+        	{
+        		if (CentralDB.npcList.get(k).getSkills().get(i) == skill)
+        		{
+        			CentralDB.npcList.get(k).getSkills().remove(i);
+        			
+        			for (int j = 0; j < CentralDB.npcList.get(k).getSkills().size(); j++)
+        			{
+        				if (CentralDB.npcList.get(k).getSkills().get(j) > skill)
+        					CentralDB.npcList.get(k).getSkills().set(j, CentralDB.npcList.get(k).getSkills().get(j)-1);
+        			}
+        		}
+        	}
+    	}  
+    	
+    	for (int k = 0; k < CentralDB.itemList.size(); k++)
+    	{
+    		for (int i = 0; i < CentralDB.itemList.get(k).getSkills().size(); i++)
+        	{
+        		if (CentralDB.itemList.get(k).getSkills().get(i) == skill)
+        		{
+        			CentralDB.itemList.get(k).getSkills().remove(i);
+        			
+        			for (int j = 0; j < CentralDB.itemList.get(k).getSkills().size(); j++)
+        			{
+        				if (CentralDB.itemList.get(k).getSkills().get(j) > skill)
+        					CentralDB.itemList.get(k).getSkills().set(j, CentralDB.itemList.get(k).getSkills().get(j)-1);
+        			}
+        		}
+        	}
+    	}
+    }
+	
 	public void deleteSelectedSkill(){
         if(!skillsList.isSelectionEmpty()){
             if(skillsList.getSelectedIndices().length > 1){
@@ -181,6 +233,11 @@ public class SkillsPanel
                 	skillList.remove(selection[i]);
                     if(selection[i] == selected)
                         selected = -1;
+                    
+                    for (int j = 0; j < selection.length; j++)
+                    {
+                    	removeFromAll(selection[j]);
+                    }
                 }
             }
             else{
@@ -189,6 +246,7 @@ public class SkillsPanel
                     selected = -1;
                 listModel.remove(selection);
                 skillList.remove(selection);
+                removeFromAll(selection);
             }
             CentralDB.skillList = skillList;
         }

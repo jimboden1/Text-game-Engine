@@ -434,6 +434,43 @@ public class EventsPanel
         CentralDB.eventList = list;
     }
 	
+	public void removeFromAll(int event)
+    {    	
+    	for (int k = 0; k < CentralDB.npcList.size(); k++)
+    	{
+    		for (int i = 0; i < CentralDB.npcList.get(k).getEvents().size(); i++)
+        	{
+        		if (CentralDB.npcList.get(k).getEvents().get(i) == event)
+        		{
+        			CentralDB.npcList.get(k).getEvents().remove(i);
+        			
+        			for (int j = 0; j < CentralDB.npcList.get(k).getEvents().size(); j++)
+        			{
+        				if (CentralDB.npcList.get(k).getEvents().get(j) > event)
+        					CentralDB.npcList.get(k).getEvents().set(j, CentralDB.npcList.get(k).getEvents().get(j)-1);
+        			}
+        		}
+        	}
+    	}
+    	
+    	for (int k = 0; k < CentralDB.locationList.size(); k++)
+    	{
+    		for (int i = 0; i < CentralDB.locationList.get(k).getEvents().size(); i++)
+        	{
+        		if (CentralDB.locationList.get(k).getEvents().get(i) == event)
+        		{
+        			CentralDB.locationList.get(k).getEvents().remove(i);
+        			
+        			for (int j = 0; j < CentralDB.locationList.get(k).getEvents().size(); j++)
+        			{
+        				if (CentralDB.locationList.get(k).getEvents().get(j) > event)
+        					CentralDB.locationList.get(k).getEvents().set(j, CentralDB.locationList.get(k).getEvents().get(j)-1);
+        			}
+        		}
+        	}
+    	} 
+    }
+	
 	public void deleteSelectedEvent()
 	{
         if(!eventList.isSelectionEmpty())
@@ -442,7 +479,11 @@ public class EventsPanel
         	for(int i=remove.length-1; i>=0;i--) {
         		dlm.remove(i);
         		list.remove(i);
+        		
         	}
+        	
+        	for (int j = 0; j < remove.length; j++)
+        		removeFromAll(remove[j]);
         	CentralDB.eventList = list;
         }
     }

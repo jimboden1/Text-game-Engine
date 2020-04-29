@@ -132,6 +132,26 @@ public class NPCPanel{
         CentralDB.npcList = list;
     }
     
+    public void removeFromAll(int npc)
+    {    	
+    	for (int k = 0; k < CentralDB.locationList.size(); k++)
+    	{
+    		for (int i = 0; i < CentralDB.locationList.get(k).getNPCs().size(); i++)
+        	{
+        		if (CentralDB.locationList.get(k).getNPCs().get(i) == npc)
+        		{
+        			CentralDB.locationList.get(k).getNPCs().remove(i);
+        			
+        			for (int j = 0; j < CentralDB.locationList.get(k).getNPCs().size(); j++)
+        			{
+        				if (CentralDB.locationList.get(k).getNPCs().get(j) > npc)
+        					CentralDB.locationList.get(k).getNPCs().set(j, CentralDB.locationList.get(k).getNPCs().get(j)-1);
+        			}
+        		}
+        	}
+    	}    	
+    }
+    
     public void deleteSelectedNPC(){
         if(!npcList.isSelectionEmpty()){
             if(npcList.getSelectedIndices().length > 1){
@@ -141,6 +161,9 @@ public class NPCPanel{
                     list.remove(selection[i]);
                     if(selection[i]==selected)
                         selected = -1;
+                    
+                    for (int j = 0; j < selection.length; j++)
+                    	removeFromAll(selection[j]);
                 }
             }
             else{
@@ -149,6 +172,7 @@ public class NPCPanel{
                     selected = -1;
                 dlm.remove(selection);
                 list.remove(selection);
+                removeFromAll(selection);
             }
             CentralDB.npcList = list;
         }
