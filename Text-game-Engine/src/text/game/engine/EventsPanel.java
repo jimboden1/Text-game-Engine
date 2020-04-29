@@ -502,6 +502,17 @@ public class EventsPanel
         		extra.setText(CentralDB.locationList.get(locationList.getSelectedIndex()-1).getName());
         	}
         }
+        else if(!npcList.isSelectionEmpty()) {
+        	if(npcList.getSelectedIndex() == 0) {
+            	extra.setText(SETTARGET);
+            }
+        	else if(npcList.isSelectionEmpty()) {
+        		
+        	}
+        	else {
+        		extra.setText(CentralDB.npcList.get(npcList.getSelectedIndex()-1).getName());
+        	}
+        }
 	}
 	
 	public void removeFunction() {

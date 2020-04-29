@@ -2,7 +2,7 @@ package text.game.engine;
 
 import java.util.ArrayList;
 
-public class Command {
+public class Command implements java.io.Serializable{
     private String command;
     public Method method;
     

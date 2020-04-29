@@ -187,7 +187,7 @@ public class TextGameEngine {
 	public void saveAs() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setDialogTitle("Specify a file to save");
-
+		currentFile = null;
 		int userSelection = fileChooser.showSaveDialog(frame);
 		if (userSelection == JFileChooser.APPROVE_OPTION) {
 			currentFile = fileChooser.getSelectedFile();
