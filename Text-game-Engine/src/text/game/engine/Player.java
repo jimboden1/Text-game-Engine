@@ -52,7 +52,6 @@ public class Player implements java.io.Serializable
 	public void unequip(int item, int type)
 	{
 		inventory.add(equipment[type]);
-		
 		for (Benefit b : CentralDB.itemList.get(equipment[type]).getBenefits())
 		{
 			if (b.attribute == "Strength")
