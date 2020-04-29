@@ -87,6 +87,37 @@ public class Events implements java.io.Serializable{
 			PlatformPanel.descriptionArea.setText("Game Over");
 		}));
 	}
+	
+	public boolean checkCondition() {
+		if(location!=-1) {
+			if(PlatformPanel.here.equals(CentralDB.locationList.get(location))) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else if(skill!=-1) {
+			if(PlatformPanel.player.getSkills().contains(skill)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else if(item!=-1) {
+			if(PlatformPanel.player.inventory.contains(item)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public int getType() {return type;}
 	public void setType(int type) {this.type = type;}
 	public int getLocation() {
