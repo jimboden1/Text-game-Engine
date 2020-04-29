@@ -24,8 +24,8 @@ public class PlayerPanel
 	JTextArea txtrDescription = new JTextArea();
 	DefaultListModel<String> skilllm = new DefaultListModel<String>();
 	JList<String> playerSkillsList = new JList<String>(skilllm);
-	DefaultListModel<String> itemLM = new DefaultListModel<String>();
-	JList<String> playerItemList = new JList<String>(skilllm);
+	DefaultListModel<String> itemlm = new DefaultListModel<String>();
+	JList<String> playerItemList = new JList<String>(itemlm);
 	JLabel picPane = new JLabel();
 	JTextField strField = new JTextField("0");
 	JTextField dexField = new JTextField("0");
@@ -263,7 +263,20 @@ public class PlayerPanel
 		statsLabel.setBounds(341, 176, 40, 16);
 		base.add(statsLabel);
 
+		JScrollPane itemScrollPane = new JScrollPane(playerItemList);
+		itemScrollPane.setBorder(new TitledBorder(null, "Items", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		itemScrollPane.setBounds(10,170,200,350);
+		base.add(itemScrollPane);
 		
+		JButton addItem = new JButton("Add Item");
+		addItem.addActionListener(e->addItem());
+		addItem.setBounds(220,470,110,20);
+		base.add(addItem);
+		
+		JButton removeItem = new JButton("Remove Item");
+		removeItem.addActionListener(e->removeItem());
+		removeItem.setBounds(220,495,110,20);
+		base.add(removeItem);
 		
 		return base;
 	}
@@ -288,6 +301,42 @@ public class PlayerPanel
 		CentralDB.player = player;
 	}
 	
+	public void addItem() {
+    	JPanel main = new JPanel(new BorderLayout(10,10));
+		DefaultListModel<String> items = new DefaultListModel<>();
+    	JList<String> itemsList = new JList<>(items);
+    	for(Item item : CentralDB.itemList)
+		{
+    		items.addElement(item.getName());
+		}
+    	JScrollPane js = new JScrollPane(itemsList);
+        js.setBorder(new TitledBorder(null, "Items", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+    	main.add(js);
+    	JOptionPane.showMessageDialog(main, main);
+        int[] selection = itemsList.getSelectedIndices();
+        for(int i:selection) {
+            itemlm.addElement(CentralDB.itemList.get(i).getName());
+            itemList.add(i);
+        }
+    }
+    
+    public void removeItem() {
+    	if(!playerItemList.isSelectionEmpty()){
+            if(playerItemList.getSelectedIndices().length > 1){
+                int[] selection = playerItemList.getSelectedIndices();
+                for(int i = selection.length-1 ; i>=0; i--){
+                	itemlm.remove(selection[i]);
+                	itemList.remove(selection[i]);
+                }
+            }
+            else{
+                int selection = playerItemList.getSelectedIndex();
+                itemlm.remove(selection);
+                itemList.remove(selection);
+            }
+        }
+    }
+	
 	public void update() {
 		player = CentralDB.player;
 		txtName.setText(player.getName());
@@ -302,6 +351,10 @@ public class PlayerPanel
 		skillList=player.getSkills();
 		for(int index: skillList) {
 			skilllm.addElement(CentralDB.skillList.get(index).getName());
+		}
+		itemList = player.inventory;
+		for(int index:itemList) {
+			itemlm.addElement(CentralDB.itemList.get(index).getName());
 		}
 	}
 
