@@ -68,6 +68,17 @@ public class TextGameEngine {
                 saveAs.addActionListener(e->saveAs());
                 JMenuItem load = new JMenuItem("Load");
                 load.addActionListener(e->load());
+                JMenuItem newGame = new JMenuItem("New");
+                newGame.addActionListener(e->{
+                	centralDB= new CentralDB();
+                	CentralDB.loadIntoCentralDB(centralDB);
+                	playerTab.update();
+                	roomsTab.update();
+                	eventsTab.update();
+                	itemTab.update();
+                	npcTab.update();
+                	skillsTab.update();
+                });
                 JMenu play = new JMenu("Play");
                 JMenuItem playNew = new JMenuItem("Load Game");
                 playNew.addActionListener(e->play());
@@ -75,6 +86,7 @@ public class TextGameEngine {
                 playThis.addActionListener(e->playThis());
                 play.add(playNew);
                 play.add(playThis);
+                files.add(newGame);
                 files.add(save);
                 files.add(saveAs);
                 files.add(load);

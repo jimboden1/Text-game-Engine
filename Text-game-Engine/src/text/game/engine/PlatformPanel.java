@@ -187,6 +187,9 @@ public class PlatformPanel {
             	player = save.getPlayer();
             	here = save.getLocation();
             	updatePlayerDisplay();
+            	descriptionArea.setText(here.getDescription());
+            	database.addBaseCommands();
+            	database.addLocationCommands(here);
               
         	} 
           

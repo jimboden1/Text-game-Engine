@@ -52,6 +52,7 @@ public class CommandDB {
 			System.out.println(location.getName());
 			System.out.println(location.getDescription());
 		}
+		help();
 	}
 	
 	public void help()
