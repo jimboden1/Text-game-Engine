@@ -4,6 +4,7 @@ package text.game.engine;
 import java.util.ArrayList;
 
 public class Events implements java.io.Serializable{
+	private static final long serialVersionUID = 1L;
 	private int type = 0;//0 is command only, 1 checks a condition, and 2 takes a command and then checks a condition
 	private String name, target="";
     public ArrayList<Integer> connectedEvents = new ArrayList<>();

@@ -1,7 +1,9 @@
 package text.game.engine;
 
 public class Benefit implements java.io.Serializable{
-    public String attribute;
+   
+	private static final long serialVersionUID = 1L;
+	public String attribute;
     public int modifier, attributePlace;
     
     public void makeAttribute(int place) {

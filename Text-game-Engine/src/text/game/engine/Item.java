@@ -3,7 +3,9 @@ package text.game.engine;
 import java.util.ArrayList;
 
 public class Item implements java.io.Serializable{
-    private String name, description;
+	
+	private static final long serialVersionUID = 1L;
+	private String name, description;
     private int cost, type;
     private ArrayList<Integer> skills = new ArrayList<Integer>();
     private ArrayList<Benefit> benefits = new ArrayList<>();

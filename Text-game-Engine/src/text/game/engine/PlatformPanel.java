@@ -8,8 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-
 import javax.swing.*;
 
 public class PlatformPanel {
@@ -17,18 +15,13 @@ public class PlatformPanel {
 	private JFrame base;
 	private File currentFile = null;
 	public static JPanel main = new JPanel(new BorderLayout(10,10)), leftSide = new JPanel(new GridLayout(8,2)), 
-			bottom = new JPanel(new BorderLayout(10,10)), buttonPanel = new JPanel(new GridLayout(2,6,10,10));
+			bottom = new JPanel(new BorderLayout(10,10));
 	public static JTextField commandLine = new JTextField(200);
 	public static JTextArea descriptionArea = new JTextArea();
 	public static JLabel name = new JLabel(""), health = new JLabel("0"),
 			strength = new JLabel("0"), dexterity = new JLabel("0"),
 			iq = new JLabel("0"), perception = new JLabel("0"),
 			will = new JLabel("0"), money = new JLabel("0");
-	public static JButton button1 = new JButton(""), button2 = new JButton(""),
-			button3 = new JButton(""), button4 = new JButton(""),
-			button5 = new JButton(""), button6 = new JButton(""),
-			button7 = new JButton(""), button8 = new JButton(""),
-			button9 = new JButton(""), button10 = new JButton("");
 	public static Location here = new Location();
 	public static Player player = new Player();
 	private SaveFile save;
@@ -74,20 +67,6 @@ public class PlatformPanel {
     	menu.add(files);
     	main.add(menu, BorderLayout.NORTH);
     	
-    	
-    	/*
-    	buttonPanel.add(button1);
-    	buttonPanel.add(button2);
-    	buttonPanel.add(button3);
-    	buttonPanel.add(button4);
-    	buttonPanel.add(button5);
-    	buttonPanel.add(button6);
-    	buttonPanel.add(button7);
-    	buttonPanel.add(button8);
-    	buttonPanel.add(button9);
-    	buttonPanel.add(button10);
-    	bottom.add(buttonPanel, BorderLayout.CENTER);
-    	*/
     	commandLine.addActionListener(e -> checkCommand());
     	bottom.add(commandLine, BorderLayout.NORTH);
     	
@@ -122,12 +101,12 @@ public class PlatformPanel {
     
     public String checkString(String string) {
 		String result = null;
-		for(int i=0; i< database.commands.size();i++)
+		for(int i=0; i< CommandDB.commands.size();i++)
 		{
 			//Compares Strings regardless of capitalization
-			if(string.equalsIgnoreCase(database.commands.get(i).getCommand()))
+			if(string.equalsIgnoreCase(CommandDB.commands.get(i).getCommand()))
 			{
-				database.commands.get(i).runMethod();
+				CommandDB.commands.get(i).runMethod();
 			}
 				
 		}

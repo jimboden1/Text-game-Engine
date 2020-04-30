@@ -1,21 +1,11 @@
 package text.game.engine;
 
-import java.awt.*;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.PlainDocument;
 
 public class PlayerPanel
 {
@@ -89,8 +79,8 @@ public class PlayerPanel
 				popupFrame.setVisible(true);
 				popupFrame.setBounds(200,175, 750, 500 );
 				popupPanel.setLayout(null);
-				DefaultListModel listModel2 = new DefaultListModel();
-				JList skills = new JList(listModel2);
+				DefaultListModel<String> listModel2 = new DefaultListModel<>();
+				JList<String>  skills = new JList<>(listModel2);
 				JScrollPane scrollPane = new JScrollPane(skills);
 				scrollPane.setBorder(new TitledBorder(null, "Skills", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 				scrollPane.setBounds(250,25,220,335);
@@ -156,51 +146,8 @@ public class PlayerPanel
         
 		JSeparator separator_4 = new JSeparator();
 		separator_4.setBounds(10, 160, 755, 2);
-		base.add(separator_4);		
-		/*
-		//Picture of the player if desired. 
-		picPane.setBounds(10, 176, 188, 174);
-		picPane.setVisible(true);
-		Border border = BorderFactory.createLineBorder(Color.BLACK);
-		picPane.setBorder(border);
-		//picPane.setEditable(false);
-		base.add(picPane);
-		addPicButton.setBounds(10, 350, 100, 20);
-		addPicButton.setText("Upload");
-		base.add(addPicButton);
-		addPicButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				JFileChooser chooser = new JFileChooser();
-			    FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG File", "jpg","jpeg");
-			    chooser.setFileFilter(filter);
-			    int returnVal = chooser.showOpenDialog(base);
-			    if(returnVal == JFileChooser.APPROVE_OPTION)
-			    {
-			       System.out.println("You chose to open this file: " +
-			            chooser.getSelectedFile().getName());
-			       
-			       File file = new File(chooser.getSelectedFile().getPath());
-			       BufferedImage img;
-			       try
-			       {
-			    	   img = ImageIO.read(file);
-			    	   Image scaled = img.getScaledInstance(picPane.getWidth(), picPane.getHeight(), Image.SCALE_SMOOTH);
-			    	   ImageIcon icon = new ImageIcon(scaled);
-			    	   playerPic = icon;
-			    	   picPane.setIcon(icon);
-			       }catch (IOException e1)
-			       {
-			    	   // TODO Auto-generated catch block
-			    	   e1.printStackTrace();
-			       }
-			       
-			       
-			    }
-			}
-		});
-		*/
+		base.add(separator_4);
+		
 		//Create Player object
 		createPlayer.setBounds(300 ,350,100,20);
 		createPlayer.setText("Create");

@@ -2,7 +2,6 @@ package text.game.engine;
 
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -230,7 +229,7 @@ public class LocationPanel
 		return base;
 	}
 	
-	public JScrollPane makeScrollList(JList list, String name){
+	public JScrollPane makeScrollList(JList<String> list, String name){
         JScrollPane js = new JScrollPane(list);
         js.setBorder(new TitledBorder(null, name, TitledBorder.LEADING, TitledBorder.TOP, null, null));
         return js;
@@ -374,16 +373,15 @@ public class LocationPanel
 	}
 	
 	public void addNPC() {
-    	JOptionPane popup = new JOptionPane();
     	JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel nlm = new DefaultListModel();
-    	JList npcList = new JList(nlm);
+		DefaultListModel<String>  nlm = new DefaultListModel<>();
+    	JList<String>  npcList = new JList<>(nlm);
     	for(NPC npc : CentralDB.npcList)
 		{
     		nlm.addElement(npc.getName());
 		}
     	main.add(this.makeScrollList(npcList, "NPCs"));
-        popup.showMessageDialog(main, main);
+    	JOptionPane.showMessageDialog(main, main);
         int[] selection = npcList.getSelectedIndices();
         for(int i:selection) {
         	npclm.addElement(CentralDB.npcList.get(i).getName());
@@ -409,16 +407,15 @@ public class LocationPanel
     }
 	
 	public void addEvent() {
-    	JOptionPane popup = new JOptionPane();
     	JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel elm = new DefaultListModel();
-    	JList eventList = new JList(elm);
+		DefaultListModel<String> elm = new DefaultListModel<>();
+    	JList<String> eventList = new JList<>(elm);
     	for(Events event : CentralDB.eventList)
 		{
     		elm.addElement(event.getName());
 		}
     	main.add(this.makeScrollList(eventList, "Events"));
-        popup.showMessageDialog(main, main);
+    	JOptionPane.showMessageDialog(main, main);
         int[] selection = eventList.getSelectedIndices();
         for(int i:selection) {
         	eventlm.addElement(CentralDB.eventList.get(i).getName());

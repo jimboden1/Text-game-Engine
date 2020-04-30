@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class NPC implements java.io.Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private String name, description;
 	private int type;//0 is merchant; 1 is enemy; 2 is other
 	private ArrayList<Integer> items= new ArrayList<>();
@@ -26,9 +27,9 @@ public class NPC implements java.io.Serializable
 	public void setHealth(int health) {this.health = health;}
 	public void setPerception(int perception) {this.perception = perception;}
 	public void setWill(int will) {this.will = will;}
-	public void setItems(ArrayList items) {this.items = items;}
-	public void setEvents(ArrayList events) {this.events = events;}
-	public void setSkills(ArrayList skills) {this.skills = skills;}
+	public void setItems(ArrayList<Integer> items) {this.items = items;}
+	public void setEvents(ArrayList<Integer> events) {this.events = events;}
+	public void setSkills(ArrayList<Integer> skills) {this.skills = skills;}
 	public void setDialog(String dialog) {this.dialog = dialog;}
 	public void takeHealth(int damage) {
 		health-=damage;

@@ -3,7 +3,8 @@ package text.game.engine;
 
 public class Skill implements java.io.Serializable
 {
-    private String name, description, type;
+	private static final long serialVersionUID = 1L;
+	private String name, description, type;
     int modifier;
     
     public Skill() 

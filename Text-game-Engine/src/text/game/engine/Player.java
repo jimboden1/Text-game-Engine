@@ -2,10 +2,9 @@ package text.game.engine;
 
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-
 public class Player implements java.io.Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private String name, description;
 	private int strength = 0, dexterity = 0, iq = 0,maxHealth = 0, health = 0, perception = 0, will=  0;
 	public int modStrength=0, modDexterity = 0, modIq = 0,modMaxHealth = 0, modPerception = 0, modWill=  0;

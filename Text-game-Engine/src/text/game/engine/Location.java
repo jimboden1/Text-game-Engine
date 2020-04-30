@@ -3,7 +3,8 @@ package text.game.engine;
 import java.util.ArrayList;
 
 public class Location implements java.io.Serializable{
-    private String name = "", description = "";
+	private static final long serialVersionUID = 1L;
+	private String name = "", description = "";
     private ArrayList<Integer> events = new ArrayList<>();
     private int[] locations = {-1,-1,-1,-1};
     private ArrayList<Integer> npcs = new ArrayList<>();

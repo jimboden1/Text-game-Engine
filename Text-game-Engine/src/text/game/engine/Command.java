@@ -3,7 +3,8 @@ package text.game.engine;
 import java.util.ArrayList;
 
 public class Command implements java.io.Serializable{
-    private String command;
+	private static final long serialVersionUID = 1L;
+	private String command;
     public Method method;
     
     String ActionDesc;
