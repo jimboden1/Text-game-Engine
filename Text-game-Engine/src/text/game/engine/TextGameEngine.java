@@ -130,19 +130,13 @@ public class TextGameEngine {
 			centralDB.loadOutCentralDB();
 			try
 		      
-			{ 
-				System.out.println("break 1");
+			{
 				FileOutputStream file = new FileOutputStream(filename);
-				System.out.println("break 2");
 				ObjectOutputStream out = new ObjectOutputStream(file);
-				System.out.println("break 3");
 				out.writeObject(centralDB);
-				System.out.println("break 4");
 
 				out.close();
-				System.out.println("break 5");
 				file.close();
-				System.out.println("break 6");
 
 			}
 			catch(IOException ex)
@@ -178,6 +172,8 @@ public class TextGameEngine {
             
             	CentralDB.loadIntoCentralDB(centralDB);
 
+
+            	playerTab.update();
             	roomsTab.selected = -1;
             	eventsTab.selected = -1;
             	itemTab.selected = -1;

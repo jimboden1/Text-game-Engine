@@ -101,12 +101,14 @@ public class PlatformPanel {
     
     public String checkString(String string) {
 		String result = null;
+		boolean first = true;
 		for(int i=0; i< CommandDB.commands.size();i++)
 		{
 			//Compares Strings regardless of capitalization
-			if(string.equalsIgnoreCase(CommandDB.commands.get(i).getCommand()))
+			if(string.equalsIgnoreCase(CommandDB.commands.get(i).getCommand())&&first)
 			{
 				CommandDB.commands.get(i).runMethod();
+				first=false;
 			}
 				
 		}

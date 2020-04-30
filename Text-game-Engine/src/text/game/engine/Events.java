@@ -42,7 +42,7 @@ public class Events implements java.io.Serializable{
 			ArrayList<Integer> skills = PlatformPanel.player.getSkills();
 			skills.add(skill);
 			PlatformPanel.player.setSkills(skills);
-			append("You gain the "+ skillName + " skill");
+			append("You gain the "+ skillName + " skill\n");
 		}));
 	}
 	public void takeSkill(int skill) {
@@ -57,14 +57,14 @@ public class Events implements java.io.Serializable{
 				}
 			}
 			PlatformPanel.player.setSkills(skills);
-			append("You have lost the "+ skillName + " skill");
+			append("You have lost the "+ skillName + " skill\n");
 		}));
 	}
 	public void giveItem(int item) {
 		String itemName = CentralDB.itemList.get(item).getName();
 		methods.add(new Command("Give Player "+ itemName,()->{
 			PlatformPanel.player.inventory.add(item);
-			append("You added "+ itemName + " to your inventory");
+			append("You added "+ itemName + " to your inventory\n");
 		}));
 	}
 	public void takeItem(int item) {
@@ -79,7 +79,7 @@ public class Events implements java.io.Serializable{
 				}
 			}
 			PlatformPanel.player.inventory=items;
-			append("You have lost "+ itemName + " from your inventory");
+			append("You have lost "+ itemName + " from your inventory\n");
 		}));
 	}
 	public void kill() {

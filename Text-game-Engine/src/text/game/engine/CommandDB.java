@@ -3,11 +3,14 @@ package text.game.engine;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JTextArea;
+
 public class CommandDB {
 
 	public static ArrayList<Command> commands = new ArrayList<>();
 	private Random random = new Random();
 	private ArrayList<NPC> enemies = new ArrayList<>();
+	private JTextArea display = PlatformPanel.descriptionArea;
 	
 	public CommandDB() {
 		
@@ -21,32 +24,73 @@ public class CommandDB {
 	public void addBaseCommands() {
 		commands.add(new Command("back", ()-> goBack()));
 		commands.add(new Command("check skills", ()-> {
-			PlatformPanel.descriptionArea.setText("You have the following skills\n");
+			display.setText("You have the following skills\n");
 			for(int index: PlatformPanel.player.getSkills()) {
 				Skill skill = CentralDB.skillList.get(index);
-				PlatformPanel.descriptionArea.append(skill.getName()+": " + skill.getDescription()+"\n");
+				display.append(skill.getName()+": " + skill.getDescription()+"\n");
 			}
 		}));
 		commands.add(new Command("check self", ()-> {
-			PlatformPanel.descriptionArea.setText(PlatformPanel.player.getDescription());
+			display.setText(PlatformPanel.player.getDescription());
 		}));
-		commands.add(new Command("check items", ()-> {
-			PlatformPanel.descriptionArea.setText("You have the following items\n");
-			for(int index: PlatformPanel.player.inventory) {
-				Item item = CentralDB.itemList.get(index);
-				PlatformPanel.descriptionArea.append(item.getName() + ": " + item.getDescription()+"\n");
-			}
-		}));
-		
-		commands.add(new Command("equip all", () -> {
-			for (int item : CentralDB.player.inventory)
-			{
-				if (CentralDB.itemList.get(CentralDB.player.inventory.get(item)).getType() == 1)
-					CentralDB.player.equip(CentralDB.player.inventory.get(item), item);
-			}
-		}));
+		commands.add(new Command("check items", ()-> checkItems()));
 		
 		commands.add(new Command("help", () -> help()));
+	}
+	
+	public void checkItems() {
+		display.setText("You have the following items\n");
+		for(int index: PlatformPanel.player.inventory) {
+			Item item = CentralDB.itemList.get(index);
+			display.append(item.getName() + ": " + item.getDescription()+"\n");
+			if(item.getType()!=0&&item.getType()!=9) {
+				commands.add(new Command("equip "+item.getName(),()-> {
+					PlatformPanel.player.equip(index, item.getType());
+					checkItems();
+					display.append("You equip "+item.getName()+"\n");
+				}));
+			}
+			else {
+				useItem(index);
+				}
+		}
+	}
+	
+	public void useItem(int index) {
+		Item item = CentralDB.itemList.get(index);
+		if(item.getType()==0) {
+			commands.add(new Command("use "+item.getName(),()-> {
+				Events event = new Events();
+				event.takeItem(index);
+				for(Benefit benefit:item.getBenefits()) {
+					if(benefit.attributePlace==0) {
+						PlatformPanel.player.setStrength(PlatformPanel.player.getStrength()+benefit.modifier);
+					}
+					else if(benefit.attributePlace==1) {
+						PlatformPanel.player.setDexterity(PlatformPanel.player.getDexterity()+benefit.modifier);
+					}
+					else if(benefit.attributePlace==2) {
+						PlatformPanel.player.setIQ(PlatformPanel.player.getIQ()+benefit.modifier);
+					}
+					else if(benefit.attributePlace==3) {
+						PlatformPanel.player.heal(benefit.modifier);
+					}
+					else if(benefit.attributePlace==4) {
+						PlatformPanel.player.setPerception(PlatformPanel.player.getPerception()+benefit.modifier);
+					}
+					else {
+						PlatformPanel.player.setWill(PlatformPanel.player.getWill()+benefit.modifier);
+					}
+				}
+				PlatformPanel.updatePlayerDisplay();
+				for(int skill:item.getSkills()) {
+					event.giveSkill(skill);
+				}
+				event.runMethod();
+				clearCommands();
+				checkItems();
+			}));
+		}
 	}
 	
 	public void help()
@@ -56,14 +100,13 @@ public class CommandDB {
 		{
 			commandList += c.getCommand() + "\n";
 		}
-		PlatformPanel.descriptionArea.append("Here is the list of available commands:\n" + commandList);
+		display.append("Here is the list of available commands:\n" + commandList);
 	}
 	
 	public void addLocationCommands(Location here) {
 		for(int move : here.getLocations()) {
 			if(move!=-1) {
 				commands.add(new Command("move to "+ CentralDB.locationList.get(move).getName(), () -> moveTo(CentralDB.locationList.get(move))));
-				System.out.println("Command move to " + CentralDB.locationList.get(move).getName() + " added "+ CentralDB.locationList.get(move).getDescription());
 			}
 		}
 		enemies.clear();
@@ -99,49 +142,52 @@ public class CommandDB {
 			}));
 		}
 		commands.add(new Command("rest",()-> {
-			PlatformPanel.descriptionArea.append("\nYou rest for a bit to regain your strength\n");
+			display.append("\nYou rest for a bit to regain your strength\n");
 			PlatformPanel.player.heal(50);
 			PlatformPanel.updatePlayerDisplay();
 		}));
 	}
 	
 	public void addNPCCommands(NPC npc) {
+		if(npc.getType()!=1) {
+			
+		
 		commands.add(new Command("look at "+ npc.getName(), ()-> { 
-			PlatformPanel.descriptionArea.setText(npc.getDescription());
+			display.setText(npc.getDescription());
 		}));
 		commands.add(new Command("approach "+ npc.getName(), ()-> { 
 			clearCommands();
-			PlatformPanel.descriptionArea.setText("You approach "+ npc.getName()+ ", what would you like to do?");
+			display.setText("You approach "+ npc.getName()+ ", what would you like to do?");
 			commands.add(new Command ("talk", () ->  {
-				PlatformPanel.descriptionArea.setText(npc.getDescription());
+				display.setText(npc.getDescription());
 			
 			}));
 			if(npc.getType()==0) {
 				commands.add(new Command("buy",()-> { 
-					PlatformPanel.descriptionArea.setText("What would you like to buy?\n");
+					display.setText("What would you like to buy?\n");
 					for(int index: npc.getItems()) {
 						Item item = CentralDB.itemList.get(index);
-						PlatformPanel.descriptionArea.append(item.getName() +": "+ item.getCost()+"\n");
+						display.append(item.getName() +": "+ item.getCost()+"\n");
 						commands.add(new Command("buy "+item.getName(), ()->{
 							if(PlatformPanel.player.money>item.getCost()) {
 								PlatformPanel.player.money-=item.getCost();
 								PlatformPanel.player.inventory.add(CentralDB.itemList.indexOf(item));
-								PlatformPanel.descriptionArea.append("you have purchased "+ item.getName()+"\n");
+								display.append("you have purchased "+ item.getName()+"\n");
 								PlatformPanel.updatePlayerDisplay();
 							}
 						}));
 					}
 				}));
 				commands.add(new Command("sell", ()->{
-					PlatformPanel.descriptionArea.setText("What would you like to sell?\n");
+					display.setText("What would you like to sell?\n");
 					for(int index: PlatformPanel.player.inventory) {
 						Item item = CentralDB.itemList.get(index);
-						PlatformPanel.descriptionArea.append(item.getName() +": "+ item.getCost()+"\n");
+						display.append(item.getName() +": "+ item.getCost()+"\n");
 						commands.add(new Command("sell "+item.getName(), ()->{
 							if(item.getType()!=9) {
 								PlatformPanel.player.money+=item.getCost();
 								PlatformPanel.player.inventory.remove(CentralDB.itemList.indexOf(item));
-								PlatformPanel.descriptionArea.append("you have sold "+ item.getName()+"\n");
+								display.append("you have sold "+ item.getName()+"\n");
 								PlatformPanel.updatePlayerDisplay();
 							}
 						}));
@@ -167,13 +213,14 @@ public class CommandDB {
 				}
 			}
 		}));
+		}
 		
 	}
 	
 	public void goBack() {
 		clearCommands();
 		addLocationCommands(PlatformPanel.here);
-		PlatformPanel.descriptionArea.setText(PlatformPanel.here.getDescription());
+		display.setText(PlatformPanel.here.getDescription());
 	}
 	
 	
@@ -187,15 +234,15 @@ public class CommandDB {
 		PlatformPanel.player.getModifiers();
 		PlatformPanel.player.applyModifiers();
 		PlatformPanel.updatePlayerDisplay();
-		PlatformPanel.descriptionArea.setText("You are fighting " + enemy.getName()+".\n");
+		display.setText("You are fighting " + enemy.getName()+".\n");
 		commands.add(new Command("attack",()->{
-			PlatformPanel.descriptionArea.setText("You are fighting " + enemy.getName()+" they have "+ enemy.getHealth()+" health left.\n");
-			PlatformPanel.descriptionArea.append("You attack " + enemy.getName()+"\n");
+			display.setText("You are fighting " + enemy.getName()+" they have "+ enemy.getHealth()+" health left.\n");
+			display.append("You attack " + enemy.getName()+"\n");
 			if(attackCheck(PlatformPanel.player.getPerception(),PlatformPanel.player.getDexterity(),enemy.getPerception(),enemy.getDexterity())) {
-				PlatformPanel.descriptionArea.append("You hit " + enemy.getName()+" for "+ PlatformPanel.player.getStrength()/2+" damage.\n");
+				display.append("You hit " + enemy.getName()+" for "+ PlatformPanel.player.getStrength()/2+" damage.\n");
 				enemy.takeHealth(PlatformPanel.player.getStrength()/2);
 				if(enemy.getHealth()==0) {
-					PlatformPanel.descriptionArea.append("You win " + enemy.getName()+" lies defeted at your feet enter back to return\n");
+					display.append("You win " + enemy.getName()+" lies defeted at your feet enter back to return\n");
 					PlatformPanel.player.removeModifiers();
 					PlatformPanel.updatePlayerDisplay();
 					if(!enemy.getItems().isEmpty()) {
@@ -209,12 +256,12 @@ public class CommandDB {
 				}
 			}
 			else {
-				PlatformPanel.descriptionArea.append("You miss!\n");
+				display.append("You miss!\n");
 				enemyAttack(enemy);
 			}
 		}));
 		commands.add(new Command("run",()-> { 
-			PlatformPanel.descriptionArea.setText("You are fighting " + enemy.getName()+".\n");
+			display.setText("You are fighting " + enemy.getName()+".\n");
 			int escapeRoll = random.nextInt(100)+1;
 			if(escapeRoll+ PlatformPanel.player.getDexterity()>=enemy.getDexterity()) {
 				goBack();
@@ -227,18 +274,18 @@ public class CommandDB {
 	}
 	
 	public void enemyAttack(NPC enemy) {
-		PlatformPanel.descriptionArea.append(enemy.getName()+" Attacks!\n");
+		display.append(enemy.getName()+" Attacks!\n");
 		if(attackCheck(enemy.getPerception(),enemy.getDexterity(),PlatformPanel.player.getPerception(),PlatformPanel.player.getDexterity())) {
-			PlatformPanel.descriptionArea.append(enemy.getName()+" hits you for "+ enemy.getStrength()/2+" damage.\n");
+			display.append(enemy.getName()+" hits you for "+ enemy.getStrength()/2+" damage.\n");
 			PlatformPanel.player.takeDamgage(enemy.getStrength()/2);
 			PlatformPanel.updatePlayerDisplay();
 			if(PlatformPanel.player.getHealth()==0) {
 				commands.removeAll(commands);
-				PlatformPanel.descriptionArea.append("Game Over");
+				display.append("Game Over");
 			}
 		}
 		else {
-			PlatformPanel.descriptionArea.append("They miss!\n");
+			display.append("They miss!\n");
 		}
 	}
 	

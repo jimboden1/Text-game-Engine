@@ -20,7 +20,7 @@ public class Location implements java.io.Serializable{
     	result.name = "Filler Start Screen";
     	result.description = "You are seeing this screen because the creator did not specifiy a start screen for this game.\n"
     			+ "If the creator is a friend of yours... you have my sympathy.\n"
-    			+ "Please try playing a different game that has an actual start point.";
+    			+ "Please try playing a different game that has an actual start point.\n";
     	return result;
     }
 
@@ -38,14 +38,14 @@ public class Location implements java.io.Serializable{
 	{
 		if (autoFillNpcs)
 		{
-			String npcDescs = " You see " + npcs.size() + " people here. ";
-			for (int i = 0; i < npcs.size(); i++)
+			String npcDescs = "\n";
+			for (int i = 0; i < npcs.size()-1; i++)
 			{
-				if ( i != npcs.size()-2)
-					npcDescs += CentralDB.npcList.get(npcs.get(i)).getDescription() + ", ";
-				else
-					npcDescs += CentralDB.npcList.get(npcs.get(i)).getDescription() + ".";
+
+				npcDescs += CentralDB.npcList.get(npcs.get(i)).getName() + ", ";
+					
 			}
+			npcDescs += CentralDB.npcList.get(npcs.get(npcs.size()-1)).getName() + ".\n";
 			return description + npcDescs;
 		}
 		else
