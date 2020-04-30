@@ -62,6 +62,10 @@ public class CommandDB {
 			commands.add(new Command("use "+item.getName(),()-> {
 				Events event = new Events();
 				event.takeItem(index);
+				event.runMethod();
+				for(int skill:item.getSkills()) {
+					event.giveSkill(skill);
+				}
 				for(Benefit benefit:item.getBenefits()) {
 					if(benefit.attributePlace==0) {
 						PlatformPanel.player.setStrength(PlatformPanel.player.getStrength()+benefit.modifier);
@@ -83,12 +87,9 @@ public class CommandDB {
 					}
 				}
 				PlatformPanel.updatePlayerDisplay();
-				for(int skill:item.getSkills()) {
-					event.giveSkill(skill);
-				}
-				event.runMethod();
 				clearCommands();
 				checkItems();
+				display.append("You used "+item.getName()+"\n");
 			}));
 		}
 	}

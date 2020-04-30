@@ -21,7 +21,16 @@ public class Player implements java.io.Serializable
 	
 	public void equip(int item, int type)
 	{
-		inventory.remove(item);
+		boolean first = true;
+		ArrayList<Integer> items = PlatformPanel.player.inventory;
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i)==item&&first) {
+				items.remove(i);
+				first=false;
+			}
+		}
+		
+		PlatformPanel.player.inventory=items;
 		if (equipment[type] != -1)
 		{
 			unequip(equipment[type], type);
@@ -31,19 +40,20 @@ public class Player implements java.io.Serializable
 		
 		for (Benefit b : CentralDB.itemList.get(equipment[type]).getBenefits())
 		{
-			if (b.attribute == "Strength")
+			if (b.attributePlace == 0)
 				strength += b.modifier;
-			else if (b.attribute == "Dexterity")
+			else if (b.attributePlace == 1)
 				dexterity += b.modifier;
-			else if (b.attribute == "IQ")
+			else if (b.attributePlace == 2)
 				iq += b.modifier;
-			else if (b.attribute == "Health Points")
+			else if (b.attributePlace == 3)
 				modMaxHealth += b.modifier;
-			else if (b.attribute == "Perception")
+			else if (b.attributePlace == 4)
 				perception += b.modifier;
-			else if (b.attribute == "Will")
+			else if (b.attributePlace == 5)
 				will += b.modifier;
-		}		
+		}
+		PlatformPanel.updatePlayerDisplay();
 	}
 	
 	public void unequip(int item, int type)
@@ -51,17 +61,17 @@ public class Player implements java.io.Serializable
 		inventory.add(equipment[type]);
 		for (Benefit b : CentralDB.itemList.get(equipment[type]).getBenefits())
 		{
-			if (b.attribute == "Strength")
+			if (b.attributePlace == 0)
 				strength -= b.modifier;
-			else if (b.attribute == "Dexterity")
+			else if (b.attributePlace == 1)
 				dexterity -= b.modifier;
-			else if (b.attribute == "IQ")
+			else if (b.attributePlace == 2)
 				iq -= b.modifier;
-			else if (b.attribute == "Health Points")
+			else if (b.attributePlace == 3)
 				modMaxHealth -= b.modifier;
-			else if (b.attribute == "Perception")
+			else if (b.attributePlace == 4)
 				perception -= b.modifier;
-			else if (b.attribute == "Will")
+			else if (b.attributePlace == 5)
 				will -= b.modifier;
 		}
 	}
