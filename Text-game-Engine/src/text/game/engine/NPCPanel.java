@@ -12,8 +12,8 @@ public class NPCPanel{
     private JPanel base;
     DefaultListModel<String> dlm = new DefaultListModel<>(), itemlm = new DefaultListModel<>(),
             skilllm = new DefaultListModel<>(), eventlm = new DefaultListModel<>();
-    int selected = -1;
-    NPC sNPC;
+    public int selected = -1;
+    NPC sNPC = new NPC();
     JPanel listPanel = new JPanel();
     JList<String> npcList = new JList<>(dlm);
     JTextField npcName = new JTextField(), strength = new JTextField("0"),
@@ -442,8 +442,11 @@ public class NPCPanel{
 		list = CentralDB.npcList;
 		dlm.removeAllElements();
 		for(NPC npc: list) {
-			System.out.println(npc.getName());
 			dlm.addElement(npc.getName());
+		}
+		if(selected!=-1) {
+			npcList.setSelectedIndex(selected);
+			loadNPC();
 		}
 	}
 }

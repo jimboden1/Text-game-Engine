@@ -294,7 +294,6 @@ public class PlayerPanel
 		player.setWill(Integer.parseInt(willField.getText()));
 		player.setSkills(skillList);
 		player.inventory = itemList;
-		player.getInfo();
 		//apply the skills 
 		//Set the image
 		CentralDB.player = player;

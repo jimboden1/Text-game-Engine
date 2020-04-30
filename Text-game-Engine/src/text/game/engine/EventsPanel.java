@@ -18,7 +18,7 @@ public class EventsPanel
 	final String SETCONDITION = "Set Condition";
 	String typeName = "location";
 	Events sEvent = new Events();
-	int selected = -1;
+	public int selected = -1;
 	JRadioButton command = new JRadioButton("Command"), 
 			trigger = new JRadioButton("Conditional"), both = new JRadioButton("Both"),
 			locationAt= new JRadioButton("Location"), hasSkill= new JRadioButton("Skill"),
@@ -334,10 +334,6 @@ public class EventsPanel
 	
 	public void saveEvent()
 	{ 
-		for (Command method : sEvent.methods)
-    {
-    	System.out.println(method.getCommand());
-    }
 		if(selected == -1){
             if(!txtEventName.getText().equals(""))
             {
@@ -420,7 +416,6 @@ public class EventsPanel
                 functionslm.clear();
                 for (Command method : sEvent.methods)
                 {
-                	System.out.println(method.getCommand());
                 	functionslm.addElement(method.getCommand());
                 }
             }
@@ -686,6 +681,10 @@ public class EventsPanel
 			else {
 				dlm.addElement(event.getName()+ " "+ event.getTarget());
 			}
+		}
+		if(selected!=-1) {
+			eventList.setSelectedIndex(selected);
+			loadEvent();
 		}
 	}
 }

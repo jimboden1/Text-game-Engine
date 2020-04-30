@@ -20,8 +20,8 @@ public class SkillsPanel
         JRadioButton percRadButton = new JRadioButton("Perception");
         JRadioButton willRadButton = new JRadioButton("Will");
         ArrayList<Skill> skillList= new ArrayList<Skill>();
-        int selected = -1;
-        Skill sSkill;
+     public int selected = -1;
+        Skill sSkill = new Skill();
         
 	public SkillsPanel()
 	{
@@ -278,7 +278,6 @@ public class SkillsPanel
 		skillList = CentralDB.skillList;
 		listModel.removeAllElements();
 		for(Skill skill: skillList) {
-			System.out.println(skill.getName());
 			listModel.addElement(skill.getName());
 		}
 	}

@@ -102,6 +102,7 @@ public class TextGameEngine {
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
         
 		tabbedPane.addTab("Player", null, playerTab.createPlayerPanel(), null);
+		tabbedPane.addChangeListener(e->updateAll());
                 
         
 		tabbedPane.addTab("NPC", null, npcTab.createNPCPanel(), null);
@@ -176,13 +177,13 @@ public class TextGameEngine {
             	file.close();
             
             	CentralDB.loadIntoCentralDB(centralDB);
-            	playerTab.update();
-            	roomsTab.update();
-            	eventsTab.update();
-            	itemTab.update();
-            	npcTab.update();
-            	skillsTab.update();
-              
+
+            	roomsTab.selected = -1;
+            	eventsTab.selected = -1;
+            	itemTab.selected = -1;
+            	npcTab.selected = -1;
+            	skillsTab.selected = -1;
+            	updateAll();
         	} 
           
         	catch(IOException ex) 
@@ -191,12 +192,12 @@ public class TextGameEngine {
             	System.out.println(ex.getLocalizedMessage());
             	centralDB= new CentralDB();
             	CentralDB.loadIntoCentralDB(centralDB);
-            	playerTab.update();
-            	roomsTab.update();
-            	eventsTab.update();
-            	itemTab.update();
-            	npcTab.update();
-            	skillsTab.update();
+            	roomsTab.selected = -1;
+            	eventsTab.selected = -1;
+            	itemTab.selected = -1;
+            	npcTab.selected = -1;
+            	skillsTab.selected = -1;
+            	updateAll();
         	} 
           
 			catch(ClassNotFoundException ex) 
@@ -234,5 +235,15 @@ public class TextGameEngine {
 		this.initialize();
 		frame.repaint();
 		frame.revalidate();
+	}
+	
+	public void updateAll() {
+		playerTab.savePlayer();
+    	playerTab.update();
+    	roomsTab.update();
+    	eventsTab.update();
+    	itemTab.update();
+    	npcTab.update();
+    	skillsTab.update();
 	}
 }

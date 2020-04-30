@@ -16,8 +16,8 @@ public class ItemPanel{
     DefaultListModel<String> skilllm = new DefaultListModel<String>();
     DefaultListModel<String> benefitlm = new DefaultListModel<String>();
     JPanel listPanel = new JPanel();
-    int selected = -1;
-    Item sItem;
+    public int selected = -1;
+    Item sItem=new Item();
     JList<String> itemList = new JList<String>(dlm);
     JTextField itemName = new JTextField();
     JTextField itemCost = new JTextField();
@@ -267,7 +267,7 @@ public class ItemPanel{
         return created;
     }
     
-    public JScrollPane makeScrollList(JList list, String name){
+    public JScrollPane makeScrollList(JList<String> list, String name){
         JScrollPane js = new JScrollPane(list);
         js.setBorder(new TitledBorder(null, name, TitledBorder.LEADING, TitledBorder.TOP, null, null));
         return js;
@@ -300,7 +300,6 @@ public class ItemPanel{
     }
     
     public void addBenefit() {
-    	JOptionPane popup = new JOptionPane();
     	Benefit benefit = new Benefit();
     	JPanel main = new JPanel(new BorderLayout(10,10));
     	JTextField mod = new JTextField("0");
@@ -314,7 +313,7 @@ public class ItemPanel{
         main.add(mod, BorderLayout.NORTH);
         main.add(statbox, BorderLayout.CENTER);
         
-        popup.showMessageDialog(main, main);
+        JOptionPane.showMessageDialog(main, main);
         if(mod.getText().isEmpty()) {
         	benefit.modifier = 0;
         }
@@ -346,16 +345,15 @@ public class ItemPanel{
     }
     
     public void addSkill() {
-    	JOptionPane popup = new JOptionPane();
     	JPanel main = new JPanel(new BorderLayout(10,10));
-		DefaultListModel skills = new DefaultListModel();
-    	JList skillList = new JList(skills);
+		DefaultListModel<String> skills = new DefaultListModel<>();
+    	JList<String> skillList = new JList<>(skills);
     	for(Skill skill : CentralDB.skillList)
 		{
     		skills.addElement(skill.getName());
 		}
     	main.add(this.makeScrollList(skillList, "Skills"));
-        popup.showMessageDialog(main, main);
+    	JOptionPane.showMessageDialog(main, main);
         int[] selection = skillList.getSelectedIndices();
         for(int i:selection) {
         	if(!skillsList.contains(i)) {
@@ -387,8 +385,11 @@ public class ItemPanel{
 		list = CentralDB.itemList;
 		dlm.removeAllElements();
 		for(Item item: list) {
-			System.out.println(item.getName());
 			dlm.addElement(item.getName());
+		}
+		if(selected!=-1) {
+			itemList.setSelectedIndex(selected);
+			loadItem();
 		}
 	}
 }

@@ -16,7 +16,7 @@ public class LocationPanel
 	DefaultListModel<String> eventlm = new DefaultListModel<String>();
 	DefaultListModel<String> commandlm = new DefaultListModel<String>();
 	DefaultListModel<String> npclm = new DefaultListModel<String>();
-	int selected = -1;
+	public int selected = -1;
 	JTextField[] positionFields = new JTextField[4];
 	JCheckBox startScreenChkBox = new JCheckBox("<html>Set as<br>Start Screen</html>");
 	JCheckBox fillNPCChkBox = new JCheckBox("Auto-fill NPCs");
@@ -27,7 +27,7 @@ public class LocationPanel
 	JList<String> npcList = new JList<>(npclm);
 	JList<String> eventsList = new JList<>(eventlm);
 	
-	Location sLoc;
+	Location sLoc = new Location();
 	JList<String> locationList = new JList<String>(dlm);
 	JTextPane locationName = new JTextPane();
 	JTextArea descArea = new JTextArea();
@@ -365,8 +365,11 @@ public class LocationPanel
 		list = CentralDB.locationList;
 		dlm.removeAllElements();
 		for(Location location: list) {
-			System.out.println(location.getName());
 			dlm.addElement(location.getName());
+		}
+		if(selected!=-1) {
+			locationList.setSelectedIndex(selected);
+			loadLocation();
 		}
 	}
 	
