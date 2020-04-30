@@ -347,10 +347,12 @@ public class PlayerPanel
 		perField.setText(""+ player.getPerception());
 		willField.setText(""+ player.getWill());
 		skillList=player.getSkills();
+		skilllm.clear();
 		for(int index: skillList) {
 			skilllm.addElement(CentralDB.skillList.get(index).getName());
 		}
 		itemList = player.inventory;
+		itemlm.clear();
 		for(int index:itemList) {
 			itemlm.addElement(CentralDB.itemList.get(index).getName());
 		}
