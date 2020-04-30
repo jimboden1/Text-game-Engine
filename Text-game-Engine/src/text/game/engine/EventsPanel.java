@@ -131,13 +131,13 @@ public class EventsPanel
 		
 		JButton add = new JButton("Add");
 		add.addActionListener(e->addFunction());
-		add.setBounds(220, 230, 70, 30);
+		add.setBounds(220, 230, 80, 30);
 		base.add(add);
 
 
 		JButton remove = new JButton("Remove");
 		remove.addActionListener(e->removeFunction());
-		remove.setBounds(300,230,70,30);
+		remove.setBounds(310,230,80,30);
 		base.add(remove);
 		
 		ButtonGroup conditionType = new ButtonGroup();

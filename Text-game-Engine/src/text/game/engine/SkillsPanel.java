@@ -97,7 +97,7 @@ public class SkillsPanel
 		base.add(skillNameLabel);
 		
 		JLabel skillDescLabel = new JLabel("Skill Description:");
-		skillDescLabel.setBounds(361, 71, 73, 16);
+		skillDescLabel.setBounds(361, 71, 100, 16);
 		base.add(skillDescLabel);
 				
 		textPane_1.setBounds(361, 97, 405, 85);

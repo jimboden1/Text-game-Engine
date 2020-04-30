@@ -34,6 +34,7 @@ public class TextGameEngine {
 			public void run() {
 				try {
 					TextGameEngine window = new TextGameEngine();
+					window.frame.setResizable(false);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

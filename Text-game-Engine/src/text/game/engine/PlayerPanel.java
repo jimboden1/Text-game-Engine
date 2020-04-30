@@ -67,7 +67,7 @@ public class PlayerPanel
         base.revalidate();
         
         addSkill.setText("Add Skill");
-        addSkill.setBounds(445,450,100,20);
+        addSkill.setBounds(430,450,110,20);
         base.add(addSkill);
         addSkill.addActionListener(new ActionListener()
 		{
@@ -111,7 +111,7 @@ public class PlayerPanel
 		});
         
         removeSkill.setText("Remove Skill");
-        removeSkill.setBounds(445,485,100,20);
+        removeSkill.setBounds(430,485,110,20);
         base.add(removeSkill);
         removeSkill.addActionListener(new ActionListener()
 		{
@@ -149,80 +149,80 @@ public class PlayerPanel
 		base.add(separator_4);
 		
 		//Create Player object
-		createPlayer.setBounds(300 ,350,100,20);
+		createPlayer.setBounds(330 ,350,100,20);
 		createPlayer.setText("Create");
 		base.add(createPlayer);
 		createPlayer.addActionListener(e->savePlayer());
 		
-		strField.setBounds(290, 219, 48, 22);
+		strField.setBounds(305, 219, 48, 22);
 		base.add(strField);
 		strField.setColumns(10);
 		
 		dexField.setColumns(10);
-		dexField.setBounds(290, 254, 48, 22);
+		dexField.setBounds(305, 254, 48, 22);
 		base.add(dexField);
 		
 		iqField.setColumns(10);
-		iqField.setBounds(290, 289, 48, 22);
+		iqField.setBounds(305, 289, 48, 22);
 		base.add(iqField);
 		
 		hpField.setColumns(10);
-		hpField.setBounds(474, 219, 48, 22);
+		hpField.setBounds(484, 219, 48, 22);
 		base.add(hpField);
 		
 		perField.setColumns(10);
-		perField.setBounds(474, 254, 48, 22);
+		perField.setBounds(484, 254, 48, 22);
 		base.add(perField);
 		
 		willField.setColumns(10);
-		willField.setBounds(474, 289, 48, 22);
+		willField.setBounds(484, 289, 48, 22);
 		base.add(willField);
 		
 		JLabel strLabel = new JLabel("Strength:");
-		strLabel.setBounds(210, 219, 56, 16);
+		strLabel.setBounds(235, 219, 56, 16);
 		base.add(strLabel);
 		
 		JLabel dexLabel = new JLabel("Dexterity:");
-		dexLabel.setBounds(210, 254, 56, 16);
+		dexLabel.setBounds(235, 254, 56, 16);
 		base.add(dexLabel);
 		
 		JLabel IQLabel = new JLabel("IQ:");
-		IQLabel.setBounds(210, 289, 56, 16);
+		IQLabel.setBounds(235, 289, 56, 16);
 		base.add(IQLabel);
 		
 		JLabel HPLabel = new JLabel("HP:");
-		HPLabel.setBounds(375, 219, 56, 16);
+		HPLabel.setBounds(400, 219, 56, 16);
 		base.add(HPLabel);
 		
 		JLabel perLabel = new JLabel("Perception:");
-		perLabel.setBounds(375, 254, 70, 16);
+		perLabel.setBounds(400, 254, 70, 16);
 		base.add(perLabel);
 		
 		JLabel willLabel = new JLabel("Will:");
-		willLabel.setBounds(375, 289, 56, 16);
+		willLabel.setBounds(400, 289, 56, 16);
 		base.add(willLabel);
 		
 		JSeparator separator_5 = new JSeparator();
-		separator_5.setBounds(210, 324, 324, 2);
+		separator_5.setBounds(240, 324, 295, 2);
 		base.add(separator_5);
 		
 		JLabel statsLabel = new JLabel("Stats:");
-		statsLabel.setBounds(341, 176, 40, 16);
+		statsLabel.setBounds(355, 176, 40, 16);
 		base.add(statsLabel);
 
 		JScrollPane itemScrollPane = new JScrollPane(playerItemList);
 		itemScrollPane.setBorder(new TitledBorder(null, "Items", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		itemScrollPane.setBounds(10,170,200,350);
+		itemScrollPane.setBounds(10,176,220,335);
 		base.add(itemScrollPane);
 		
 		JButton addItem = new JButton("Add Item");
 		addItem.addActionListener(e->addItem());
-		addItem.setBounds(220,470,110,20);
+		addItem.setBounds(235,450,110,20);
 		base.add(addItem);
 		
 		JButton removeItem = new JButton("Remove Item");
 		removeItem.addActionListener(e->removeItem());
-		removeItem.setBounds(220,495,110,20);
+		removeItem.setBounds(235,485,110,20);
 		base.add(removeItem);
 		
 		return base;

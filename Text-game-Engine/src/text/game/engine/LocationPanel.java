@@ -17,7 +17,7 @@ public class LocationPanel
 	DefaultListModel<String> npclm = new DefaultListModel<String>();
 	public int selected = -1;
 	JTextField[] positionFields = new JTextField[4];
-	JCheckBox startScreenChkBox = new JCheckBox("Set as Start Screen");
+	JCheckBox startScreenChkBox = new JCheckBox("<html>Set as<br>Start Screen</html>");
 	JCheckBox fillNPCChkBox = new JCheckBox("Auto-fill NPCs");
 	int[] locations = {-1,-1,-1,-1};
 	
@@ -86,7 +86,7 @@ public class LocationPanel
 		separator_1.setBounds(218, 201, 548, 2);
 		base.add(separator_1);
 		
-		JLabel roomDesc = new JLabel("Location Description:");
+		JLabel roomDesc = new JLabel("<html>Location<br>Description:</html>");
 		roomDesc.setBounds(218, 70, 115, 35);
 		base.add(roomDesc);
 				
@@ -106,7 +106,7 @@ public class LocationPanel
 		locationName.setBounds(334, 13, 432, 36);
 		base.add(locationName);
 		
-		startScreenChkBox.setBounds(210, 110, 113, 25);
+		startScreenChkBox.setBounds(210, 125, 113, 25);
 		base.add(startScreenChkBox);
 		
 		/*JCheckBox fillItemsChkBox = new JCheckBox("Auto-fill items");
